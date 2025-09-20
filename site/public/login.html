@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="Style/css/loginCSS.css">
+    <link rel="icon" type="image/x-icon" href="Style/assets/smartLogoVetor.ico">
+</head>
+
+<body>
+
+    <main>
+        <div id="loginContainer">
+            <h1>Bem-vindo de volta!</h1>
+            <p>Insira suas credenciais para acessar sua conta.</p>
+            <div id="loginBox">
+                <div id="loginForm">
+                    <h1>Login</h1>
+                    <label for="username">Usuário ou Email:</label>
+                    <input type="text" id="username" name="username" required>
+
+                    <label for="password">Senha:</label>
+                    <input type="password" id="senha" name="senha" required>
+
+                    <button onclick="logar()" type="submit">Entrar</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+</body>
+
+</html>
+
+<script>
+    function logar() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('senha').value;
+
+        if ((username == 'admin' || username == 'smart@investment.com') && password == 'senha123') {
+            alert('Login bem-sucedido!');
+            window.location.href = 'index.html';
+        } else {
+            alert('Credenciais inválidas. Tente novamente.');
+        }
+    }
+
+</script>
