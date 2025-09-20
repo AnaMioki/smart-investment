@@ -11,47 +11,309 @@ body {
     display: flex;
 }
 
+#mainContainer {
+    height: 100dvh;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#btnIndex {
+    position: absolute;
+    top: 10px;
+    right: 0.1vw;
+    width: 8vw;
+    height: 11vh;
+    cursor: pointer;
+}
+
 #loginContainer {
     height: 100dvh;
     width: 100%;
-    padding: 4dvh 10dvh 10dvh  10dvh;
+    padding: 4dvh 10dvh 10dvh 10dvh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(135deg, #71b7e6, #9b59b6);
+      background: linear-gradient(135deg, #3b8841, #004225);
+}
 
-    h1{
-        font-size: 2rem;
-        color: #fff;
-        margin-bottom: 10px;
-        align-self: flex-start;
-        justify-self: flex-start    ;
-    }
+#loginContainer h1 {
+    font-size: 2rem;
+    color: #fff;
+    margin-bottom: 10px;
+    align-self: flex-start;
+    justify-self: flex-start;
+}
 
-    p{
-        font-size: 1.2rem;
-        color: #fff;
-        margin-bottom: 20px;
-        align-self: center;
-        justify-self: center;
-    }
+#loginContainer p {
+    font-size: 1.2rem;
+    color: #fff;
+    margin-bottom: 20px;
+    align-self: center;
+    justify-self: center;
 }
 
 #loginForm {
     height: 60vh;
     width: 50vw;
-    background-color:transparent;
-    margin-top: 10dvh;
-    padding: 40px;
+    background: linear-gradient(135deg, #3b8841, #004225);
+    margin-top: 8dvh;
+    padding: 15px 40px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     max-width: 400px;
     display: flex;
     flex-direction: column;
+}
 
-    h1 {
-        margin-bottom: 20px;
-        color: #333;
+#loginForm h1 {
+    color: #FFF;
+    margin-bottom: 5vh;
+}
+
+.grupoInput {
+    position: relative;
+    margin-bottom: 5vh;
+    width: 80%;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.grupoInput input {
+    font-size: 1.2rem;
+    padding: 10px 10px 10px 5px;
+    display: block;
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #FFF;
+    background: transparent;
+    outline: none;
+}
+
+.grupoInput label {
+    position: absolute;
+    left: 5px;
+    top: 10px;
+    color: #FFF;
+    font-size: 1rem;
+    pointer-events: none;
+    transition: 0.3s ease all;
+}
+
+.grupoInput input:focus {
+    border-bottom: 2px solid yellow;
+}
+
+.grupoInput input:focus~label,
+.grupoInput input:not(:placeholder-shown)~label {
+    top: -15px;
+    font-size: 0.9rem;
+    color: yellow;
+    font-weight: bold;
+}
+
+#btnLogar {
+    width: 80%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #004225;
+    font-size: 1.2rem;
+    cursor: pointer;
+    align-self: center;
+}
+
+#btnLogar:hover {
+    background-color: #f1f1f1;
+}
+
+#redCadastro {
+    margin-top: 10vh;
+    color: #fff;
+    text-decoration: none;
+}
+
+#redCadastro:hover {
+    text-decoration: underline;
+}
+
+#logo {
+    opacity: 0.8;
+    margin-left: 10vw;
+}
+
+@media screen and (max-width: 1024px) {
+    #loginContainer {
+        padding: 3dvh 5dvh 5dvh 5dvh;
+    }
+    
+    #loginForm {
+        width: 70vw;
+        padding: 20px 30px;
+    }
+    
+    #logo {
+        margin-left: 5vw;
+    }
+}
+
+
+@media screen and (max-width: 768px) {
+    #mainContainer {
+        flex-direction: column;
+        justify-content: center;
+    }
+    
+    #loginContainer {
+        padding: 2dvh 3dvh 3dvh 3dvh;
+    }
+    
+    #loginContainer h1 {
+        font-size: 1.5rem;
+        text-align: center;
+        align-self: center;
+    }
+    
+    #loginContainer p {
+        font-size: 1rem;
+        text-align: center;
+    }
+    
+    #loginForm {
+        width: 90vw;
+        height: auto;
+        min-height: 50vh;
+        margin-top: 3dvh;
+        padding: 20px 25px;
+        max-width: none;
+    }
+    
+    #loginForm h1 {
+        font-size: 1.5rem;
+        text-align: center;
+        margin-bottom: 3vh;
+    }
+    
+    .grupoInput {
+        width: 100%;
+        margin-bottom: 4vh;
+    }
+    
+    .grupoInput input {
+        font-size: 1.1rem;
+        padding: 12px 10px 12px 5px;
+    }
+    
+    .grupoInput label {
+        font-size: 0.9rem;
+    }
+    
+    #btnLogar {
+        width: 100%;
+        padding: 12px;
+        font-size: 1.1rem;
+    }
+    
+    #redCadastro {
+        margin-top: 5vh;
+        text-align: center;
+        font-size: 0.9rem;
+    }
+    
+    #btnIndex {
+        width: 15vw;
+        height: 8vh;
+        right: 2vw;
+        top: 15px;
+    }
+    
+    #logo {
+        display: none;
+    }
+}
+
+
+@media screen and (max-width: 480px) {
+    #loginContainer {
+        padding: 1dvh 2dvh 2dvh 2dvh;
+    }
+    
+    #loginForm {
+        width: 95vw;
+        padding: 15px 20px;
+        margin-top: 2dvh;
+    }
+    
+    #loginForm h1 {
+        font-size: 1.3rem;
+        margin-bottom: 2vh;
+    }
+    
+    #loginContainer h1 {
+        font-size: 1.3rem;
+    }
+    
+    #loginContainer p {
+        font-size: 0.9rem;
+    }
+    
+    .grupoInput {
+        margin-bottom: 3vh;
+    }
+    
+    .grupoInput input {
+        font-size: 1rem;
+        padding: 10px 8px 10px 5px;
+    }
+    
+    .grupoInput label {
+        font-size: 0.8rem;
+    }
+    
+    #btnLogar {
+        font-size: 1rem;
+        padding: 10px;
+    }
+    
+    #redCadastro {
+        margin-top: 3vh;
+        font-size: 0.8rem;
+    }
+    
+    #btnIndex {
+        width: 20vw;
+        height: 6vh;
+        right: 3vw;
+    }
+}
+
+@media screen and (max-width: 896px) and (orientation: landscape) {
+    #loginContainer {
+        padding: 1dvh 3dvh;
+    }
+    
+    #loginForm {
+        height: auto;
+        min-height: 80vh;
+        margin-top: 1dvh;
+        padding: 15px 25px;
+    }
+    
+    #loginForm h1 {
+        margin-bottom: 2vh;
+        font-size: 1.3rem;
+    }
+    
+    .grupoInput {
+        margin-bottom: 3vh;
+    }
+    
+    #redCadastro {
+        margin-top: 3vh;
     }
 }

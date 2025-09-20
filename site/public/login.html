@@ -12,31 +12,48 @@
 <body>
 
     <main>
-        <div id="loginContainer">
-            <h1>Bem-vindo de volta!</h1>
-            <p>Insira suas credenciais para acessar sua conta.</p>
-            <div id="loginBox">
-                <div id="loginForm">
-                    <h1>Login</h1>
-                    <label for="username">Usuário ou Email:</label>
-                    <input type="text" id="username" name="username" required>
+        <div id="mainContainer">
+            <img id="btnIndex" src="Style/assets/home.svg" onclick="backIndex()" alt="">
+            <div id="loginContainer">
+                <h1>Bem-vindo de volta!</h1>
+                <p>Insira suas credenciais para acessar sua conta.</p>
+                <div id="loginBox">
+                    <div id="loginForm">
+                        <h1>Login</h1>
 
-                    <label for="password">Senha:</label>
-                    <input type="password" id="senha" name="senha" required>
+                        <div class="grupoInput">
+                            <input type="email" id="username" required placeholder=" ">
+                            <label for="username">Usuário ou Email</label>
+                        </div>
 
-                    <button onclick="logar()" type="submit">Entrar</button>
+                        <div class="grupoInput">
+                            <input type="password" id="senha" required placeholder=" ">
+                            <label for="senha">Senha</label>
+                        </div>
+                        <button onclick="logar()" id="btnLogar">Entrar</button>
+
+                        <a id="redCadastro" href="cadastro.html">Ainda não possui conta? Cadastre-se aqui</a>
+                    </div>
                 </div>
             </div>
-        </div>
 
+            <div>
+                <img id="logo" src="Style/assets/smartLogoVetor.svg" alt="">
+            </div>
+        </div>
     </main>
+
 
 </body>
 
 </html>
 
 <script>
-    function logar() {
+    backIndex = () => {
+        window.location.href = 'index.html';
+    }
+
+    logar = () => {
         const username = document.getElementById('username').value;
         const password = document.getElementById('senha').value;
 
@@ -45,6 +62,8 @@
             window.location.href = 'index.html';
         } else {
             alert('Credenciais inválidas. Tente novamente.');
+            document.getElementById('username').value = '';
+            document.getElementById('senha').value = '';
         }
     }
 
