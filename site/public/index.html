@@ -22,6 +22,17 @@
                 <a href="#contato">Contato</a>
             </div>
             <button id="btnComecar" onclick="loginRedirect()">Começar Agora</button>
+                <button class="menu-mobile-icon" id="menuMobileBtn" aria-label="Abrir menu" style="display:none">&#9776;</button>
+                <div class="menu-mobile" id="menuMobile" style="display:none;">
+                    <a href="#container">Início</a>
+                    <a href="#Sobre">Sobre</a>
+                    <a href="#pqSmart">Por que Smart</a>
+                    <a href="#solucao">Solução</a>
+                    <a href="#contato">Contato</a>
+                    <a href="#segmentos">Segmentos</a>
+                    <a href="#funcionamento">Funcionamento</a>
+                    <a href="#footer">Rodapé</a>
+                </div>
         </div>
 
         <div id="inicio">
@@ -40,10 +51,7 @@
             </div>
 
             <div id="botoes">
-                <button id="btnComecar2" onclick="loginRedirect()">Começar Agora<svg xmlns="http://www.w3.org/2000/svg" height="40px"
-                        viewBox="0 -960 960 960" width="48px" fill="#e3e3e3">
-                        <path d="m560-242-43-42 168-168H160v-60h525L516-681l43-42 241 241-240 240Z" />
-                    </svg></button>
+                <button id="btnComecar2" onclick="loginRedirect()">Começar Agora</button>
                 <button id="btnSaibaMais">Saiba Mais <br>... </button>
             </div>
 
@@ -57,7 +65,7 @@
                     <span>Maximize seus retornos com estratégias personalizadas</span>
                 </div>
                 <div class="box">
-                    <img src="Style/assets/alvo.svg" alt="">
+                    <img src="Style/assets/alvo.svg" class="alvo" alt="">
                     <p>Perfil Personalizado</p>
                     <span>Estratégias baseadas no seu perfil de risco</span>
                 </div>
@@ -111,30 +119,30 @@
 
             </div>
 
-            <div id="historia">
-                <img src="Style/assets/imagemFundo.png" alt="">
-                <p id="tituloHistoria">
-                    Nossa História
+            
+        </div>
+        
+        <div id="historia">
+            <img src="Style/assets/imagemFundo.png" alt="">
+            <p id="tituloHistoria">
+                Nossa História
+            </p>
+            <div id="descricaoHistoria">
+                <p>
+                    Fundada por especialistas em tecnologia e mercado financeiro, a Smart Invest nasceu da
+                    necessidade
+                    de tornar os investimentos mais acessíveis e inteligentes para todos.
                 </p>
-                <div id="descricaoHistoria">
-                    <p>
-                        Fundada por especialistas em tecnologia e mercado financeiro, a Smart Invest nasceu da
-                        necessidade
-                        de tornar os investimentos mais acessíveis e inteligentes para todos.
-                    </p>
-                    <br>
-                    <p>
-                        Através de algoritmos avançados e análise de dados, oferecemos uma experiência personalizada que
-                        se
-                        adapta ao perfil e objetivos de cada investidor, seja ele conservador ou arrojado.
+                <br>
+                <p>
+                    Através de algoritmos avançados e análise de dados, oferecemos uma experiência personalizada que
+                    se
+                    adapta ao perfil e objetivos de cada investidor, seja ele conservador ou arrojado.
 
-                    </p>
-                </div>
-
+                </p>
             </div>
 
         </div>
-
         <div id="segmentos">
 
 
@@ -419,6 +427,23 @@
 
 loginRedirect = () => {
     window.location.href = 'login.html';
+}
+
+const menuBtn = document.getElementById('menuMobileBtn');
+const menuMobile = document.getElementById('menuMobile');
+
+if(menuBtn && menuMobile) {
+    menuBtn.addEventListener('click', () => {
+        menuMobile.classList.toggle('open');
+        menuMobile.style.display = menuMobile.classList.contains('open') ? 'block' : 'none';
+    });
+
+    menuMobile.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            menuMobile.classList.remove('open');
+            menuMobile.style.display = 'none';
+        });
+    });
 }
 
 </script>
