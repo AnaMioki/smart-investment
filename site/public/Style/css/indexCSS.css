@@ -40,6 +40,8 @@ body {
 
 ;
 
+
+
 #logo {
     max-width: 5vh;
     height: 5vh;
@@ -294,46 +296,147 @@ button#btnComecar:hover {
 
 @media 
 (max-width: 900px) {
-    #boxes {
-        flex-direction: column;
-        height: auto;
-        gap: 5vh;
+
+    #segmentos {
         padding: 5vh 0;
     }
 
-    #boxes .box {
-        width: 80%;
-    }
-
-
-
     .boxesSegmentos {
-       background-color: #ffb103;
-       flex-direction: column;
-       display: flex;
-       width: 100%;
-    }
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center;
+            gap: 3vh;
+            width: 100% !important;
+            margin: 0 auto;
+            padding: 2vh 0;
+       
+        }
+        .boxSegmento {
+            width: 90vw !important;
+            min-width: 0;
+            margin: 0 auto 2vh auto;
+            height: auto;
+            background-color: #fff;
+        }
 
-    .boxesSmart {
-        flex-direction: column;
-        gap: 5vh;
-        width: 100%;
-    }
+        /* boxesSmart em coluna */
+        .boxesSmart {
+            flex-direction: column !important;
+            display: flex !important;
+            width: 100% !important;
+            gap: 4vh;
+            padding: 0 2vh;
+            align-items: center;
+        }
+        .boxSmart {
+            width: 95vw !important;
+            min-width: 0;
+            margin-bottom: 3vh;
+            height: auto;
+        }
 
-    .boxSmart{
-        width: 80vh;
-        background-color: aqua;
-    }
+        /* boxes e box em coluna */
+        #boxes {
+            flex-direction: column;
+            height: auto;
+            gap: 5vh;
+            padding: 5vh 0;
+        }
+        #boxes .box {
+            width: 90vw !important;
+            min-width: 0;
+            margin: 0 auto 2vh auto;
+        }
 
-    #pqSmart {
-        height: 100vh;
-    }
+        #conteudoSolucao {
+            flex-direction: column !important;
+            align-items: center !important;
+        }
 
-    #historia *{
-      
-    }
+        #boxesSolucao{
+            display: flex !important;
+            flex-direction: column;
+            justify-content: space-around;
+            gap: 5vh !important;
+            align-items: center !important;
+            width: 100% !important ;
+        }
 
+        .iconeSolucao{
+            width: 10vh !important;
+            height: 10vh !important;
+        }
+
+        #oferecemos {
+            align-self: self-start;
+            width: 90% !important;
+            gap: 4vh;
+            
+        }  
+
+
+        .boxSolucao{
+            display: flex !important;
+            width: 80% !important;
+            height: auto !important;
+        }
+
+
+.etapa:not(:last-child)::after {
+    content: '' !important;
+    position: absolute !important;
+    top: 24vh !important;
+    left: -2vh !important;
+    width: 30vh !important;
+    height: 0.2vh !important;
+    transform: rotate(90deg) !important;
+    background-color: #00422531!important;
 }
+
+#infoContato{
+    align-self: flex-start;
+}
+
+#formularioContato{
+    width: 90% !important;
+}
+
+#conteudoContato{
+    gap: 5vh!important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+        #etapas {
+            flex-direction: column !important;
+            height: auto !important;
+            gap: 5vh !important;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .box {
     display: flex;
@@ -423,6 +526,7 @@ button#btnComecar:hover {
 
 #pqSmart {
     width: 100%;
+    padding: 10vh 0;
     box-shadow: 0 -0.4vh 0.8vh rgba(0, 0, 0, 0.1);
 
 }
@@ -430,7 +534,7 @@ button#btnComecar:hover {
 .boxesSmart {
     display: flex;
     width: 100%;
-    height: 34vh;
+
     align-items: center;
     justify-content: space-around;
 }
@@ -439,12 +543,14 @@ button#btnComecar:hover {
     display: flex;
     flex-direction: column;
     width: 30vh;
-    height: 21vh;
+    
     background-color: #ffffff;
     box-shadow: 0 2vh 1vh rgba(0, 0, 0, 0.4);
     border-radius: 2vh;
-    padding: 1vh;
+    padding: 3vh 0;
+    cursor: pointer;
     justify-content: space-around;
+    transition: 1s;
     text-align: center;
 
 
@@ -476,6 +582,10 @@ button#btnComecar:hover {
     }
 }
 
+.boxSmart:hover{
+    transform: scale(1.04);
+}
+
 #olho {
     height: 7vh;
     min-width: 10vh;
@@ -490,24 +600,16 @@ button#btnComecar:hover {
     justify-content: center;
     text-align: center;
     position: relative;
+    background-image: url("/site/public/Style/assets/imagemFundo.png");
     overflow: hidden;
+    background-size: cover;
     padding: 2vh 0 4vh 0;
 
-    img {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        object-fit: cover;
-        z-index: 0;
-    }
-
-    #tituloHistoria,
-    #descricaoHistoria {
-        position: relative;
-        z-index: 3;
-    }
+  
 }
+
+
+
 
 #tituloHistoria {
     font-family: 'Poppins', sans-serif;
@@ -543,6 +645,8 @@ button#btnComecar:hover {
     text-align: center;
     margin-top: 4vh;
     margin-bottom: 2vh;
+    display: flex;
+    flex-direction: column;
     padding-bottom: 4vh;
     box-shadow: 0 0.4vh 0.8vh rgba(0, 0, 0, 0.2);
     border-bottom: 0.1vh solid rgba(0, 0, 0, 0.1);
@@ -597,7 +701,7 @@ button#btnComecar:hover {
     padding: 2.5vh;
     background-color: #ffffff;
     border-radius: 0.8vh;
-    height: 18vh;
+    height: 24vh;
     box-shadow: 0 0.4vh 0.6vh rgba(0, 0, 0, 0.1);
     position: relative;
 }
@@ -840,7 +944,7 @@ button#btnComecar:hover {
 
 #interrogacao {
     position: absolute;
-    width: 80vh;
+
     height: 70vh;
     opacity: 0.1;
     z-index: -1;
@@ -852,13 +956,13 @@ button#btnComecar:hover {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 5vh 2vh;
+    padding: 15vh 2vh;
     position: relative;
     background-color: #f8f8f9;
     box-shadow: 0 -0.4vh 0.8vh rgba(0, 0, 0, 0.1);
     z-index: 0;
     gap: 2vh;
-    height: 90vh;
+   
 
     h1 {
         font-family: 'Poppins', sans-serif;
@@ -930,8 +1034,8 @@ button#btnComecar:hover {
     content: '';
     position: absolute;
     top: 6vh;
-    left: 19vh;
-    width: 30vh;
+    left: 15vh;
+    width: 20vh;
     height: 0.2vh;
     background-color: #004225;
 }
@@ -952,7 +1056,7 @@ button#btnComecar:hover {
     background-color: #f8f8f9;
     box-shadow: 0 -0.4vh 0.8vh rgba(0, 0, 0, 0.1);
     z-index: 0;
-    height: 95vh;
+
 
     h1 {
         font-family: 'Poppins', sans-serif;
