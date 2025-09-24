@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro</title>
+    <link rel="stylesheet" href="Style/css/cadastroCSS.css">
+    <link rel="icon" type="image/x-icon" href="Style/assets/smartLogoVetor.ico">
+</head>
+
+<body>
+
+    <main>
+        <div id="mainContainer">
+            <img id="btnIndex" src="Style/assets/home.svg" onclick="backIndex()" alt="">
+            <div id="cadastroContainer">
+                <h1>Bem-vindo!</h1>
+                <p>Faça seu cadastro abaixo.</p>
+                <div id="cadastroBox">
+                    <div id="cadastroForm">
+                        <h1>Cadastro</h1>
+
+                        <div class="grupoInput">
+                            <input type="email" id="username" required placeholder=" ">
+                            <label for="username">Usuário ou Email</label>
+                        </div>
+
+                        <div class="grupoInput">
+                            <input type="password" id="senha" required placeholder=" ">
+                            <label for="senha">Senha</label>
+                            <span>Exibir Senha</span>
+                        </div>
+                        <button onclick="exibirForm()" id="btnLogar">Cadastrar</button>
+
+                        <a id="redLogin" href="login.html">Já possui conta? Faça seu login aqui</a>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div id="formularioCadastro">
+                    <h1> Preencha as seguintes informações para finzalizar seu cadastro</h1>
+
+                </div>
+                <img id="logo" src="Style/assets/smartLogoVetor.svg" alt="">
+            </div>
+        </div>
+    </main>
+
+
+</body>
+
+</html>
+
+<script>
+    backIndex = () => {
+        window.location.href = 'index.html';
+    };
+
+
+
+    exibirForm = () => {
+        const form = document.getElementById('formularioCadastro');
+        form.style.display = 'flex';
+
+        
+    };
+
+</script>
