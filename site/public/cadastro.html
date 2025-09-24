@@ -16,7 +16,7 @@
             <img id="btnIndex" src="Style/assets/home.svg" onclick="backIndex()" alt="">
             <div id="cadastroContainer">
                 <h1>Bem-vindo!</h1>
-                <p>Faça seu cadastro abaixo.</p>
+                <p>Faça seu cadastro abaixo, para acessar nossa plataforma.</p>
                 <div id="cadastroBox">
                     <div id="cadastroForm">
                         <h1>Cadastro</h1>
@@ -29,7 +29,7 @@
                         <div class="grupoInput">
                             <input type="password" id="senha" required placeholder=" ">
                             <label for="senha">Senha</label>
-                            <span>Exibir Senha</span>
+                            <img class="olho" onclick="exibirSenha()" src="Style/assets/inivisivel.svg">
                         </div>
                         <button onclick="exibirForm()" id="btnLogar">Cadastrar</button>
 
@@ -39,13 +39,29 @@
             </div>
 
             <div>
-                <div id="formularioCadastro">
-                    <h1> Preencha as seguintes informações para finzalizar seu cadastro</h1>
-
-                </div>
                 <img id="logo" src="Style/assets/smartLogoVetor.svg" alt="">
             </div>
+
         </div>
+        <div id="formularioCadastro">
+            <h1> Preencha as seguintes informações para finzalizar seu cadastro</h1>
+            <img id="btnFechar" onclick="fecharForm()" src="Style/assets/xis.svg" alt="">
+
+            <div>
+
+            <div class="grupoInput">
+                <input type="text" id="nomeCompleto" required placeholder=" ">
+                <label for="nomeCompleto">Nome Completo</label>
+            </div>
+
+            <div class="grupoInput">
+                <input type="text" id="cpf" required placeholder=" ">
+                <label for="cpf">CPF</label>
+            </div>
+        </div>
+
+        <divv>
+            </div>
     </main>
 
 
@@ -54,6 +70,29 @@
 </html>
 
 <script>
+    
+    fecharForm = () => {
+        const form = document.getElementById('formularioCadastro');
+        form.style.display = 'none';
+        const background = document.getElementById('mainContainer');
+        background.style.filter = 'none';
+    };
+
+    exibirSenha = () => {
+        const senhaInput = document.getElementById('senha');
+        const olhoIcon = document.querySelector('.olho');
+
+        if (senhaInput.type === 'password') {
+            senhaInput.type = 'text';
+            olhoIcon.src = 'Style/assets/visivel.svg';
+        } else {
+            senhaInput.type = 'password';
+            olhoIcon.src = 'Style/assets/inivisivel.svg';
+        }
+    };
+
+
+
     backIndex = () => {
         window.location.href = 'index.html';
     };
@@ -63,8 +102,9 @@
     exibirForm = () => {
         const form = document.getElementById('formularioCadastro');
         form.style.display = 'flex';
+        const background = document.getElementById('mainContainer');
+        background.style.filter = 'blur(5px)';
 
-        
     };
 
 </script>

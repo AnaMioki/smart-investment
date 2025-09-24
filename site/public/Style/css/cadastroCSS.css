@@ -24,8 +24,8 @@ body {
     position: absolute;
     top: 10px;
     right: 0.1vw;
-    width: 8vw;
-    height: 11vh;
+    width: 7vw;
+    height: 10vh;
     cursor: pointer;
 }
 
@@ -320,11 +320,11 @@ body {
 }
 
 #formularioCadastro {
-    display: none;
+    /* display: none; */
     position: absolute;
     align-self: center;
     justify-self: center;
-    top: 20vh;
+    top: 15vh;
     left: 10vw;
     flex-direction: column;
     background-color: #004225;
@@ -333,10 +333,74 @@ body {
     margin-bottom: 5vh;
     padding: 20px;
     width: 80%;
-    height: 50vh;
+    height: 58vh;
     z-index: 1;
+    border-radius: 2rem;
+    border: solid 0.5rem #002c19;
 
     h1 {
         font-size: 1rem !important;
     }
+
+    .grupoInput {
+        position: relative;
+        margin-bottom: 5vh;
+        width: 50%;
+        align-items: center;
+        display: flex;
+        justify-content: center;
+    }
+
+    .grupoInput input {
+        font-size: 1rem;
+        padding: 5px 5px 5px 2.5px;
+        display: block;
+        width: 100%;
+        border: none;
+        color: #FFF;
+        border-bottom: 1px solid #FFF;
+        background: transparent;
+        outline: none;
+    }
+
+    .grupoInput label {
+        position: absolute;
+        left: 5px;
+        top: 10px;
+        color: #FFF;
+        font-size: 0.8rem;
+        pointer-events: none;
+        transition: 0.3s ease all;
+        font-weight: bold;
+    }
+
+    .grupoInput input:focus {
+        border-bottom: 2px solid yellow;
+    }
+
+    .grupoInput input:focus~label,
+    .grupoInput input:not(:placeholder-shown)~label {
+        top: -15px;
+        font-size: 0.9rem;
+        color: yellow;
+        font-weight: bold;
+
+    }
+}
+
+.olho {
+    position: absolute;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+#btnFechar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
 }
