@@ -22,8 +22,8 @@
                         <h1>Cadastro</h1>
 
                         <div class="grupoInput">
-                            <input type="email" id="username" required placeholder=" ">
-                            <label for="username">Usuário ou Email</label>
+                            <input type="email" id="email" required placeholder=" ">
+                            <label for="email">Email</label>
                         </div>
 
                         <div class="grupoInput">
@@ -47,21 +47,31 @@
             <h1> Preencha as seguintes informações para finzalizar seu cadastro</h1>
             <img id="btnFechar" onclick="fecharForm()" src="Style/assets/xis.svg" alt="">
 
-            <div>
+            <div id="divEsquerdaForm">
+                <div class="grupoInput">
+                    <input type="text" id="nomeCompleto" required placeholder=" ">
+                    <label for="nomeCompleto">Nome Completo</label>
+                </div>
 
-            <div class="grupoInput">
-                <input type="text" id="nomeCompleto" required placeholder=" ">
-                <label for="nomeCompleto">Nome Completo</label>
-            </div>
+                <div class="grupoInput">
+                    <input type="date" id="dtNascimento" required placeholder=" ">
+                    <label for="dtNascimento">Data de Nascimento</label>
+                </div>
 
-            <div class="grupoInput">
-                <input type="text" id="cpf" required placeholder=" ">
-                <label for="cpf">CPF</label>
-            </div>
-        </div>
+                <div id="selectRisco">
+                    <h4>Qual o nivel de risco tolerado ?</h4>
+                    <select id="slcRisco" onchange="atualizarCorRisco()">
+                        <option value="">Selecione um opção abaixo</option>
+                        <option value="baixo">Baixo</option>
+                        <option value="moderado">Moderado</option>
+                        <option value="alto">Alto</option>
+                    </select>
+                </div>
 
-        <divv>
             </div>
+            <button id="btnFinalizar">Finalizar Cadastro</button>
+
+
     </main>
 
 
@@ -70,7 +80,31 @@
 </html>
 
 <script>
-    
+    function atualizarCorRisco() {
+        const riscoUsuario = document.getElementById('slcRisco').value;
+        const select = document.getElementById('slcRisco');
+
+        select.className = '';
+
+        if (riscoUsuario === 'baixo') {
+            select.style.backgroundColor = 'green';
+            select.style.color = 'white';
+            select.style.fontWeight = '400';
+        } else if (riscoUsuario === 'moderado') {
+            select.style.backgroundColor = 'yellow';
+            select.style.color = '#333';
+            select.style.fontWeight = '600';
+        } else if (riscoUsuario === 'alto') {
+            select.style.backgroundColor = 'red';
+            select.style.color = 'white';
+            select.style.fontWeight = '900';
+        } else {
+            select.style.backgroundColor = '#f8f9fa';
+            select.style.color = '#333';
+        }
+    }
+
+
     fecharForm = () => {
         const form = document.getElementById('formularioCadastro');
         form.style.display = 'none';
@@ -100,11 +134,30 @@
 
 
     exibirForm = () => {
+        const email = document.getElementById('email').value;
+        const senha = document.getElementById('senha').value;
         const form = document.getElementById('formularioCadastro');
         form.style.display = 'flex';
         const background = document.getElementById('mainContainer');
         background.style.filter = 'blur(5px)';
-
     };
 
+    cadastrarUsuario = () => {
+        if (!email || !senha) {
+            alert('Preencha todos os campos!');
+            return;
+        }
+
+        if (!email.includes('@')) {
+            alert('Email inválido!');
+            return;
+        }
+
+        sessionStorage.setItem('EMAIL', email);
+        sessionStorage.setItem('USUARIO_LOGADO', 'true');
+        sessionStorage.setItem('DATA_LOGIN', new Date().toISOString());
+
+        alert('Cadastro realizado com sucesso!');
+
+    }
 </script>

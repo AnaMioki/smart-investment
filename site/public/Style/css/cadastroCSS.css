@@ -339,6 +339,7 @@ body {
     border: solid 0.5rem #002c19;
 
     h1 {
+        margin-bottom: 1rem;
         font-size: 1rem !important;
     }
 
@@ -403,4 +404,87 @@ body {
     width: 25px;
     height: 25px;
     cursor: pointer;
+}
+
+#selectRisco {
+    display: flex;
+    align-self: flex-start;
+    flex-direction: column;
+    justify-content: start;
+    text-align: left;
+}
+
+#slcRisco {
+    width: 20vw;
+    height: 5vh;
+    cursor: pointer;
+    border-radius: 1rem;
+    outline: none;
+
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    background-color: white;
+    font-size: 0.8rem;
+    color: #333;
+
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 12px center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    padding-right: 40px;
+
+    option {
+        text-align: center;
+
+    }
+
+    #optNula {
+        font-weight: normal !important;
+    }
+}
+
+select:hover,
+select:focus {
+    outline: none;
+}
+
+#slcRisco option {
+    padding: 10px;
+}
+
+#slcRisco option[value="baixo"] {
+    background-color: #28a745;
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 400;
+}
+
+#slcRisco option[value="moderado"] {
+    background-color: #ffc107;
+    color: #333;
+    font-size: 0.9rem;
+    font-weight: 540;
+}
+
+#slcRisco option[value="alto"] {
+    background-color: #dc3545;
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 900;
+}
+
+#slcRisco option[value=""] {
+    background-color: #f8f9fa;
+    color: #333;
+    font-size: 0.9rem;
+}
+
+
+#slcRisco:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 15);
 }
