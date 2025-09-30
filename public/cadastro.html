@@ -69,7 +69,7 @@
                 </div>
 
             </div>
-            <button id="btnFinalizar">Finalizar Cadastro</button>
+            <button id="btnFinalizar" onclick="cadastrarUsuario()">Finalizar Cadastro</button>
 
 
     </main>
@@ -102,15 +102,21 @@
             select.style.backgroundColor = '#f8f9fa';
             select.style.color = '#333';
         }
-}
+    }
 
-
-    fecharForm = () => {
+    // fecharForm
+    // window.fecharForm = () => {
+    //     const form = document.getElementById('formularioCadastro');
+    //     form.style.display = 'none';
+    //     const background = document.getElementById('mainContainer');
+    //     background.style.filter = 'none';
+    // };
+    function fecharForm() {
         const form = document.getElementById('formularioCadastro');
         form.style.display = 'none';
         const background = document.getElementById('mainContainer');
         background.style.filter = 'none';
-    };
+    }
 
     exibirSenha = () => {
         const senhaInput = document.getElementById('senha');
@@ -134,8 +140,8 @@
 
 
     exibirForm = () => {
-        const email = document.getElementById('email').value;
-        const senha = document.getElementById('senha').value;
+        //     const email = document.getElementById('email').value;
+        //     const senha = document.getElementById('senha').value;
         const form = document.getElementById('formularioCadastro');
         form.style.display = 'flex';
         const background = document.getElementById('mainContainer');
@@ -143,21 +149,97 @@
     };
 
     cadastrarUsuario = () => {
-        if (!email || !senha) {
+        var nomeCompletoVar = document.getElementById("nomeCompleto").value;
+        var dtNascimentoVar = document.getElementById("dtNascimento").value;
+        var perfilVar = document.getElementById("slcRisco").value;
+        var emailVar = document.getElementById("email").value;
+        var senhaVar = document.getElementById("senha").value;
+
+        if (!emailVar || !senhaVar || !nomeCompletoVar || !dtNascimentoVar || !perfilVar) {
             alert('Preencha todos os campos!');
             return;
         }
 
-        if (!email.includes('@')) {
+        if (!emailVar.includes('@')) {
             alert('Email inválido!');
             return;
         }
 
-        sessionStorage.setItem('EMAIL', email);
-        sessionStorage.setItem('USUARIO_LOGADO', 'true');
-        sessionStorage.setItem('DATA_LOGIN', new Date().toISOString());
+        if (senhaVar.length < 8) {
+            alert("A senha deve conter no mínimo 8 caracteres");
+            return;
+        }
 
-        alert('Cadastro realizado com sucesso!');
+        if (!/[A-Z]/.test(senhaVar)) {
+            alert("A senha deve conter alguma letra maiúscula");
+            return;
+        }
+
+        if (!/[0-9]/.test(senhaVar)) {
+            alert("A senha deve conter algum número");
+            return;
+        }
+
+
+        // if (perfilVar === "alto") {
+        //     perfilVar = "Arrojado";
+        // } else if (perfilVar === "baixo") {
+        //     perfilVar = "Conservador";
+        // } else if (perfilVar === "moderado") {
+        //     perfilVar = "Moderado";
+        // }
+        const mapPerfil = {
+            "alto": "Arrojado",
+            "baixo": "Conservador",
+            "moderado": "Moderado"
+        };
+        perfilVar = mapPerfil[perfilVar] ? mapPerfil[perfilVar].trim() : "";
+        // const perfisValidos = ["Conservador", "Moderado", "Arrojado"];
+        // if (!perfisValidos.includes(perfil)) {
+        //     res.status(400).send("Perfil inválido! Escolha: Conservador, Moderado ou Arrojado");
+        //     return;
+        // }
+
+
+        const dadosCadastro = {
+            nomeCompleto: nomeCompletoVar,
+            dtNascimento: dtNascimentoVar,
+            email: emailVar,
+            senha: senhaVar,
+            perfil: perfilVar
+        };
+
+        console.log("Função cadastrarUsuario chamada!");
+        console.log(nomeCompletoVar, dtNascimentoVar, perfilVar, emailVar, senhaVar);
+
+        fetch("/usuarios/cadastrar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(dadosCadastro)
+
+        })
+
+            .then(res => {
+                if (res.ok) {
+                    alert("Cadastro realizado com sucesso!");
+                    setTimeout(() => window.location = "login.html", 2000);
+                } else {
+                    res.text().then(msg => alert("Erro no cadastro: " + msg));
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('Erro ao conectar com o servidor.');
+            });
+
+        // sessionStorage.setItem('EMAIL', email);
+        // sessionStorage.setItem('USUARIO_LOGADO', 'true');
+        // sessionStorage.setItem('DATA_LOGIN', new Date().toISOString());
+
+        // alert('Cadastro realizado com sucesso!');
 
     }
+
 </script>
