@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="Style/css/loginCSS.css">
+    <link rel="icon" type="image/x-icon" href="Style/assets/smartLogoVetor.ico">
+</head>
+
+<body>
+
+    <main>
+        <div id="mainContainer">
+            <img id="btnIndex" src="Style/assets/home.svg" onclick="backIndex()" alt="">
+            <div id="loginContainer">
+                <h1>Bem-vindo de volta!</h1>
+                <p>Insira suas credenciais para acessar sua conta.</p>
+                <div id="loginBox">
+                    <div id="loginForm">
+                        <h1>Login</h1>
+
+                        <div class="grupoInput">
+                            <input type="email" id="username" required placeholder=" ">
+                            <label for="username">Usuário ou Email</label>
+                        </div>
+
+                        <div class="grupoInput">
+                            <input type="password" id="senha" required placeholder=" ">
+                            <label for="senha">Senha</label>
+                        </div>
+                        <button onclick="logar()" id="btnLogar">Entrar</button>
+
+                        <a id="redCadastro" href="cadastro.html">Ainda não possui conta? Cadastre-se aqui</a>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <img id="logo" src="Style/assets/smartLogoVetor.svg" alt="">
+            </div>
+        </div>
+    </main>
+
+
+</body>
+
+</html>
+
+<script>
+    backIndex = () => {
+        window.location.href = 'index.html';
+    }
+
+    logar = () => {
+        // const username = document.getElementById('username').value;
+        // const password = document.getElementById('senha').value;
+
+        // if ((username == 'admin' || username == 'smart@investment.com') && password == 'senha123') {
+        //     alert('Login bem-sucedido!');
+        //     window.location.href = 'index.html';
+        // } else {
+        //     alert('Credenciais inválidas. Tente novamente.');
+        //     document.getElementById('username').value = '';
+        //     document.getElementById('senha').value = '';
+        // }
+
+        console.log("entrou")
+        var emailVar = document.getElementById('username').value;
+        var senhaVar = document.getElementById('senha').value;
+
+
+        if (emailVar == "" || senhaVar == "") {
+            alert("Campos vazios.")
+            return false;
+        }
+
+        console.log("FORM LOGIN: ", emailVar);
+        console.log("FORM SENHA: ", senhaVar);
+
+        fetch("/usuarios/autenticar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                emailServer: emailVar,
+                senhaServer: senhaVar
+            })
+        }).then(function (resposta) {
+            console.log("ESTOU NO THEN DO entrar()!")
+
+            if (resposta.ok) {
+                console.log(resposta);
+
+
+                resposta.json().then(json => {
+                    console.log(json);
+                    console.log(JSON.stringify(json));
+                    sessionStorage.EMAIL_USUARIO = json.email;
+                    sessionStorage.NOME_USUARIO = json.nome;
+                    sessionStorage.ID_USUARIO = json.idUsuario;
+
+                    console.log("ID_USUARIO salvo no sessionStorage:", sessionStorage.ID_USUARIO);
+                    setTimeout(function () {
+                        window.location = "./home.html";
+                    }, 1000); // apenas para exibir o loading
+
+                });
+
+            } else {
+                resposta.text().then(msg => alert(msg));
+                console.log("Houve um erro ao tentar realizar o login!");
+                alert("Houve um erro ao tentar realizar o login!")
+                // resposta.text().then(texto => {
+                //     console.error(texto);
+                // });
+            }
+
+        }).catch(function (erro) {
+            console.log(erro);
+        })
+
+        return false;
+
+    }
+
+</script>
