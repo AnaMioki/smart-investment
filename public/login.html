@@ -29,6 +29,7 @@
                         <div class="grupoInput">
                             <input type="password" id="senha" required placeholder=" ">
                             <label for="senha">Senha</label>
+                             <img class="olho" onclick="exibirSenha()" src="Style/assets/inivisivel.svg">
                         </div>
                         <button onclick="logar()" id="btnLogar">Entrar</button>
 
@@ -52,6 +53,20 @@
     backIndex = () => {
         window.location.href = 'index.html';
     }
+
+     exibirSenha = () => {
+        const senhaInput = document.getElementById('senha');
+        const olhoIcon = document.querySelector('.olho');
+
+        if (senhaInput.type === 'password') {
+            senhaInput.type = 'text';
+            olhoIcon.src = 'Style/assets/visivel.svg';
+        } else {
+            senhaInput.type = 'password';
+            olhoIcon.src = 'Style/assets/inivisivel.svg';
+        }
+    };
+
 
     logar = () => {
         // const username = document.getElementById('username').value;
