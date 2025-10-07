@@ -149,6 +149,23 @@ body {
     margin-left: 10vw;
 }
 
+#btnFinalizar {
+    width: 50%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #004225;
+    font-size: 1.2rem;
+    cursor: pointer;
+    align-self: flex-start;
+    margin-top: 1vh;
+}
+
+#btnFinalizar:hover {
+    background-color: #f1f1f1;
+}
+
 @media screen and (max-width: 1024px) {
     #cadastroContainer {
         padding: 3dvh 5dvh 5dvh 5dvh;

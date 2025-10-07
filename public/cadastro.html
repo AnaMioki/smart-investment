@@ -31,6 +31,18 @@
                             <label for="senha">Senha</label>
                             <img class="olho" onclick="exibirSenha()" src="Style/assets/inivisivel.svg">
                         </div>
+
+                        <div class="grupoInput">
+                            <input type="text" id="nomeCompleto" required placeholder=" ">
+                            <label for="nomeCompleto">Nome Completo</label>
+                        </div>
+
+                        <div class="grupoInput">
+                            <input type="date" id="dtNascimento" required placeholder=" ">
+                            <label for="dtNascimento">Data de Nascimento</label>
+                        </div>
+
+
                         <button onclick="exibirForm()" id="btnLogar">Cadastrar</button>
 
                         <a id="redLogin" href="login.html">Já possui conta? Faça seu login aqui</a>
@@ -48,16 +60,6 @@
             <img id="btnFechar" onclick="fecharForm()" src="Style/assets/xis.svg" alt="">
 
             <div id="divEsquerdaForm">
-                <div class="grupoInput">
-                    <input type="text" id="nomeCompleto" required placeholder=" ">
-                    <label for="nomeCompleto">Nome Completo</label>
-                </div>
-
-                <div class="grupoInput">
-                    <input type="date" id="dtNascimento" required placeholder=" ">
-                    <label for="dtNascimento">Data de Nascimento</label>
-                </div>
-
                 <div id="selectRisco">
                     <h4>Qual o nivel de risco tolerado ?</h4>
                     <select id="slcRisco" onchange="atualizarCorRisco()">
