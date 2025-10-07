@@ -9,6 +9,7 @@ body {
     height: 100%;
     width: 100%;
     display: flex;
+    overflow-y:hidden ;
 }
 
 #mainContainer {
@@ -119,7 +120,7 @@ body {
 }
 
 #btnLogar {
-    width: 80%;
+    width: 60%;
     padding: 10px;
     border: none;
     border-radius: 5px;
@@ -128,6 +129,7 @@ body {
     font-size: 1.2rem;
     cursor: pointer;
     align-self: center;
+    margin-top: 1vh;
 }
 
 #btnLogar:hover {
