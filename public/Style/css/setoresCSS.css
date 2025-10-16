@@ -9,7 +9,6 @@ body {
     height: 100%;
     width: 100%;
     display: flex;
-    overflow-y: hidden;
 }
 
 #mainContainer {
@@ -171,7 +170,7 @@ img#perfilIcon {
 
 #selectSetores{
     display: flex;
-    background-color: aqua;
+
     align-items: center;
     justify-content: space-between;
 }
@@ -206,7 +205,7 @@ img#perfilIcon {
 
 #kpiSetores{
     display: flex;
-    background-color: aqua;
+
     justify-content: space-between;
 }
 
@@ -302,4 +301,179 @@ img#perfilIcon {
     min-width: 50% !important;
     max-height: 87% !important;
     
+}
+
+
+/* Lista de setores */
+
+
+#listSetores{
+    display: flex;
+    width: 100%;
+    background-color: #ffffff;
+    flex-direction: column;
+    padding: 3vh;
+    gap: 5vh;
+}
+
+#topoSetor{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+}
+
+#topoSetor h1{
+    font-weight: 100;
+    font-size: 1.4rem;
+}
+
+#topoSetor label{
+    display: flex;
+    background-color: #f3f3f5;
+    border-radius: 1vh;
+    transition: 0.5s;
+    cursor: pointer;
+}
+#topoSetor label img{
+    width: 7vh;
+    padding: 0 2vh ;
+}
+
+#topoSetor label input{
+    background-color: #f3f3f5;
+    border: none;
+    padding: 1vh;
+    border-radius: 2vh;
+    font-size: 1.3rem;
+}
+
+
+#topoSetor label input::placeholder{
+    color: gray;
+}
+
+#topoSetor label:hover{
+    transform: scale(1.03);
+}
+
+#lista{
+    display: flex;
+    flex-direction: column;
+    gap: 6vh;
+}
+
+#lista div{
+    justify-content: space-between;
+    display: flex;
+    padding: 1vh;
+    border: solid #00000012;
+    border-radius: 2vh;
+    width: 100%;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+#lista div:hover{
+    transform: scale(1.02);
+}
+
+.numero{
+    padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border: none !important;
+    width: 20% !important;
+}
+
+.numero h2{
+    height: 60%;
+    text-align: center ;
+    align-items: center;
+    background-color: #DBEAFE;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    display: flex;
+    padding: 4vh;
+    justify-content: center;
+}
+
+.numero div{
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1vh;
+    border: none !important;
+}
+
+.numero div h1{
+    font-size: 1.6rem;
+    font-weight: 100;
+    color: #000;
+}
+
+.numero div p{
+    font-size: 1rem;
+}
+
+
+.infos{
+    display: flex;
+    width: 70% !important;
+    align-items: center;
+    border: none !important;
+}
+
+.infos div{
+    display: flex;
+    flex-direction: column;
+    border: none !important;
+}
+
+.infos div h1{
+    font-size: 1.3rem;
+    font-weight: 300;
+}
+
+.infos div p{
+    font-size: 1.5rem;
+}
+
+.corVerde{
+    color: #00A63E;
+}
+
+.corLaranja{
+    color: #F54900;
+}
+
+.corVermelha{
+    color: #E7000B;
+}
+
+.azul{
+    font-size: 1rem;
+    color: #193CB8;
+    background-color: #DBEAFE;
+    padding: 2vh 3vh;
+    border-radius: 2vh;
+}
+
+.verde{
+    font-size: 1rem;
+    color: #016630;
+    background-color: #DCFCE7;
+    padding: 2vh 3vh;
+    border-radius: 2vh;
+}
+
+.amarelo{
+    font-size: 1rem;
+    color: #894B00;
+    background-color: #FEF9C2;
+    padding: 2vh 3vh;
+    border-radius: 2vh;
 }
