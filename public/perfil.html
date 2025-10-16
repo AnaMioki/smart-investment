@@ -12,27 +12,110 @@
 <body>
 
     <div id="mainContainer">
-          <div class="container">
-        <div id="header">
-            <img id="logo" src="Style/assets/smartLogoVetor.svg" alt="logoSmartInvestment">
-            <div class="navbar">
-                <a href="dashboard.html">Dashboard</a>
-                <a href="setores.html">Setores</a>
-                <a href="acoes.html">Ações</a>
-                <a href="comparacoes.html">Comparações</a>
-                <a href="perfil.html" class="selected">Perfil</a>
+        <div class="container">
+            <div id="header">
+                <img id="logo" src="Style/assets/smartLogoVetor.svg" alt="logoSmartInvestment">
+                <div class="navbar">
+                    <a href="dashboard.html">Dashboard</a>
+                    <a href="setores.html">Setores</a>
+                    <a href="acoes.html">Ações</a>
+                    <a href="comparacoes.html">Comparações</a>
+                    <a href="perfil.html" class="selected">Perfil</a>
+                </div>
+
+                <div class="notification-container">
+                    <span class="notification-badge">3</span>
+                    <img id="notificacaoIcon" src="Style/assets/sinoNotificacao.svg" alt="">
+                </div>
+                <img id="perfilIcon" src="Style/assets/perfilBoneco.svg" alt="">
             </div>
-            
-            <div class="notification-container">
-                <span class="notification-badge">3</span>
-                <img id="notificacaoIcon" src="Style/assets/sinoNotificacao.svg" alt="">
+
+            <div id="content">
+                <h1>Configurações de perfil</h1>
+                <div class="section">
+                    <h2>Informações Pessoais</h2>
+                    <div id="sectionContent">
+                        <img id="imgPerfil" src="Style/assets/pefilIconAzul.svg" alt="">
+                        <div class="info">
+                            <p id="usuario"> Alexandre Silva</p>
+                            <p id="email"><img src="Style/assets/emailIcon.svg" alt=""> alexandre.silva@example.com</p>
+                        </div>
+                    </div>
+
+                    <span id="perfilRisco">Conservador</span>
+
+                </div>
+
+                <div class="section">
+                    <h2>Perfil de Investidor</h2>
+                    <div id="aviso">
+                        <img src="Style/assets/avisoIcon.svg" alt="">
+                        <p>Seu perfil de investidor determina quais ações e setores são recomendados para você. Escolha
+                            o perfil que melhor reflete sua tolerância a risco e objetivos de investimento.
+                        </p>
+                    </div>
+
+                    <div class="perfilInvestidor">
+                        <div class="perfilOpcao" id="iniciante">
+                            <div class="perfilHeader">
+                                <span class="check"></span>
+                                <div class="perfilTitulo">Iniciante</div>
+                                <span class="perfilTag iniciante">iniciante</span>
+                            </div>
+                            <div class="perfilDesc">
+                                Para investidores que estão começando e buscam aprender sobre o mercado
+                            </div>
+                            <ul class="perfilFeatures">
+                                <li>Ações de empresas consolidadas e conhecidas</li>
+                                <li>Setores com menor volatilidade</li>
+                                <li>Foco em aprendizado e estabilidade</li>
+                                <li>Recomendações mais conservadoras</li>
+                            </ul>
+                        </div>
+
+                        <div class="perfilOpcao selected" id="conservador">
+                            <div class="perfilHeader">
+                                <span class="check active"></span>
+                                <div class="perfilTitulo">Conservador</div>
+                                <span class="perfilTag conservador">conservador</span>
+                            </div>
+                            <div class="perfilDesc">
+                                Para investidores que priorizam segurança e retornos consistentes
+                            </div>
+                            <ul class="perfilFeatures">
+                                <li>Ações com bom histórico de dividendos</li>
+                                <li>Empresas com fundamentos sólidos</li>
+                                <li>Volatilidade moderada</li>
+                                <li>Equilíbrio entre risco e retorno</li>
+                            </ul>
+                        </div>
+
+                        <div class="perfilOpcao" id="arrojado">
+                            <div class="perfilHeader">
+                                <span class="check"></span>
+                                <div class="perfilTitulo">Arrojado</div>
+                                <span class="perfilTag arrojado">arrojado</span>
+                            </div>
+                            <div class="perfilDesc">
+                                Para investidores experientes que buscam maiores retornos e aceitam mais risco
+                            </div>
+                            <ul class="perfilFeatures">
+                                <li>Ações de crescimento acelerado</li>
+                                <li>Maior volatilidade aceita</li>
+                                <li>Potencial de retornos elevados</li>
+                                <li>Empresas inovadoras e disruptivas</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="actions-buttons">
+                        <button class="btn-cancel">Cancelar</button>
+                        <button class="btn-save">Salvar Alterações</button>
+                    </div>
+                </div>
             </div>
-            <img id="perfilIcon" src="Style/assets/perfilBoneco.svg" alt="">
         </div>
-
     </div>
-
-
 </body>
 
 </html>
