@@ -1,0 +1,363 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    height: 100%;
+    width: 100%;
+    display: flex;
+}
+
+#mainContainer {
+    height: 100dvh;
+    width: 100%;
+}
+
+#header {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 7vh;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+}
+
+;
+
+#logo {
+    max-width: 5vh;
+    height: 5vh;
+    margin-left: 5px;
+    object-fit: contain;
+    display: block;
+    flex-shrink: 0;
+}
+
+#logo img,
+img#logo {
+    width: 12vh;
+    height: 12ch;
+    object-fit: contain;
+    display: block;
+}
+
+.navbar {
+    display: flex;
+    width: 100%;
+    gap: 5vh;
+    align-items: center;
+    justify-content: center;
+    padding: 0 2vh;
+}
+
+.selected {
+    background-color: #004225;
+    color: #fff;
+}
+
+.navbar .selected {
+    background-color: #016630;
+    color: #fff;
+    padding: 1vh 1.5vh;
+    border-radius: 10px;
+}
+
+.navbar a.selected:hover {
+    color: #fff;
+    transform: none;
+    text-decoration: none;
+}
+
+.navbar a {
+    margin: 2vh;
+    text-decoration: none;
+    color: #000;
+    font-size: 1.9vh;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.navbar a:hover {
+    color: #168500d2;
+    transform: scale(1.09);
+    text-decoration: underline #004225;
+}
+
+#mainContainer {
+    height: 100dvh;
+    width: 100%;
+}
+
+#perfilIcon {
+    max-width: 7vh;
+    height: 7vh;
+    margin-left: 5px;
+    object-fit: contain;
+    display: block;
+    flex-shrink: 0;
+}
+
+#notificacaoIcon {
+    max-width: 3vh;
+    height: 3vh;
+    fill: white !important;
+    margin-left: 5px;
+    object-fit: contain;
+    display: block;
+    flex-shrink: 0;
+}
+
+#perfilIcon img,
+img#perfilIcon {
+    width: 14vh;
+    height: 14ch;
+    object-fit: contain;
+    display: block;
+}
+
+.notification-container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -0.5vh;
+    right: -0.5vh;
+    background-color: #016630;
+    color: white;
+    font-size: 1.2vh;
+    font-weight: bold;
+    min-width: 1.8vh;
+    height: 1.8vh;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.2vh;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+}
+
+
+.notification-container #notificacaoIcon {
+    max-width: 3vh;
+    height: 3vh;
+    object-fit: contain;
+    display: block;
+}
+
+
+/* Main das notificações */
+
+#mainNotification{
+    display: flex;
+    height: 100%;
+    width: 100%;
+    padding: 3dvh;
+}
+
+#mainExp{
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    background-color: #f9fafb;
+    flex-direction: column;
+    border-radius: 1vh;
+    gap: 2vh;
+}
+
+#topNotification{
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#topNotification div{
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+}
+
+#topNotification div h1{
+    font-size: 1.4rem;
+    font-weight: 100;
+    color: #000;
+}
+
+#topNotification div p{
+    font-size: 1rem;
+    font-weight: 100;
+    color: #4A5565;
+}
+
+#topNotification h2{
+    font-size: 0.8rem;
+    background-color: #016630;
+    color: #ffffff;
+    padding: 0.8vh 1.5vh;
+    border-radius: 1vh;
+}
+
+
+/* Área de seleção de notificação (todas/não lidas) */
+
+#selectNotification{
+    display: flex;
+    padding: 2vh 0;
+}
+
+#selectNotification div{
+    display: flex;
+    gap: 02vh;
+    padding:0.4vh 0.5vw;
+    border-radius: 1.9vh;
+    padding-right: 2vh;
+    background-color: #ECECF0;
+    align-items: center;
+    color: #000;
+    font-size: 1rem;
+}
+
+#selectNotification div p{
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: 0.5s;
+}
+
+
+#selectNotification div p:hover{
+    transform: translateX(0.1vh) translateY(0.1vh);
+    font-weight: 100;
+}
+
+
+
+.selected{
+    background-color: #ffffff;
+    padding: 0.9vh 1.3vh;
+    border-radius: 2vh;
+    color: #000;
+}
+
+
+/* Lista das notificação */
+
+#listNotificacoes{
+
+    display: flex;
+    flex-direction: column;
+    gap: 3vh;
+
+}
+
+#listNotificacoes p{
+    font-size: 1rem;
+    font-weight: 300;
+    color: #004225;
+}
+
+#listNotificacoes p span{
+    font-weight: bold;
+    color:  #004225;
+}
+
+.setorLista{
+    background-color: white;
+    border: rgba(0, 0, 0, 0.201) solid 0.2vh;
+    border-radius: 1vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.setorLista div{
+    display: flex;
+    border: rgba(0, 0, 0, 0.092) solid 0.2vh;
+    justify-content: space-between;
+    transition: 0.5s;
+    background-color: #ffffff;
+}
+
+.setorLista div:hover{
+    z-index: 999;
+    transform: scale(1.01) translateX(0.5vh) translateY(0.5vh) ;
+    box-shadow: 0.1px 0.1px 4px;
+}
+
+.setorLista div *{
+    border: none;
+}
+.setorLista div *:hover{
+    box-shadow: none;
+    transform: none;
+}
+
+.setorLista div div{
+    display: flex;
+    align-items: self-start;
+    gap: 2vh;
+    padding: 2vh;
+}
+.setorLista div div div{
+    display: flex;
+    
+    flex-direction: column;
+}
+
+.setorLista div div div h1{
+    font-size: 1.5rem;
+    font-weight: 100;
+    color: #000;
+}
+
+.setorLista div div div p{
+    font-size: 1rem !important;
+    color: #4A5565;
+}
+
+.setorLista div div div h2{
+    font-size: 1rem;
+    color: #4A5565;
+    font-weight: 100;
+}
+
+.setorLista div div img{
+    height: 10vh;
+    padding: 2vh;
+    border-radius: 50%;
+    background-color: #004225;
+}
+
+.alerta{
+    background-color:#FFE2E2 !important;
+}
+
+.informacao{
+    background-color:#DCFCE7 !important;
+}
+
+.newNotify{
+    background-color: #155DFC !important;
+    padding: 1px !important;
+    height: 1vh !important;
+    width: 1vh !important;
+    border-radius: 50%;
+    margin: 1vh;
+}
+
+/*
+Caso queira modificar uma div que tenha algo
+.setorLista > div:has(.newNotify){
+
+    background-color: #000 !important;
+
+} */

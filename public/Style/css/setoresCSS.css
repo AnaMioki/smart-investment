@@ -213,11 +213,16 @@ img#perfilIcon {
     width: 32%;
     border-radius: 1.3vh;
     padding: 2vh;
+    transition: 0.5s;
     align-items: center;
     display: flex;
     justify-content: space-between;
     background-color: #ffffff;
     border: solid 0.1vh #0000001e;
+}
+
+#kpiSetores div:hover{
+    transform: scale(1.05);
 }
 
 #kpiSetores div div{
@@ -279,10 +284,15 @@ img#perfilIcon {
     align-items: center;
     border-radius: 2vh;
     padding: 4vh;
+    transition: 0.5s;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     background-color: #ffffff;
+}
+
+#grafSetores div:hover{
+    transform: scale(1.05);
 }
 
 #grafSetores div h1{
