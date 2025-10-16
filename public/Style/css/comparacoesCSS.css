@@ -11,7 +11,6 @@ body {
     display: flex;
     background-color: #f8f9fa;
 }
-
 #mainContainer {
     height: 100dvh;
     width: 100%;
@@ -26,7 +25,10 @@ body {
     justify-content: space-between;
     background-color: #ffffff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
 }
+
+;
 
 #logo {
     max-width: 5vh;
