@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setores</title>
+    <link rel="icon" type="image/x-icon" href="Style/assets/smartLogoVetor.ico">
+    <link rel="stylesheet" href="Style/css/setoresCSS.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div id="mainContainer">
+        <div id="header">
+            <img id="logo" src="Style/assets/smartLogoVetor.svg" alt="logoSmartInvestment">
+            <div class="navbar">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="setores.html" class="selected">Setores</a>
+                <a href="acoes.html">Ações</a>
+                <a href="comparacoes.html">Comparações</a>
+                <a href="perfil.html">Perfil</a>
+            </div>
+            
+            <div class="notification-container">
+                <span class="notification-badge">3</span>
+                <img id="notificacaoIcon" src="Style/assets/sinoNotificacao.svg" alt="">
+            </div>
+            <img id="perfilIcon" src="Style/assets/perfilBoneco.svg" alt="">
+        </div>
+        <div id="mainContent">
+            <div id="mainExp">
+                <div id="selectSetores">
+                    <h1>Análise de setores</h1>
+                    <div>
+                        <select name="seletorPeriodo" id="selectPeriodo">
+                            <option value="3m">3 meses</option>
+                            <option value="5m">5 meses</option>
+                            <option value="9m">9 meses</option>
+                            <option value="1" selected>1 ano</option>
+                            <option value="2">2 anos</option>
+                            <option value="3">3 anos</option>
+                        </select>
+                        <select name="seletorTipo" id="selectTipo">
+                            <option value="retorno" selected>Por retorno</option>
+                            <option value="volatibilidade">Por volatibilidade</option>
+                            <option value="valor">Por valor</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="kpiSetores">
+                    
+                    <div>
+                        <div>
+                            <p>Total de Setores</p>
+                            <h1>8</h1>
+                        </div>
+                        <img src="Style/assets/flechaSetores.svg" alt="imagem seta para cima (como ações)" class="order1">
+                    </div>
+
+                    <div>
+                        <div>
+                            <p>Melhor Peformer</p>
+                            <h1 class="cor1">Tecnologia</h1>
+                        </div>
+                        <img src="Style/assets/setaPraCimaSetores.svg" alt="Imagem seta para cima" class="order2">
+                    </div>
+
+                    <div>
+                        <div>
+                            <p>Maior Volatibilidade</p>
+                            <h1 class="cor2">Energia</h1>
+                        </div>
+                        <img src="Style/assets/metricaSetores.svg" alt="imagem de volatibilidade" class="order3">
+                    </div>
+
+                </div>
+
+                <div id="grafSetores">
+                    <div>
+                        <h1>Comparativo Multidimensional</h1>
+                        <canvas id="graficoRadar"></canvas>
+                    </div>
+
+                    <div>
+                        <h1>Retorno vs Volatilidade vs Sharpe</h1>
+                        <canvas id="graficoBarra"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<!-- Script radar -->
+
+<script>
+    const ctxRadar = document.getElementById('graficoRadar').getContext('2d');
+
+    const dataRadar = {
+  labels: ['Retorno', 'Sharpe', 'Liquidez', 'Estabilidade'],
+  datasets: [
+    {
+      label: 'Financeiro',
+      data: [90, 85, 98, 85],
+      fill: true,
+      backgroundColor: 'rgba(255, 159, 64, 0.2)', // laranja
+      borderColor: 'rgb(255, 159, 64)',
+      pointRadius: 0
+    },
+    {
+      label: 'Saúde',
+      data: [96, 90, 90, 90],
+      fill: true,
+      backgroundColor: 'rgba(75, 192, 192, 0.2)', // verde
+      borderColor: 'rgb(75, 192, 192)',
+      pointRadius: 0
+    },
+    {
+      label: 'Tecnologia',
+      data: [90, 85, 90, 60],
+      fill: true,
+      backgroundColor: 'rgba(54, 162, 235, 0.2)', // azul
+      borderColor: 'rgb(54, 162, 235)',
+      pointRadius: 0
+    }
+  ]
+};
+
+    const configRadar = {
+        type: 'radar',
+        data: dataRadar,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        boxWidth: 20,
+                        padding: 15
+                    }
+                },
+                title: {
+                    display: false
+                }
+            },
+            elements: {
+                line: {
+                    borderWidth: 1
+                }
+            },
+            scales: {
+                r: {
+                    angleLines: {
+                        display: false
+                    },
+                    pointLabels: {
+                        font: {
+                            size: 14
+                        }
+                    },
+                    ticks: {
+                        display: false
+                    }
+                }
+            }
+        },
+    };
+
+    new Chart(ctxRadar, configRadar);
+</script>
+
+<!-- Script barra -->
+
+<script>
+const ctx = document.getElementById('graficoBarra');
+new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Tech', 'Saúd','Fina', 'Ener', ' Cons', 'Indu', 'Imob', 'Tele'],//Nomes setores
+                datasets: [
+                    {
+                        label: 'Retorno',
+                        data: [18, 13, 10, 9, 8, 7, 6, 7],
+                        backgroundColor: '#10B981' //verde
+                    },
+                    {
+                        label: 'Sharpe',
+                        data: [7, 8, 6, 4, 5, 4, 4, 4],
+                        backgroundColor: '#8B5CF6' // roxo
+                    },
+                    {
+                        label: 'Volatilidade',
+                        data: [24, 22, 28, 15, 18, 17, 15, 15],
+                        backgroundColor: '#F59E0B' // laranja
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    x: {
+                    },
+                    y: {
+
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            boxWidth: 20
+                        }
+                    }
+                }
+            }
+        });
+
+</script>

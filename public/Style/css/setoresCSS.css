@@ -1,0 +1,305 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    overflow-y: hidden;
+}
+
+#mainContainer {
+    height: 100dvh;
+    width: 100%;
+}
+
+#header {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 7vh;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+}
+
+;
+
+#logo {
+    max-width: 5vh;
+    height: 5vh;
+    margin-left: 5px;
+    object-fit: contain;
+    display: block;
+    flex-shrink: 0;
+}
+
+#logo img,
+img#logo {
+    width: 12vh;
+    height: 12ch;
+    object-fit: contain;
+    display: block;
+}
+
+.navbar {
+    display: flex;
+    width: 100%;
+    gap: 5vh;
+    align-items: center;
+    justify-content: center;
+    padding: 0 2vh;
+}
+
+.selected {
+    background-color: #004225;
+    color: #fff;
+}
+
+.navbar .selected {
+    background-color: #016630;
+    color: #fff;
+    padding: 1vh 1.5vh;
+    border-radius: 10px;
+}
+
+.navbar a.selected:hover {
+    color: #fff;
+    transform: none;
+    text-decoration: none;
+}
+
+.navbar a {
+    margin: 2vh;
+    text-decoration: none;
+    color: #000;
+    font-size: 1.9vh;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.navbar a:hover {
+    color: #168500d2;
+    transform: scale(1.09);
+    text-decoration: underline #004225;
+}
+
+#perfilIcon {
+    max-width: 7vh;
+    height: 7vh;
+    margin-left: 5px;
+    object-fit: contain;
+    display: block;
+    flex-shrink: 0;
+}
+
+#notificacaoIcon {
+    max-width: 3vh;
+    height: 3vh;
+    margin-left: 5px;
+    object-fit: contain;
+    display: block;
+    flex-shrink: 0;
+}
+
+#perfilIcon img,
+img#perfilIcon {
+    width: 14vh;
+    height: 14ch;
+    object-fit: contain;
+    display: block;
+}
+
+.notification-container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -0.5vh;
+    right: -0.5vh;
+    background-color: #016630;
+    color: white;
+    font-size: 1.2vh;
+    font-weight: bold;
+    min-width: 1.8vh;
+    height: 1.8vh;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.2vh;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+}
+
+
+.notification-container #notificacaoIcon {
+    max-width: 3vh;
+    height: 3vh;
+    object-fit: contain;
+    display: block;
+}
+
+
+/* Parte de conteúdo principal */
+
+#mainContent{
+    display: flex;
+    height: 100%;
+    width: 100%;
+   
+    padding: 3dvh;
+}
+
+#mainExp{
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    background-color: #f9fafb;
+    flex-direction: column;
+    gap: 2vh;
+}
+
+#selectSetores{
+    display: flex;
+    background-color: aqua;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#selectSetores h1{
+    font-weight: 500;    
+    font-size: 1rem;
+}
+#selectSetores div select{
+    cursor: pointer;
+    background-color: #f3f3f5;
+    border: none;
+    font-size: 1rem;
+    padding: 1vh;
+    font-weight: 100;
+    transition: 0.4s;
+    border-radius: 0.3dvh;
+}
+
+#selectSetores div select:hover{
+    transform: scale(1.03);
+    font-weight: 100;
+}
+
+#selectSetores div{
+    display: flex;
+    gap: 2vh;
+}
+
+
+/* Parte das KPIS do setor */
+
+#kpiSetores{
+    display: flex;
+    background-color: aqua;
+    justify-content: space-between;
+}
+
+#kpiSetores div{
+    width: 32%;
+    border-radius: 1.3vh;
+    padding: 2vh;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    background-color: #ffffff;
+    border: solid 0.1vh #0000001e;
+}
+
+#kpiSetores div div{
+    display: flex;
+    flex-direction: column;
+    align-items: self-start;
+    gap: 1vh;
+    border: none;
+    width: auto;
+}
+
+#kpiSetores div p{
+    font-size: 1rem;
+    color: #000;
+}
+
+#kpiSetores div h1{
+    font-size: 1.3rem;
+    font-weight: 200;
+}
+
+#kpiSetores div img{
+    border-radius: 50%;
+    padding: 2.4vh;
+    height: 10vh;
+}
+
+.order1{
+    background-color: #DBEAFE;
+}
+
+.order2{
+    background-color:#DCFCE7 ;
+}
+
+.order3{
+    background-color: #FFEDD4;
+}
+
+.cor1{
+    color: #00A63E;
+}
+
+.cor2{
+    color: #F54800;
+}
+
+
+#grafSetores{
+    display: flex;
+    width: 100%;
+    padding: 2vh 0;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+#grafSetores div{
+    width: 49%;
+    align-items: center;
+    border-radius: 2vh;
+    padding: 4vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #ffffff;
+}
+
+#grafSetores div h1{
+    align-self: self-start;
+    font-size: 1.2rem;
+    font-weight: 100;
+}
+
+#graficoRadar{
+  width: 30vw !important;
+  height: 50vh !important;   /* <-- ESSENCIAL para deixar o gráfico quadrado */
+}
+
+#graficoBarra{
+    max-width: 100% !important;
+    min-width: 50% !important;
+    max-height: 87% !important;
+    
+}
