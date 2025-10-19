@@ -14,21 +14,35 @@
     <div id="mainContainer">
         <div class="container">
             <div id="header">
-                <img id="logo" src="Style/assets/smartLogoVetor.svg" alt="logoSmartInvestment">
-                <div class="navbar">
-                    <a href="dashboard.html">Dashboard</a>
-                    <a href="setores.html">Setores</a>
-                    <a href="acoes.html">Ações</a>
-                    <a href="comparacoes.html">Comparações</a>
-                    <a href="perfil.html" class="selected">Perfil</a>
-                </div>
-
-                <div class="notification-container">
-                    <span class="notification-badge">3</span>
-                    <img id="notificacaoIcon" src="Style/assets/sinoNotificacao.svg" alt="">
-                </div>
-                <img id="perfilIcon" src="Style/assets/perfilBoneco.svg" alt="">
+            <img id="logo" src="Style/assets/smartLogoVetor.svg" alt="logoSmartInvestment">
+            <div class="navbar">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="setores.html">Setores</a>
+                <a href="acoes.html">Ações</a>
+                <a href="comparacoes.html">Comparações</a>
+                <a href="perfil.html" class="selected">Perfil</a>
             </div>
+
+            <div class="notification-container">
+                <span class="notification-badge">3</span>
+                <img id="notificacaoIcon" src="Style/assets/sinoNotificacao.svg" alt="">
+            </div>
+            <img id="perfilIcon" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" alt="">
+
+            <div class="hamburger">
+                <div class="bar1"></div>
+                <div class="bar2"></div>
+                <div class="bar3"></div>    
+            </div>
+            <nav class="mobile-menu">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="setores.html">Setores</a>
+                <a href="acoes.html">Ações</a>
+                <a href="comparacoes.html">Comparações</a>
+                <a href="perfil.html">Perfil</a>
+            </nav>
+
+        </div>
 
             <div id="content">
                 <h1>Configurações de perfil</h1>
@@ -119,3 +133,4 @@
 </body>
 
 </html>
+<script src="Style/js/fazerHamburguer.js"></script>

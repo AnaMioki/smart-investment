@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ações</title>
+    <link rel="icon" type="image/x-icon" href="Style/assets/smartLogoVetor.ico">
+    <link rel="stylesheet" href="Style/css/acoesCSS.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+     <div id="mainContainer">
+         <div id="header">
+                 <img id="logo" src="Style/assets/smartLogoVetor.svg" alt="logoSmartInvestment">
+                 <div class="navbar">
+                     <a href="dashboard.html">Dashboard</a>
+                     <a href="setores.html">Setores</a>
+                     <a href="acoes.html" class="selected">Ações</a>
+                     <a href="comparacoes.html">Comparações</a>
+                     <a href="perfil.html">Perfil</a>
+                 </div>
+     
+                 <div class="notification-container">
+                     <span class="notification-badge">3</span>
+                     <img id="notificacaoIcon" src="Style/assets/sinoNotificacao.svg" alt="">
+                 </div>
+                 <img id="perfilIcon" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" alt="">
+     
+                 <div class="hamburger">
+                     <div class="bar1"></div>
+                     <div class="bar2"></div>
+                     <div class="bar3"></div>    
+                 </div>
+                 <nav class="mobile-menu">
+                     <a href="dashboard.html">Dashboard</a>
+                     <a href="setores.html">Setores</a>
+                     <a href="acoes.html">Ações</a>
+                     <a href="comparacoes.html">Comparações</a>
+                     <a href="perfil.html">Perfil</a>
+                 </nav>
+     
+         </div>
+         <div id="mainContent">
+    
+            <div id="mainAcoes">
+                <div id="selectAcoes">
+                    <h1>Análise de Ações</h1>
+                    <div>
+                        <select name="seletorSetor" id="selectPeriodo">
+                            <option>Todos Setores</option>
+                            <option>Tecnologia</option>
+                            <option>Saúde</option>
+                            <option>Industrial</option>
+                            <option>Outros</option>
+                        </select>
+                        <select name="seletorTipo" id="selectTipo">
+                            <option value="retorno" selected>Por retorno</option>
+                            <option value="volatibilidade">Por volatibilidade</option>
+                            <option value="valor">Por valor</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="kpisAcoes">
+                    <div>
+                        <div>
+                            <p>Ações Recomendadas</p>
+                            <h1>6</h1>
+                        </div>
+                        <img src="Style/assets/flechaSetores.svg" class="fundoAzul">
+                    </div>
+
+
+                    <div>
+                        <div>
+                            <p>Retorno Médio</p>
+                            <h1 class="verde">+21.8%</h1>
+                        </div>
+                        <img src="Style/assets/setaPraCimaSetores.svg" class="fundoVerde">
+                    </div>
+
+                    <div>
+                        <div>
+                            <p>Volatilidade Média</p>
+                            <h1 class="laranja">26.7%</h1>
+                        </div>
+                        <img src="Style/assets/metricaSetores.svg" class="fundoLaranja">
+                    </div>
+
+                    <div>
+                        <div>
+                            <p>P/E Médio</p>
+                            <h1 class="roxo">35.2</h1>
+                        </div>
+                        <img src="Style/assets/sifrao.svg" class="fundoRoxo">
+                    </div>
+
+                </div>
+
+                <div id="graphAcoes">
+                    <h1>Evolução de preço - AAPL</h1>
+                    <canvas id="graphLinha"></canvas>
+                </div>
+
+
+                <div id="listAcoes">
+
+                    <div id="topoSetor">
+                        <h1>Ações Disponíveis</h1>
+                        <label for="searchSetor">
+                            <img src="Style/assets/lupaSetores.svg">
+                            <input type="search" id="searchSetor" placeholder="Buscar setor...">
+                        </label>
+                    </div>
+
+                    <div id="listaAcoes">
+                        <div class="descricao">
+                            <div class="tipo">
+                                <img src="Style/assets/imagemVazia.webp" >
+                                <h1>Ação</h1>
+                                <h1>Setor</h1>
+                                <h1>Preço</h1>
+                                <h1>Retorno</h1>
+                            </div>
+                            <div class="especificacao">
+                                <h1>Sharpe</h1>
+                                <h1>Beta</h1>
+                                <h1>Volume</h1>
+                            </div>
+                        </div>
+
+
+                        <div>
+                            <div class="tipo">
+                                <img src="Style/assets/estrelaCheia.svg">
+                                <div>
+                                    <h1>Apple Inc</h1>
+                                    <p>AAPL</p>
+                                </div>
+                                <h1 class="setor">Tecnologia</h1>
+                                <h1>$178.45</h1>
+                                <h1 class="verde">+22.5%</h1>
+                            </div>
+                            <div class="especificacao">
+                                <h1 class="disaparecido">Sharpe:</h1>
+                                <h1>0.89</h1>
+                                <h1 class="disaparecido">Beta:</h1>
+                                <h1>1.18</h1>
+                                <h1 class="disaparecido">Volume: </h1>
+                                <h1>125M</h1>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="tipo">
+                                <img src="Style/assets/estrelaCheia.svg">
+                                <div>
+                                    <h1>Microsoft</h1>
+                                    <p>MSFT</p>
+                                </div>
+                                <h1 class="setor">Tecnologia</h1>
+                                <h1>$374.45</h1>
+                                <h1 class="verde">19.8%</h1>
+                            </div>
+                            <div class="especificacao">
+                                <h1 class="disaparecido">Sharpe:</h1>
+                                <h1>0.89</h1>
+                                <h1 class="disaparecido">Beta:</h1>
+                                <h1>1.18</h1>
+                                <h1 class="disaparecido">Volume: </h1>
+                                <h1>125M</h1>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="tipo">
+                                <img src="Style/assets/estrelaCheia.svg">
+                                <div>
+                                    <h1>Johnson & Johnson</h1>
+                                    <p>JNJ</p>
+                                </div>
+                                <h1 class="setor">Saúde</h1>
+                                <h1>$156.32</h1>
+                                <h1 class="verde">+15.2%</h1>
+                            </div>
+                            <div class="especificacao">
+                                    <h1 class="disaparecido">Sharpe:</h1>
+                                <h1>0.89</h1>
+                                <h1 class="disaparecido">Beta:</h1>
+                                <h1>1.18</h1>
+                                <h1 class="disaparecido">Volume: </h1>
+                                <h1>125M</h1>
+                            </div>
+                        </div>
+
+
+                        <div>
+                            <div class="tipo">
+                                <img src="Style/assets/estrelaVazia.svg">
+                                <div>
+                                    <h1>JPMorgan Chase</h1>
+                                    <p>JPM</p>
+                                </div>
+                                <h1 class="setor">Financeiro</h1>
+                                <h1>$152.67</h1>
+                                <h1 class="verde">+12.8%</h1>
+                            </div>
+                            <div class="especificacao">
+                                   <h1 class="disaparecido">Sharpe:</h1>
+                                <h1>0.89</h1>
+                                <h1 class="disaparecido">Beta:</h1>
+                                <h1>1.18</h1>
+                                <h1 class="disaparecido">Volume: </h1>
+                                <h1>125M</h1>
+                            </div>
+                        </div>
+
+
+                        <div>
+                            <div class="tipo">
+                                <img src="Style/assets/estrelaVazia.svg">
+                                <div>
+                                    <h1>Exxon Mobil</h1>
+                                    <p>XOM</p>
+                                </div>
+                                <h1 class="setor">Energia</h1>
+                                <h1>$105.23</h1>
+                                <h1 class="verde">+11.5%</h1>
+                            </div>
+                            <div class="especificacao">
+                                 <h1 class="disaparecido">Sharpe:</h1>
+                                <h1>0.89</h1>
+                                <h1 class="disaparecido">Beta:</h1>
+                                <h1>1.18</h1>
+                                <h1 class="disaparecido">Volume: </h1>
+                                <h1>125M</h1>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="tipo">
+                                <img src="Style/assets/estrelaVazia.svg">
+                                <div>
+                                    <h1>Procter & Gamble</h1>
+                                    <p>PG</p>
+                                </div>
+                                <h1 class="setor">Consumo</h1>
+                                <h1>$105.23</h1>
+                                <h1 class="verde">9.3%</h1>
+                            </div>
+                            <div class="especificacao">
+                                   <h1 class="disaparecido">Sharpe:</h1>
+                                <h1>0.89</h1>
+                                <h1 class="disaparecido">Beta:</h1>
+                                <h1>1.18</h1>
+                                <h1 class="disaparecido">Volume: </h1>
+                                <h1>125M</h1>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+            </div>
+    
+         </div>
+     </div>
+
+
+
+</body>
+</html>
+
+<script>
+function criarGraficoEvolucaoPrecos() {
+    const ctx = document.getElementById('graphLinha').getContext('2d');
+
+    const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+    const datapoints = [140, 150, 155, 160, 175, 180, 176, 180, 180, 180 , 179, 180];
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: meses,
+            datasets: [{
+                label: 'Evolução de Preços',
+                data: datapoints,
+                fill: false,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+
+            }]
+        },
+        options: {
+            responsive: true,
+             maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 45
+                    },  
+                    grid: {
+                        color: 'rgba(0,0,0,0.05)'
+                    }
+                },
+                x: {
+                    grid: {
+                        color: 'rgba(0,0,0,0.05)'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+}
+
+criarGraficoEvolucaoPrecos();
+</script>
+
+<script src="Style/js/fazerHamburguer.js"></script>

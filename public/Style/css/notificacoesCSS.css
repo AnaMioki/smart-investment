@@ -5,6 +5,8 @@
     font-family: 'Poppins', sans-serif;
 }
 
+
+
 body {
     height: 100%;
     width: 100%;
@@ -152,6 +154,91 @@ img#perfilIcon {
     object-fit: contain;
     display: block;
 }
+/* Mobile menu (oculto por padrão) */
+.mobile-menu {
+    display: none;
+    flex-direction: column;
+    background-color: #ffffff;
+    position: absolute;
+    top: 7vh; /* altura do header */
+    right: 2vh;
+    width: 50vw;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 1vh;
+    padding: 2vh;
+    z-index: 999;
+}
+
+.mobile-menu a {
+    padding: 1.5vh 0;
+    color: #000;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 2vh;
+    transition: all 0.3s ease;
+}
+
+.mobile-menu a:hover {
+    color: #016630;
+    text-decoration: underline;
+}
+
+.mobile-menu.active {
+    display: flex;
+}
+
+
+@media (max-width: 1000px) {
+    
+    #perfilIcon, .notification-container, .navbar{
+        display: none !important;
+    }
+    
+    .hamburger {
+       display: flex !important;
+    }
+}
+ 
+
+
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-evenly;
+    width: 30px;
+    height: 100%;
+    cursor: pointer;
+    margin-right: 2vh;
+}
+
+
+.hamburger .bar1,
+.hamburger .bar2,
+.hamburger .bar3 {
+  height: 3px;
+  width: 100%;
+  background-color: #000;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  transform-origin: center;
+  margin: 0.6vh 0; 
+}
+
+.hamburger.active .bar1 {
+  transform: rotate(45deg) translateX(2vh) translateY(2vh);
+  width: 40px;
+}
+
+.hamburger.active .bar2 {
+  opacity: 0;
+}
+
+.hamburger.active .bar3 {
+  transform: rotate(-45deg) translateX(1vh) translateY(-1vh);
+  width: 40px;
+}
+
+
 
 
 /* Main das notificações */
@@ -331,8 +418,8 @@ img#perfilIcon {
 }
 
 .setorLista div div img{
-    height: 10vh;
-    padding: 2vh;
+    height: 8vh;
+    padding: 1.4vh;
     border-radius: 50%;
     background-color: #004225;
 }

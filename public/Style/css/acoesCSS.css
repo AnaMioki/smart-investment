@@ -63,6 +63,8 @@ img#logo {
     color: #fff;
 }
 
+
+
 .navbar .selected {
     background-color: #016630;
     color: #fff;
@@ -197,47 +199,70 @@ img#perfilIcon {
     .hamburger {
        display: flex !important;
     }
-
-
-
-#kpiSetores{
-
-    gap: 2vh;
-    flex-direction: column;
-}
-#kpiSetores div{
-    width: 100% !important;
-
-}
-
-    #grafSetores{
-    flex-direction: column;
+    
+    #kpisAcoes{
+        flex-direction: column;
+        gap: 2vh;
+        align-items: center;
     }
 
-    #grafSetores div{
-    width: 100% !important;
+    #kpisAcoes div{
+        width: 95% !important;
     }
 
+    #selectAcoes{
+        flex-direction: column;
+        gap: 2vh;
+        align-items: flex-start !important;
+    }
 
     #topoSetor{
         flex-direction: column;
         align-items: self-start !important;
+        gap: 3vh;
     }
 
-    #lista div{
+    .descricao .especificacao{
+        display: none !important;
+    }
+
+    .descricao{
+        width: 100% !important;
+    }
+
+    #listaAcoes div{
         flex-direction: column;
+        align-items: center;
+        width: 100% !important;
     }
 
-    .numero{
-        flex-direction: row !important;
+    
+    #listaAcoes div *{
+        flex-direction: row;
     }
 
-    .infos{
-        flex-direction: row !important;
-        flex-wrap: wrap ;
+    .disaparecido{
+        display: flex !important;
     }
+
+    .tipo img{
+        position: absolute !important;
+        left: -1vh;
+    }
+
+    .tipo div{
+        flex-direction: column !important;
+
+        max-width: fit-content !important;
+    }
+
+   
 }
  
+.disaparecido{
+    display: none;
+
+}
 
 
 .hamburger {
@@ -279,8 +304,12 @@ img#perfilIcon {
 
 
 
+/* Principal ações */
 
-/* Parte de conteúdo principal */
+#mainContainer {
+    height: 100dvh;
+    width: 100%;
+}
 
 #mainContent{
     display: flex;
@@ -290,7 +319,7 @@ img#perfilIcon {
     padding: 3dvh;
 }
 
-#mainExp{
+#mainAcoes{
     padding: 0;
     width: 100%;
     height: 100%;
@@ -300,156 +329,145 @@ img#perfilIcon {
     gap: 2vh;
 }
 
-#selectSetores{
-    display: flex;
 
+/* Seleções */
+
+#selectAcoes{
+    display: flex;
+    width: 100%;
     align-items: center;
     justify-content: space-between;
 }
 
-#selectSetores h1{
-    font-weight: 500;    
-    font-size: 1rem;
-}
-#selectSetores div select{
-    cursor: pointer;
-    background-color: #f3f3f5;
-    border: none;
-    font-size: 1rem;
-    padding: 1vh;
+#selectAcoes h1{
+    font-size: 1.2rem;
     font-weight: 100;
-    transition: 0.4s;
-    border-radius: 0.3dvh;
-}
-
-/* #selectSetores div select:hover{
-    transform: scale(1.03);
-    font-weight: 100;
-} */
-
-#selectSetores div{
-    display: flex;
-    gap: 2vh;
-}
-
-
-/* Parte das KPIS do setor */
-
-#kpiSetores{
-    display: flex;
-
-    justify-content: space-between;
-}
-
-#kpiSetores div{
-    width: 32%;
-    border-radius: 1.3vh;
-    padding: 2vh;
-    transition: 0.5s;
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-    background-color: #ffffff;
-    border: solid 0.1vh #0000001e;
-}
-
-/* #kpiSetores div:hover{
-    transform: scale(1.05);
-} */
-
-#kpiSetores div div{
-    display: flex;
-    flex-direction: column;
-    align-items: self-start;
-    gap: 1vh;
-    border: none;
-    width: auto;
-}
-
-#kpiSetores div p{
-    font-size: 1rem;
     color: #000;
 }
 
-#kpiSetores div h1{
-    font-size: 1.3rem;
+#selectAcoes div{
+    display: flex;
+    gap: 3vh;
+}
+
+#selectAcoes select{
+    background-color: #F3F3F5;
+    padding: 1vh;
     font-weight: 200;
+    transition: 0.5s;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 1vh;
 }
 
-#kpiSetores div img{
+#selectAcoes select:hover{
+    transform: scale(1.04);
+}
+
+/* As KPIS com ações */
+
+
+#kpisAcoes{
+    display: flex !important ;
+    justify-content: space-between;
+    padding: 3vh 0 ;
+    flex-wrap: wrap !important;
+
+}
+
+#kpisAcoes *{
+    padding: 0;
+}
+
+#kpisAcoes div{
+    background-color: #ffff;
+    display: flex;
+    justify-content: space-between;
+   
+    width: 23%;
+    align-items: center;
+    padding: 3vh;
+    border-radius: 1.4vh;
+    border: solid 0.2vh rgba(128, 128, 128, 0.118);
+}
+
+#kpisAcoes div img{
+    height: 10vh ;
+    padding: 2vh;
     border-radius: 50%;
-    padding: 2.4vh;
-    height: 10vh;
 }
 
-.order1{
+#kpisAcoes div div{
+    display: flex;
+    width: 100%;
+    border: none;
+    gap: 2vh;
+    align-items: self-start;
+    flex-direction: column;
+}
+
+#kpisAcoes div div p{
+    font-size: 1rem; 
+}
+
+#kpisAcoes div div h1{
+    font-size: 1.5rem;
+    font-weight:300;
+}
+
+.verde{
+    color:#00A63E;
+}
+
+.laranja{
+    color: #F54900;
+}
+
+.roxo{
+    color: #9810FA;
+}
+
+.fundoAzul{
     background-color: #DBEAFE;
 }
 
-.order2{
-    background-color:#DCFCE7 ;
+.fundoVerde{
+    background-color: #DCFCE7;
 }
 
-.order3{
+.fundoLaranja{
     background-color: #FFEDD4;
 }
 
-.cor1{
-    color: #00A63E;
+.fundoRoxo{
+    background-color: #F3E8FF;
 }
 
-.cor2{
-    color: #F54800;
-}
+/* Parte do Gráfico */
 
-
-#grafSetores{
-    display: flex;
-    width: 100%;
-    padding: 2vh 0;
-    flex-wrap: wrap;
-    justify-content: space-between;
-}
-
-#grafSetores div{
-    width: 49%;
-    align-items: center;
-    border-radius: 2vh;
-    padding: 4vh;
-    transition: 0.5s;
+#graphAcoes{
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    background-color: #ffffff;
+    padding: 4vh;
+    gap: 6vh;
+
 }
 
-/* #grafSetores div:hover{
-    transform: scale(1.05);
-} */
-
-#grafSetores div h1{
-    align-self: self-start;
-    font-size: 1.2rem;
+#graphAcoes h1{
+    font-size: 1.3rem;
     font-weight: 100;
 }
 
-#graficoRadar{
-  width: 30vw !important;
-  height: 50vh !important;   /* <-- ESSENCIAL para deixar o gráfico quadrado */
-}
-
-#graficoBarra{
-    max-width: 100% !important;
-    min-width: 50% !important;
-    max-height: 87% !important;
-    
+#graphLinha{
+  height: 40vh !important;
 }
 
 
-/* Lista de setores */
 
 
-#listSetores{
+
+#listAcoes{
     display: flex;
     width: 100%;
     background-color: #ffffff;
@@ -499,123 +517,67 @@ img#perfilIcon {
     transform: scale(1.03);
 }
 
-#lista{
+
+#listaAcoes{
     display: flex;
+    padding: 2vh;
     flex-direction: column;
-    gap: 6vh;
+    gap: 3vh;
 }
 
-#lista div{
-    justify-content: space-between;
+#listaAcoes div{
     display: flex;
-    padding: 1vh;
-    border: solid #00000012;
-    border-radius: 2vh;
+    justify-content: space-between;
     width: 100%;
-    cursor: pointer;
-    transition: 0.5s;
+    padding: 1vh 0;
+    border-bottom: solid 0.2vh rgba(128, 128, 128, 0.211);
 }
 
-#lista div:hover{
-    transform: scale(1.02);
+#listaAcoes div *{
+    border: none;
 }
 
-.numero{
-    padding: 0;
-    box-sizing: border-box;
+.tipo{
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    border: none !important;
-    width: 20% !important;
+    width: 46% !important;
 }
 
-.numero h2{
-    height: 60%;
-    text-align: center ;
-    align-items: center;
-    background-color: #DBEAFE;
-    border-radius: 50%;
-    font-size: 1.5rem;
-    display: flex;
-    padding: 4vh;
-    justify-content: center;
+.tipo img{
+    height: 7vh;
 }
 
-.numero div{
-    padding: 0;
-    display: flex;
-    flex-direction: column;
+.tipo div{
     gap: 1vh;
-    border: none !important;
-}
-
-.numero div h1{
-    font-size: 1.6rem;
-    font-weight: 100;
-    color: #000;
-}
-
-.numero div p{
-    font-size: 1rem;
-}
-
-
-.infos{
-    display: flex;
-    width: 70% !important;
-    align-items: center;
-    border: none !important;
-}
-
-.infos div{
     display: flex;
     flex-direction: column;
-    border: none !important;
+    width: auto !important;
 }
 
-.infos div h1{
-    font-size: 1.3rem;
-    font-weight: 300;
+.setor{
+    background-color: #ECEEF2;
+    padding: 1vh 2vh;
+    border-radius: 4vh;
 }
 
-.infos div p{
-    font-size: 1.5rem;
+
+.tipo p{
+    font-size: 0.9rem;
+    color: rgba(128, 128, 128, 0.645);
 }
 
-.corVerde{
-    color: #00A63E;
-}
-
-.corLaranja{
-    color: #F54900;
-}
-
-.corVermelha{
-    color: #E7000B;
-}
-
-.azul{
+.tipo h1{
+    font-weight: 100;
     font-size: 1rem;
-    color: #193CB8;
-    background-color: #DBEAFE;
-    padding: 2vh 3vh;
-    border-radius: 2vh;
 }
 
-.verde{
-    font-size: 1rem;
-    color: #016630;
-    background-color: #DCFCE7;
-    padding: 2vh 3vh;
-    border-radius: 2vh;
+.especificacao{
+    display: flex;
+    width: 30% !important;
 }
 
-.amarelo{
+.especificacao h1{
+    font-weight: 100;
     font-size: 1rem;
-    color: #894B00;
-    background-color: #FEF9C2;
-    padding: 2vh 3vh;
-    border-radius: 2vh;
 }
