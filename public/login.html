@@ -115,11 +115,12 @@
                     console.log(JSON.stringify(json));
                     sessionStorage.EMAIL_USUARIO = json.email;
                     sessionStorage.NOME_USUARIO = json.nome;
+                    sessionStorage.PERFIL_USUARIO = json.perfil;
                     sessionStorage.ID_USUARIO = json.idUsuario;
-
+                    
                     console.log("ID_USUARIO salvo no sessionStorage:", sessionStorage.ID_USUARIO);
                     setTimeout(function () {
-                        window.location = "./home.html";
+                        window.location = "./perfil.html";
                     }, 1000); // apenas para exibir o loading
 
                 });

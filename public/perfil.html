@@ -11,7 +11,7 @@
 
 <body>
 
-    <div id="mainContainer">
+    <div id="mainContainer" onload="carregarDados()">
         <div class="container">
             <div id="header">
             <img id="logo" src="Style/assets/smartLogoVetor.svg" alt="logoSmartInvestment">
@@ -20,14 +20,14 @@
                 <a href="setores.html">Setores</a>
                 <a href="acoes.html">Ações</a>
                 <a href="comparacoes.html">Comparações</a>
-                <a href="perfil.html" class="selected">Perfil</a>
+                <a href="perfil.html" class="selected" >Perfil</a>
             </div>
 
             <div class="notification-container">
                 <span class="notification-badge">3</span>
                 <img id="notificacaoIcon" src="Style/assets/sinoNotificacao.svg" alt="">
             </div>
-            <img id="perfilIcon" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" alt="">
+            <img id="perfilIcon" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" style="cursor: pointer;" onclick="sair()"  alt="">
 
             <div class="hamburger">
                 <div class="bar1"></div>
@@ -51,12 +51,12 @@
                     <div id="sectionContent">
                         <img id="imgPerfil" src="Style/assets/pefilIconAzul.svg" alt="">
                         <div class="info">
-                            <p id="usuario"> Alexandre Silva</p>
-                            <p id="email"><img src="Style/assets/emailIcon.svg" alt=""> alexandre.silva@example.com</p>
+                            <p id="usuario"></p>
+                            <p id="email"><img src="Style/assets/emailIcon.svg" alt=""><span id="escritaEmail"></span></p>
                         </div>
                     </div>
 
-                    <span id="perfilRisco">Conservador</span>
+                    <span id="perfilRisco"></span>
 
                 </div>
 
@@ -87,7 +87,7 @@
                             </ul>
                         </div>
 
-                        <div class="perfilOpcao selected" id="conservador">
+                        <div class="perfilOpcao selected" id="conse rvador">
                             <div class="perfilHeader">
                                 <span class="check active"></span>
                                 <div class="perfilTitulo">Conservador</div>
@@ -134,3 +134,24 @@
 
 </html>
 <script src="Style/js/fazerHamburguer.js"></script>
+
+<script>
+
+    function sair(){
+        sessionStorage.clear();
+        window.location.href = "./login.html";
+    }
+
+    function carregarDados(){
+        var email =  sessionStorage.EMAIL_USUARIO;
+        var nome = sessionStorage.NOME_USUARIO;
+        var perfil = sessionStorage.PERFIL_USUARIO;
+        
+        console.log(perfil)
+        escritaEmail.innerHTML = email;
+        usuario.innerHTML = nome;
+        perfilRisco.innerHTML = perfil;
+    }
+
+    carregarDados();
+</script>
