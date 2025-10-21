@@ -95,6 +95,7 @@ img#logo {
     height: 100dvh;
     width: 100%;
 }
+
 #perfilIcon {
     max-width: 9vh;
     height: 9vh;
@@ -161,20 +162,40 @@ img#perfilIcon {
     top: 2vh;
     right: 2vh;
     cursor: pointer;
-    opacity: 0.6 ;
+    opacity: 0.6;
     transition: transform 0.3s ease;
 }
 
 #pencilIcon:hover {
     opacity: 1 !important;
 }
+
+#alertaAlteracao {
+    background-color: #00ad51;
+    z-index: 2;
+    position: fixed;
+    margin-top: 2vh;
+    margin-left: 2vh;
+    width: 35vw;
+    height: 10vh;
+    border-radius: 2vh;
+    border: #004225 solid 2px;
+    transition: all 0.5s ease;
+    text-align: center;
+    padding-top: 2vh;
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+}
+
 /* Mobile menu (oculto por padrão) */
 .mobile-menu {
     display: none;
     flex-direction: column;
     background-color: #ffffff;
     position: absolute;
-    top: 7vh; /* altura do header */
+    top: 7vh;
+    /* altura do header */
     right: 2vh;
     width: 50vw;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -203,16 +224,18 @@ img#perfilIcon {
 
 
 @media (max-width: 1000px) {
-    
-    #perfilIcon, .notification-container, .navbar{
+
+    #perfilIcon,
+    .notification-container,
+    .navbar {
         display: none !important;
     }
-    
+
     .hamburger {
-       display: flex !important;
+        display: flex !important;
     }
 }
- 
+
 
 
 .hamburger {
@@ -229,27 +252,27 @@ img#perfilIcon {
 .hamburger .bar1,
 .hamburger .bar2,
 .hamburger .bar3 {
-  height: 3px;
-  width: 100%;
-  background-color: #000;
-  border-radius: 2px;
-  transition: all 0.3s ease;
-  transform-origin: center;
-  margin: 0.6vh 0; 
+    height: 3px;
+    width: 100%;
+    background-color: #000;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    transform-origin: center;
+    margin: 0.6vh 0;
 }
 
 .hamburger.active .bar1 {
-  transform: rotate(45deg) translateX(2vh) translateY(2vh);
-  width: 40px;
+    transform: rotate(45deg) translateX(2vh) translateY(2vh);
+    width: 40px;
 }
 
 .hamburger.active .bar2 {
-  opacity: 0;
+    opacity: 0;
 }
 
 .hamburger.active .bar3 {
-  transform: rotate(-45deg) translateX(1vh) translateY(-1vh);
-  width: 40px;
+    transform: rotate(-45deg) translateX(1vh) translateY(-1vh);
+    width: 40px;
 }
 
 
@@ -338,7 +361,7 @@ img#perfilIcon {
     display: flex;
     margin-top: 1vh;
     font-size: 1.5vh;
-    background-color: #bedbff8e ;
+    background-color: #bedbff8e;
     border: solid 1px #155DFC;
     border-radius: 5px;
     justify-content: space-evenly;
@@ -461,7 +484,8 @@ img#perfilIcon {
     gap: 2vh;
 }
 
-.btn-cancel, .btn-save {
+.btn-cancel,
+.btn-save {
     padding: 1vh 2vh;
     border-radius: 5px;
     font-size: 1.8vh;
