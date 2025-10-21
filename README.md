@@ -23,8 +23,8 @@ Valores: Transparência, inovação, segurança e compromisso com o sucesso fina
 
 Frontend: HTML / CSS
 
-Backend:
+Backend: Java 
 
-Banco de Dados: MySQL
+Banco de Dados: MySQL Bucket S3
 
 Outros: APIs de mercado financeiro e integrações de segurança
