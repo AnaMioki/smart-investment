@@ -22,7 +22,7 @@ body {
     display: flex;
     flex-direction: row;
     width: 100%;
-    height: 7vh;
+    height: 9vh;
     align-items: center;
     justify-content: space-between;
     background-color: #ffffff;
@@ -33,8 +33,8 @@ body {
 ;
 
 #logo {
-    max-width: 5vh;
-    height: 5vh;
+    max-width: 9vh;
+    height: 9vh;
     margin-left: 5px;
     object-fit: contain;
     display: block;
@@ -43,8 +43,8 @@ body {
 
 #logo img,
 img#logo {
-    width: 12vh;
-    height: 12ch;
+    width: 14vh;
+    height: 14ch;
     object-fit: contain;
     display: block;
 }
@@ -80,7 +80,7 @@ img#logo {
     margin: 2vh;
     text-decoration: none;
     color: #000;
-    font-size: 1.9vh;
+    font-size: 2.5vh;
     font-weight: 500;
     transition: all 0.3s ease;
 }
@@ -97,8 +97,8 @@ img#logo {
 }
 
 #perfilIcon {
-    max-width: 7vh;
-    height: 7vh;
+    max-width: 9vh;
+    height: 9vh;
     margin-left: 5px;
     object-fit: contain;
     display: block;
@@ -106,8 +106,8 @@ img#logo {
 }
 
 #notificacaoIcon {
-    max-width: 3vh;
-    height: 3vh;
+    max-width: 7vh;
+    height: 7vh;
     fill: white !important;
     margin-left: 5px;
     object-fit: contain;
@@ -117,8 +117,8 @@ img#logo {
 
 #perfilIcon img,
 img#perfilIcon {
-    width: 14vh;
-    height: 14ch;
+    width: 16vh;
+    height: 16ch;
     object-fit: contain;
     display: block;
 }
@@ -135,32 +135,34 @@ img#perfilIcon {
     right: -0.5vh;
     background-color: #016630;
     color: white;
-    font-size: 1.2vh;
+    font-size: 1.9vh;
     font-weight: bold;
-    min-width: 1.8vh;
-    height: 1.8vh;
+    min-width: 2vh;
+    height: 2.5vh;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0.2vh;
+    padding: 0.8vh;
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
 }
 
 
 .notification-container #notificacaoIcon {
-    max-width: 3vh;
-    height: 3vh;
+    max-width: 4vh;
+    height: 4vh;
     object-fit: contain;
     display: block;
 }
+
 /* Mobile menu (oculto por padrão) */
 .mobile-menu {
     display: none;
     flex-direction: column;
     background-color: #ffffff;
     position: absolute;
-    top: 7vh; /* altura do header */
+    top: 7vh;
+    /* altura do header */
     right: 2vh;
     width: 50vw;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -189,16 +191,18 @@ img#perfilIcon {
 
 
 @media (max-width: 1000px) {
-    
-    #perfilIcon, .notification-container, .navbar{
+
+    #perfilIcon,
+    .notification-container,
+    .navbar {
         display: none !important;
     }
-    
+
     .hamburger {
-       display: flex !important;
+        display: flex !important;
     }
 }
- 
+
 
 
 .hamburger {
@@ -215,27 +219,27 @@ img#perfilIcon {
 .hamburger .bar1,
 .hamburger .bar2,
 .hamburger .bar3 {
-  height: 3px;
-  width: 100%;
-  background-color: #000;
-  border-radius: 2px;
-  transition: all 0.3s ease;
-  transform-origin: center;
-  margin: 0.6vh 0; 
+    height: 3px;
+    width: 100%;
+    background-color: #000;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    transform-origin: center;
+    margin: 0.6vh 0;
 }
 
 .hamburger.active .bar1 {
-  transform: rotate(45deg) translateX(2vh) translateY(2vh);
-  width: 40px;
+    transform: rotate(45deg) translateX(2vh) translateY(2vh);
+    width: 40px;
 }
 
 .hamburger.active .bar2 {
-  opacity: 0;
+    opacity: 0;
 }
 
 .hamburger.active .bar3 {
-  transform: rotate(-45deg) translateX(1vh) translateY(-1vh);
-  width: 40px;
+    transform: rotate(-45deg) translateX(1vh) translateY(-1vh);
+    width: 40px;
 }
 
 
@@ -252,7 +256,7 @@ img#perfilIcon {
     gap: 3vh;
 
     h1 {
-        font-size: 2.5vh;
+        font-size: 4vh;
     }
 }
 
@@ -265,7 +269,7 @@ img#perfilIcon {
     position: relative;
 
     h2 {
-        font-size: 1.7vh;
+        font-size: 5vh;
         margin-bottom: 2.5vh;
     }
 }
@@ -285,7 +289,7 @@ img#perfilIcon {
     padding: 0.7vh 1.2vh;
     border-radius: 6px;
     border: 1px solid #e0e0e0;
-    font-size: 1.5vh;
+    font-size: 2vh;
     background-color: white;
     cursor: pointer;
     min-width: 15vh;
@@ -296,7 +300,7 @@ img#perfilIcon {
 }
 
 .instrucaoSelecao {
-    font-size: 1.6vh;
+    font-size: 3vh;
     margin-bottom: 1.5vh;
 }
 
@@ -316,7 +320,7 @@ img#perfilIcon {
     display: flex;
     align-items: center;
     gap: 1vh;
-    font-size: 1.5vh;
+    font-size: 2.2vh;
     font-weight: 500;
 }
 
@@ -363,7 +367,7 @@ img#perfilIcon {
 }
 
 .nomeAcao {
-    font-size: 1.4vh;
+    font-size: 2.2vh;
     color: #333;
 }
 
@@ -413,7 +417,7 @@ img#perfilIcon {
 }
 
 .cabecalhoCard h3 {
-    font-size: 1.8vh;
+    font-size: 2vh;
     font-weight: 600;
 }
 
@@ -421,7 +425,7 @@ img#perfilIcon {
     background-color: #f2f4f6;
     padding: 0.5vh 1vh;
     border-radius: 4px;
-    font-size: 1.4vh;
+    font-size: 1.7vh;
     color: #555;
 }
 
@@ -438,12 +442,12 @@ img#perfilIcon {
 
 .nomeIndicador {
     flex: 1;
-    font-size: 1.5vh;
+    font-size: 2vh;
     color: #555;
 }
 
 .valorIndicador {
-    font-size: 1.7vh;
+    font-size: 2vh;
     font-weight: 600;
     margin-right: 0.2vh;
 }
@@ -481,7 +485,7 @@ img#perfilIcon {
 }
 
 .secaoGrafico h3 {
-    font-size: 1.6vh;
+    font-size: 2vh;
     margin-bottom: 1.5vh;
     color: #333;
     text-align: center;
@@ -503,43 +507,52 @@ img#perfilIcon {
 .tabelaResumo {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 1.5vh; 
-    font-size: 1.4vh;   
+    margin-top: 1.5vh;
+    font-size: 2vh;
 }
 
 .tabelaResumo th,
 .tabelaResumo td {
-    padding: 1vh;  
+    padding: 1vh;
     text-align: center;
     border-bottom: 1px solid #f0f0f0;
 }
 
 .tabelaResumo th {
-    font-weight: 600;
+    font-weight: 700;
     background-color: #f8f8f8;
 }
 
 .tabelaResumo td:first-child {
     text-align: left;
-    font-weight: 500;
+    font-weight: 900;
     color: #333;
 }
 
-.valorPositivo, .percentualPositivo {
+.valorPositivo,
+.percentualPositivo {
     color: #16a34a;
+     font-weight: 900; 
 }
 
-.valorNegativo, .percentualNegativo {
+.valorNegativo,
+.percentualNegativo {
     color: #dc2626;
+     font-weight: 900; 
 }
 
-.valorNeutro, .percentualNeutro {
+.valorNeutro,
+.percentualNeutro {
     color: #f97316;
+     font-weight: 900;  
 }
 
-.percentualPositivo, .percentualNegativo, .percentualNeutro {
-    font-size: 1.2vh;
+.percentualPositivo,
+.percentualNegativo,
+.percentualNeutro {
+    font-size: 2vh;
     margin-left: 0.2vh;
+    font-weight: 900;
 }
 
 @media (max-width: 768px) {

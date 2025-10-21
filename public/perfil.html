@@ -14,35 +14,36 @@
     <div id="mainContainer" onload="carregarDados()">
         <div class="container">
             <div id="header">
-            <img id="logo" src="Style/assets/smartLogoVetor.svg" alt="logoSmartInvestment">
-            <div class="navbar">
-                <a href="dashboard.html">Dashboard</a>
-                <a href="setores.html">Setores</a>
-                <a href="acoes.html">Ações</a>
-                <a href="comparacoes.html">Comparações</a>
-                <a href="perfil.html" class="selected" >Perfil</a>
-            </div>
+                <img id="logo" src="Style/assets/smartLogoVetor.svg" alt="logoSmartInvestment">
+                <div class="navbar">
+                    <a href="dashboard.html">Dashboard</a>
+                    <a href="setores.html">Setores</a>
+                    <a href="acoes.html">Ações</a>
+                    <a href="comparacoes.html">Comparações</a>
+                    <a href="perfil.html" class="selected">Perfil</a>
+                </div>
 
-            <div class="notification-container">
-                <span class="notification-badge">3</span>
-                <img id="notificacaoIcon" src="Style/assets/sinoNotificacao.svg" alt="">
-            </div>
-            <img id="perfilIcon" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" style="cursor: pointer;" onclick="sair()"  alt="">
+                <div class="notification-container">
+                    <span class="notification-badge">3</span>
+                    <img id="notificacaoIcon" src="Style/assets/sinoNotificacao.svg" alt="">
+                </div>
+                <img id="perfilIcon" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" style="cursor: pointer;"
+                    onclick="sair()" alt="">
 
-            <div class="hamburger">
-                <div class="bar1"></div>
-                <div class="bar2"></div>
-                <div class="bar3"></div>    
-            </div>
-            <nav class="mobile-menu">
-                <a href="dashboard.html">Dashboard</a>
-                <a href="setores.html">Setores</a>
-                <a href="acoes.html">Ações</a>
-                <a href="comparacoes.html">Comparações</a>
-                <a href="perfil.html">Perfil</a>
-            </nav>
+                <div class="hamburger">
+                    <div class="bar1"></div>
+                    <div class="bar2"></div>
+                    <div class="bar3"></div>
+                </div>
+                <nav class="mobile-menu">
+                    <a href="dashboard.html">Dashboard</a>
+                    <a href="setores.html">Setores</a>
+                    <a href="acoes.html">Ações</a>
+                    <a href="comparacoes.html">Comparações</a>
+                    <a href="perfil.html">Perfil</a>
+                </nav>
 
-        </div>
+            </div>
 
             <div id="content">
                 <h1>Configurações de perfil</h1>
@@ -52,7 +53,8 @@
                         <img id="imgPerfil" src="Style/assets/pefilIconAzul.svg" alt="">
                         <div class="info">
                             <p id="usuario"></p>
-                            <p id="email"><img src="Style/assets/emailIcon.svg" alt=""><span id="escritaEmail"></span></p>
+                            <p id="email"><img src="Style/assets/emailIcon.svg" alt=""><span id="escritaEmail"></span>
+                            </p>
                         </div>
                     </div>
 
@@ -61,6 +63,7 @@
                 </div>
 
                 <div class="section">
+                    <img id="pencilIcon" onclick="editarPerfil()" src="Style/assets/pencilIcon.svg" alt="">
                     <h2>Perfil de Investidor</h2>
                     <div id="aviso">
                         <img src="Style/assets/avisoIcon.svg" alt="">
@@ -87,7 +90,7 @@
                             </ul>
                         </div>
 
-                        <div class="perfilOpcao selected" id="conse rvador">
+                        <div class="perfilOpcao selected" id="conservador">
                             <div class="perfilHeader">
                                 <span class="check active"></span>
                                 <div class="perfilTitulo">Conservador</div>
@@ -122,9 +125,9 @@
                         </div>
                     </div>
 
-                    <div class="actions-buttons">
-                        <button class="btn-cancel">Cancelar</button>
-                        <button class="btn-save">Salvar Alterações</button>
+                    <div class="actions-buttons" style="display: none;">
+                        <button class="btn-cancel" onclick="cancelarEdicao()">Cancelar</button>
+                        <button class="btn-save" onclick="salvarEdicao()">Salvar Alterações</button>
                     </div>
                 </div>
             </div>
@@ -137,16 +140,75 @@
 
 <script>
 
-    function sair(){
+    cancelarEdicao = () => {
+        const buttons = document.querySelector('.actions-buttons');
+        buttons.style.display = 'none';
+        pencilIcon.style.opacity = '0.6';
+
+        const perfilOptions = document.querySelectorAll('.perfilOpcao');
+        perfilOptions.forEach(option => {
+            option.classList.remove('selected');
+            const checks = document.querySelectorAll('.check');
+            checks.forEach(check => check.classList.remove('active'));
+        });
+
+        const perfilRisco = document.getElementById('perfilRisco').innerText.toLowerCase();
+        const perfilMap = {
+            'iniciante': 'iniciante',
+            'conservador': 'conservador',
+            'arrojado': 'arrojado'
+        };
+
+        const selectedPerfil = perfilMap[perfilRisco];
+        if (selectedPerfil) {
+            const selectedOption = document.getElementById(selectedPerfil);
+            selectedOption.classList.add('selected');
+            selectedOption.querySelector('.check').classList.add('active');
+        }
+    }
+
+    salvarEdicao = () => {
+        const buttons = document.querySelector('.actions-buttons');
+        buttons.style.display = 'none';
+        pencilIcon.style.opacity = '0.6';
+
+        const selectedOption = document.querySelector('.perfilOpcao.selected');
+        if (selectedOption) {
+            const novoPerfil = selectedOption.id;
+            document.getElementById('perfilRisco').innerText = novoPerfil.charAt(0).toUpperCase() + novoPerfil.slice(1);
+
+            sessionStorage.PERFIL_USUARIO = novoPerfil.charAt(0).toUpperCase() + novoPerfil.slice(1);
+        }
+    }
+
+    editarPerfil = () => {
+        const buttons = document.querySelector('.actions-buttons');
+        buttons.style.display = 'flex';
+        pencilIcon.style.opacity = '1';
+
+        const perfilOptions = document.querySelectorAll('.perfilOpcao');
+        perfilOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                perfilOptions.forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+
+                const checks = document.querySelectorAll('.check');
+                checks.forEach(check => check.classList.remove('active'));
+                option.querySelector('.check').classList.add('active');
+            });
+        });
+    }
+
+    function sair() {
         sessionStorage.clear();
         window.location.href = "./login.html";
     }
 
-    function carregarDados(){
-        var email =  sessionStorage.EMAIL_USUARIO;
+    function carregarDados() {
+        var email = sessionStorage.EMAIL_USUARIO;
         var nome = sessionStorage.NOME_USUARIO;
         var perfil = sessionStorage.PERFIL_USUARIO;
-        
+
         console.log(perfil)
         escritaEmail.innerHTML = email;
         usuario.innerHTML = nome;
