@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="Style/css/dashboardCSS.css">
+</head>
+<body>
+    <div id="mainContainer">
+        <div id="header">
+                    <img id="logo" src="Style/assets/smartLogoVetor.svg" alt="logoSmartInvestment">
+                    <div class="navbar">
+                        <a href="dashboard.html" class="selected">Dashboard</a>
+                        <a href="setores.html">Setores</a>
+                        <a href="acoes.html">Ações</a>
+                        <a href="comparacoes.html">Comparações</a>
+                        <a href="perfil.html" >Perfil</a>
+                    </div>
+    
+                    <div class="notification-container">
+                        <span class="notification-badge">3</span>
+                        <img id="notificacaoIcon" src="Style/assets/sinoNotificacao.svg" alt="">
+                    </div>
+                    <img id="perfilIcon" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" style="cursor: pointer;"
+                        onclick="sair()" alt="">
+    
+                    <div class="hamburger">
+                        <div class="bar1"></div>
+                        <div class="bar2"></div>
+                        <div class="bar3"></div>
+                    </div>
+                    <nav class="mobile-menu">
+                        <a href="dashboard.html">Dashboard</a>
+                        <a href="setores.html">Setores</a>
+                        <a href="acoes.html">Ações</a>
+                        <a href="comparacoes.html">Comparações</a>
+                        <a href="perfil.html">Perfil</a>
+                    </nav>
+    
+        </div>
+
+        <div id="mainContent">
+
+            <div id="contentPrincipal">
+                <div id="topoDash">
+                    <h1>Ranking de Setores</h1>
+                    <select id="selectDash">
+                        <option value="3m">3 meses</option>
+                        <option value="5m">5 meses</option>
+                        <option value="9m">9 meses</option>
+                        <option value="1" selected>1 ano</option>
+                        <option value="2">2 anos</option>
+                        <option value="3">3 anos</option>
+                    </select>
+                </div>
+
+                <div id="listSetores">
+                    <div id="lista">
+                        <div>
+                            <div class="numero">
+
+                                <h2>1</h2>
+                                <div>
+                                    <h1>Tecnologia</h1>
+                                    <p>68 ações <br> disponíveis</p>
+                                </div>
+                            </div>
+
+                            <div class="infos">
+                                <div>
+                                    <h1>Retorno</h1>
+                                    <p class="corVerde">+18.5%</p>
+                                </div>
+
+                                <div>
+                                    <h1>Sharpe</h1>
+                                    <p>0.76</p>
+                                </div>
+
+                                <div>
+                                    <h1>Beta</h1>
+                                    <p>1.15</p>
+                                </div>
+                                
+                                <div>
+                                    <h1>Volatilidade</h1>
+                                    <p class="corLaranja">24.3%</p>
+                                </div>
+
+                                <div>
+                                    <h1>Max Drawdown</h1>
+                                    <p class="corVermelha">-15.2%</p>
+                                </div>
+                                
+                                <h1 class="azul">Alta</h1>
+                            </div>
+
+                        </div>
+
+                        <div>
+                            <div class="numero">
+
+                                <h2>2</h2>
+                                <div>
+                                    <h1>Saúde</h1>
+                                    <p>54 ações <br> disponíveis</p>
+                                </div>
+                            </div>
+
+                            <div class="infos">
+                                <div>
+                                    <h1>Retorno</h1>
+                                    <p class="corVerde">+15.2%</p>
+                                </div>
+
+                                <div>
+                                    <h1>Sharpe</h1>
+                                    <p>0.81</p>
+                                </div>
+
+                                <div>
+                                    <h1>Beta</h1>
+                                    <p>0.92</p>
+                                </div>
+                                
+                                <div>
+                                    <h1>Volatilidade</h1>
+                                    <p class="corLaranja">18.7%</p>
+                                </div>
+
+                                <div>
+                                    <h1>Max Drawdown</h1>
+                                    <p class="corVermelha">-11.8%</p>
+                                </div>
+                                
+                                <h1 class="azul">Alta</h1>
+                            </div>
+
+                        </div>
+
+
+                         <div>
+                            <div class="numero">
+
+                                <h2>3</h2>
+                                <div>
+                                    <h1>Financeiro</h1>
+                                    <p>72 ações <br> disponíveis</p>
+                                </div>
+                            </div>
+
+                            <div class="infos">
+                                <div>
+                                    <h1>Retorno</h1>
+                                    <p class="corVerde">+12.8%</p>
+                                </div>
+
+                                <div>
+                                    <h1>Sharpe</h1>
+                                    <p>0.58</p>
+                                </div>
+
+                                <div>
+                                    <h1>Beta</h1>
+                                    <p>1.08</p>
+                                </div>
+                                
+                                <div>
+                                    <h1>Volatilidade</h1>
+                                    <p class="corLaranja">22.1%</p>
+                                </div>
+
+                                <div>
+                                    <h1>Max Drawdown</h1>
+                                    <p class="corVermelha">-18.5%</p>
+                                </div>
+                                
+                                <h1 class="verde">Muito Alta</h1>
+                            </div>
+
+                        </div>
+
+
+                        <div>
+                            <div class="numero">
+
+                                <h2>4</h2>
+                                <div>
+                                    <h1>Energia</h1>
+                                    <p>38 ações <br> disponíveis</p>
+                                </div>
+                            </div>
+
+                            <div class="infos">
+                                <div>
+                                    <h1>Retorno</h1>
+                                    <p class="corVerde">+11.5%</p>
+                                </div>
+
+                                <div>
+                                    <h1>Sharpe</h1>
+                                    <p>0.41</p>
+                                </div>
+
+                                <div>
+                                    <h1>Beta</h1>
+                                    <p>1.32</p>
+                                </div>
+                                
+                                <div>
+                                    <h1>Volatilidade</h1>
+                                    <p class="corLaranja">28.4%</p>
+                                </div>
+
+                                <div>
+                                    <h1>Max Drawdown</h1>
+                                    <p class="corVermelha">-22.3%</p>
+                                </div>
+                                
+                                <h1 class="amarelo">Média</h1>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div id="graphDash">
+                    
+                </div>
+
+            </div>
+
+        </div>
+        
+    </div>
+</body>
+</html>
+<script src="Style/js/fazerHamburguer.js"></script>
