@@ -176,16 +176,18 @@ img#perfilIcon {
     position: fixed;
     margin-top: 2vh;
     margin-left: 2vh;
-    width: 35vw;
-    height: 10vh;
+    width: 20vw;
+    height: 6vh;
     border-radius: 2vh;
     border: #004225 solid 2px;
     transition: all 0.5s ease;
     text-align: center;
-    padding-top: 2vh;
-    font-size: 2rem;
+    padding-top: 1.5vh;
+    font-size: 1rem;
     font-weight: 700;
     color: white;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Mobile menu (oculto por padrão) */
@@ -304,7 +306,7 @@ img#perfilIcon {
     position: relative;
 
     h2 {
-        font-size: 1.9vh;
+        font-size: 2.9vh;
         margin-bottom: 3.9vh;
     }
 }
@@ -424,13 +426,13 @@ img#perfilIcon {
 
 .perfilTitulo {
     color: #000;
-    font-size: 2.2vh;
+    font-size: 3.2vh;
     font-weight: 600;
     margin-right: 2vh;
 }
 
 .perfilTag {
-    font-size: 1.6vh;
+    font-size: 2vh;
     padding: 0.5vh 1.5vh;
     border-radius: 2vh;
     color: #fff;
@@ -450,7 +452,7 @@ img#perfilIcon {
 }
 
 .perfilDesc {
-    font-size: 1.8vh;
+    font-size: 2vh;
     color: #555;
     margin-bottom: 2vh;
     padding-left: 2.7vh;
@@ -462,7 +464,7 @@ img#perfilIcon {
 }
 
 .perfilFeatures li {
-    font-size: 1.7vh;
+    font-size: 2.4vh;
     margin-bottom: 1vh;
     color: #333;
     position: relative;
