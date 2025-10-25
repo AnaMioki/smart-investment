@@ -24,29 +24,7 @@
             <div class="notification-container">
                 <span class="notification-badge">3</span>
                 <img id="notificacaoIcon" src="Style/assets/sinoNotificacao.svg" alt="">
-                <div class="notificacao-dropdown">
-                    <div class="notificacao-item">
-                        <div class="notificacao-content">
-                            <div class="notificacao-title">Atualização de Preço</div>
-                            <div class="notificacao-text">AAPL atingiu sua meta de preço de R$180,00</div>
-                            <div class="notificacao-time">Há 5 minutos</div>
-                        </div>
-                    </div>
-                    <div class="notificacao-item">
-                        <div class="notificacao-content">
-                            <div class="notificacao-title">Nova Recomendação</div>
-                            <div class="notificacao-text">Nova análise disponível para MSFT</div>
-                            <div class="notificacao-time">Há 30 minutos</div>
-                        </div>
-                    </div>
-                    <div class="notificacao-item">
-                        <div class="notificacao-content">
-                            <div class="notificacao-title">Alerta de Mercado</div>
-                            <div class="notificacao-text">Índice de volatilidade aumentou significativamente</div>
-                            <div class="notificacao-time">Há 1 hora</div>
-                        </div>
-                    </div>
-                </div>
+              
             </div>
             <img id="perfilIcon" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" alt="">
 
@@ -136,16 +114,5 @@
 </body>
 
 </html>
-<script> document.querySelector('#notificacaoIcon').addEventListener('click', function (e) {
-        e.stopPropagation();
-        const dropdown = document.querySelector('.notificacao-dropdown');
-        dropdown.classList.toggle('active');
-    });
-
-    document.addEventListener('click', function (e) {
-        const dropdown = document.querySelector('.notificacao-dropdown');
-        if (!e.target.closest('.notificacao-container')) {
-            dropdown.classList.remove('active');
-        }
-    });</script>
+<script> </script>
 <script src="Style/js/fazerHamburguer.js"></script>
