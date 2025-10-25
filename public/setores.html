@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link rel="stylesheet" href="Style/css/setoresCSS.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
     <div id="mainContainer">
         <div id="header">
@@ -29,11 +31,11 @@
             <div class="hamburger">
                 <div class="bar1"></div>
                 <div class="bar2"></div>
-                <div class="bar3"></div>    
+                <div class="bar3"></div>
             </div>
             <nav class="mobile-menu">
                 <a href="dashboard.html">Dashboard</a>
-                <a href="setores.html" >Setores</a>
+                <a href="setores.html">Setores</a>
                 <a href="acoes.html">Ações</a>
                 <a href="comparacoes.html">Comparações</a>
                 <a href="perfil.html">Perfil</a>
@@ -62,18 +64,19 @@
                 </div>
 
                 <div id="kpiSetores">
-                    
+
                     <div>
                         <div>
                             <p>Total de Setores</p>
                             <h1>8</h1>
                         </div>
-                        <img src="Style/assets/flechaSetores.svg" alt="imagem seta para cima (como ações)" class="order1">
+                        <img src="Style/assets/flechaSetores.svg" alt="imagem seta para cima (como ações)"
+                            class="order1">
                     </div>
 
                     <div>
                         <div>
-                            <p>Melhor Peformer</p>
+                            <p>Melhor Performer</p>
                             <h1 class="cor1">Tecnologia</h1>
                         </div>
                         <img src="Style/assets/setaPraCimaSetores.svg" alt="Imagem seta para cima" class="order2">
@@ -81,7 +84,10 @@
 
                     <div>
                         <div>
-                            <p>Maior Volatibilidade</p>
+                            <p>Maior <span class="tooltip left-edge">
+                                            Volatibilidade
+                                            <span class="tip">Mostra o quanto o preço oscila ao longo do tempo.</span>
+                                        </span></p>
                             <h1 class="cor2">Energia</h1>
                         </div>
                         <img src="Style/assets/metricaSetores.svg" alt="imagem de volatibilidade" class="order3">
@@ -123,30 +129,45 @@
 
                             <div class="infos">
                                 <div>
-                                    <h1>Retorno</h1>
+                                    <h1><span class="tooltip left-edge">
+                                            <strong>Retorno</strong>
+                                            <span class="tip">É o lucro ou prejuízo percentual do investimento em determinado período.</span>
+                                        </span></h1>
                                     <p class="corVerde">+18.5%</p>
                                 </div>
 
                                 <div>
-                                    <h1>Sharpe</h1>
+                                    <h1><span class="tooltip left-edge">
+                                            <strong>Sharpe</strong>
+                                            <span class="tip">Mostra quanto o investidor ganhou para cada unidade de risco assumido.</span>
+                                        </span></h1>
                                     <p>0.76</p>
                                 </div>
 
                                 <div>
-                                    <h1>Beta</h1>
+                                    <h1><span class="tooltip left-edge">
+                                            <strong>Beta</strong>
+                                            <span class="tip">Indica o nível de sensibilidade do ativo ao mercado.</span>
+                                        </span></h1>
                                     <p>1.15</p>
                                 </div>
-                                
+
                                 <div>
-                                    <h1>Volatilidade</h1>
+                                    <h1><span class="tooltip left-edge">
+                                            <strong>Volatilidade</strong>
+                                            <span class="tip">Mostra o quanto o preço oscila ao longo do tempo.</span>
+                                        </span></h1>
                                     <p class="corLaranja">24.3%</p>
                                 </div>
 
                                 <div>
-                                    <h1>Max Drawdown</h1>
+                                    <h1><span class="tooltip left-edge">
+                                            <strong>Max Drawdown</strong>
+                                            <span class="tip">É a maior perda desde o ponto mais alto até o mais baixo do investimento.</span>
+                                        </span></h1>
                                     <p class="corVermelha">-15.2%</p>
                                 </div>
-                                
+
                                 <h1 class="azul">Alta</h1>
                             </div>
 
@@ -177,9 +198,13 @@
                                     <h1>Beta</h1>
                                     <p>0.92</p>
                                 </div>
-                                
+
                                 <div>
-                                    <h1>Volatilidade</h1>
+                                    <h1><span class="tooltip left-edge">
+                                            <strong>Volatilidade</strong>
+                                            <span class="tip">Explicação breve sobre o significado da palavra, sem sair
+                                                da tela.</span>
+                                        </span></h1>
                                     <p class="corLaranja">18.7%</p>
                                 </div>
 
@@ -187,14 +212,14 @@
                                     <h1>Max Drawdown</h1>
                                     <p class="corVermelha">-11.8%</p>
                                 </div>
-                                
+
                                 <h1 class="azul">Alta</h1>
                             </div>
 
                         </div>
 
 
-                         <div>
+                        <div>
                             <div class="numero">
 
                                 <h2>3</h2>
@@ -219,7 +244,7 @@
                                     <h1>Beta</h1>
                                     <p>1.08</p>
                                 </div>
-                                
+
                                 <div>
                                     <h1>Volatilidade</h1>
                                     <p class="corLaranja">22.1%</p>
@@ -229,7 +254,7 @@
                                     <h1>Max Drawdown</h1>
                                     <p class="corVermelha">-18.5%</p>
                                 </div>
-                                
+
                                 <h1 class="verde">Muito Alta</h1>
                             </div>
 
@@ -261,7 +286,7 @@
                                     <h1>Beta</h1>
                                     <p>1.32</p>
                                 </div>
-                                
+
                                 <div>
                                     <h1>Volatilidade</h1>
                                     <p class="corLaranja">28.4%</p>
@@ -271,7 +296,7 @@
                                     <h1>Max Drawdown</h1>
                                     <p class="corVermelha">-22.3%</p>
                                 </div>
-                                
+
                                 <h1 class="amarelo">Média</h1>
                             </div>
 
@@ -285,6 +310,7 @@
         </div>
     </div>
 </body>
+
 </html>
 
 <!-- Script radar -->
@@ -293,34 +319,34 @@
     const ctxRadar = document.getElementById('graficoRadar').getContext('2d');
 
     const dataRadar = {
-  labels: ['Retorno', 'Sharpe', 'Liquidez', 'Estabilidade'],
-  datasets: [
-    {
-      label: 'Financeiro',
-      data: [90, 85, 98, 85],
-      fill: true,
-      backgroundColor: 'rgba(255, 159, 64, 0.2)', // laranja
-      borderColor: 'rgb(255, 159, 64)',
-      pointRadius: 0
-    },
-    {
-      label: 'Saúde',
-      data: [96, 90, 90, 90],
-      fill: true,
-      backgroundColor: 'rgba(75, 192, 192, 0.2)', // verde
-      borderColor: 'rgb(75, 192, 192)',
-      pointRadius: 0
-    },
-    {
-      label: 'Tecnologia',
-      data: [90, 85, 90, 60],
-      fill: true,
-      backgroundColor: 'rgba(54, 162, 235, 0.2)', // azul
-      borderColor: 'rgb(54, 162, 235)',
-      pointRadius: 0
-    }
-  ]
-};
+        labels: ['Retorno', 'Sharpe', 'Liquidez', 'Estabilidade'],
+        datasets: [
+            {
+                label: 'Financeiro',
+                data: [90, 85, 98, 85],
+                fill: true,
+                backgroundColor: 'rgba(255, 159, 64, 0.2)', // laranja
+                borderColor: 'rgb(255, 159, 64)',
+                pointRadius: 0
+            },
+            {
+                label: 'Saúde',
+                data: [96, 90, 90, 90],
+                fill: true,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)', // verde
+                borderColor: 'rgb(75, 192, 192)',
+                pointRadius: 0
+            },
+            {
+                label: 'Tecnologia',
+                data: [90, 85, 90, 60],
+                fill: true,
+                backgroundColor: 'rgba(54, 162, 235, 0.2)', // azul
+                borderColor: 'rgb(54, 162, 235)',
+                pointRadius: 0
+            }
+        ]
+    };
 
     const configRadar = {
         type: 'radar',
@@ -368,51 +394,51 @@
 <!-- Script barra -->
 
 <script>
-const ctx = document.getElementById('graficoBarra');
-new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['Tech', 'Saúd','Fina', 'Ener', ' Cons', 'Indu', 'Imob', 'Tele'],//Nomes setores
-                datasets: [
-                    {
-                        label: 'Retorno',
-                        data: [18, 13, 10, 9, 8, 7, 6, 7],
-                        backgroundColor: '#10B981' //verde
-                    },
-                    {
-                        label: 'Sharpe',
-                        data: [7, 8, 6, 4, 5, 4, 4, 4],
-                        backgroundColor: '#8B5CF6' // roxo
-                    },
-                    {
-                        label: 'Volatilidade',
-                        data: [24, 22, 28, 15, 18, 17, 15, 15],
-                        backgroundColor: '#F59E0B' // laranja
-                    }
-                ]
-            },
-            options: {
-                scales: {
-                    x: {
-                    },
-                    y: {
-
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                        }
-                    }
+    const ctx = document.getElementById('graficoBarra');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Tech', 'Saúd', 'Fina', 'Ener', ' Cons', 'Indu', 'Imob', 'Tele'],//Nomes setores
+            datasets: [
+                {
+                    label: 'Retorno',
+                    data: [18, 13, 10, 9, 8, 7, 6, 7],
+                    backgroundColor: '#10B981' //verde
                 },
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            boxWidth: 20
-                        }
+                {
+                    label: 'Sharpe',
+                    data: [7, 8, 6, 4, 5, 4, 4, 4],
+                    backgroundColor: '#8B5CF6' // roxo
+                },
+                {
+                    label: 'Volatilidade',
+                    data: [24, 22, 28, 15, 18, 17, 15, 15],
+                    backgroundColor: '#F59E0B' // laranja
+                }
+            ]
+        },
+        options: {
+            scales: {
+                x: {
+                },
+                y: {
+
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        boxWidth: 20
                     }
                 }
             }
-        });
+        }
+    });
 
 </script>
 

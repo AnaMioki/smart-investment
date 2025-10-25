@@ -564,3 +564,52 @@ img#perfilIcon {
         height: 30vh;
     }
 }
+
+/* Teste */
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: help;
+  }
+
+  /* O BALÃO DE TEXTO */
+  .tooltip .tip {
+    position: absolute;
+    bottom: 120%;               /* aparece acima por padrão */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #111;
+    color: #fff;
+    text-align: center;
+    padding: 8px 12px;
+    border-radius: 6px;
+    white-space: normal;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    z-index: 10;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    width: max-content;
+    max-width: 220px;
+  }
+
+  /* Setinha do tooltip */
+  .tooltip .tip::after {
+    content: "";
+    position: absolute;
+    top: 100%; /* padrão: aparece abaixo do balão (pois o balão está acima da palavra) */
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: #111 transparent transparent transparent;
+  }
+
+  /* MOSTRAR AO PASSAR O MOUSE */
+  .tooltip:hover .tip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(-4px);
+  }
+  

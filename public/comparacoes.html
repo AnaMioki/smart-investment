@@ -222,17 +222,25 @@
                         </div>
                         <div class="indicadores">
                             <div class="grupoIndicador">
-                                <div class="nomeIndicador">Retorno</div>
+                                <div class="nomeIndicador">
+                                    <span class="tooltip left-edge">
+                                            Retorno <span class="tip">É o lucro ou prejuízo percentual do investimento em determinado período.</span>
+                                        </span></div>
                                 <div class="valorIndicador positivo">${dados.retornoValor}</div>
                                 <div class="percentualIndicador positivo">${dados.retornoPercent}</div>
                             </div>
                             <div class="grupoIndicador">
-                                <div class="nomeIndicador">Volatilidade</div>
+                                <div class="nomeIndicador"><span class="tooltip left-edge">
+                                            Volatilidade
+                                            <span class="tip">Mostra o quanto o preço oscila ao longo do tempo.</span>
+                                        </span></div>
                                 <div class="valorIndicador neutro">${dados.volatilidade}</div>
                                 <div class="percentualIndicador neutro">${dados.volatPorcent}</div>
                             </div>
                             <div class="grupoIndicador">
-                                <div class="nomeIndicador">Max Drawdown</div>
+                                <div class="nomeIndicador"><span class="tooltip left-edge">
+                                            Max Drawdown <span class="tip">É a maior perda desde o ponto mais alto até o mais baixo do investimento.</span>
+                                        </span></div>
                                 <div class="valorIndicador negativo">${dados.maxDrawdownValor}</div>
                                 <div class="percentualIndicador negativo">${dados.maxDrawdownPercent}</div>
                             </div>
@@ -374,7 +382,7 @@
             const dadosRadar = {
                 'AAPL': [7.5, 6.8, 6.5, 7.0],
                 'MSFT': [8.2, 7.5, 7.8, 7.6],
-                'GOOGL': [7.8, 7.2,6.9, 7.4],
+                'GOOGL': [7.8, 7.2, 6.9, 7.4],
                 'TSLA': [8.5, 6.0, 5.5, 5.8],
                 'JNJ': [6.8, 7.8, 8.2, 8.5],
                 'JPM': [7.2, 7.0, 7.8, 7.5]
