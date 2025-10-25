@@ -1,43 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="Style/css/dashboardCSS.css">
 </head>
+
 <body>
     <div id="mainContainer">
         <div id="header">
-                    <img id="logo" src="Style/assets/smartLogoVetor.svg" alt="logoSmartInvestment">
-                    <div class="navbar">
-                        <a href="dashboard.html" class="selected">Dashboard</a>
-                        <a href="setores.html">Setores</a>
-                        <a href="acoes.html">Ações</a>
-                        <a href="comparacoes.html">Comparações</a>
-                        <a href="perfil.html" >Perfil</a>
+            <img id="logo" src="Style/assets/smartLogoVetor.svg" alt="logoSmartInvestment">
+            <div class="navbar">
+                <a href="dashboard.html" class="selected">Dashboard</a>
+                <a href="setores.html">Setores</a>
+                <a href="acoes.html">Ações</a>
+                <a href="comparacoes.html">Comparações</a>
+                <a href="perfil.html">Perfil</a>
+            </div>
+
+            <div class="notification-container">
+                <span class="notification-badge">3</span>
+                <img id="notificacaoIcon" src="Style/assets/sinoNotificacao.svg" alt="">
+                <div class="notificacao-dropdown">
+                    <div class="notificacao-item">
+                        <div class="notificacao-content">
+                            <div class="notificacao-title">Atualização de Preço</div>
+                            <div class="notificacao-text">AAPL atingiu sua meta de preço de R$180,00</div>
+                            <div class="notificacao-time">Há 5 minutos</div>
+                        </div>
                     </div>
-    
-                    <div class="notification-container">
-                        <span class="notification-badge">3</span>
-                        <img id="notificacaoIcon" src="Style/assets/sinoNotificacao.svg" alt="">
+                    <div class="notificacao-item">
+                        <div class="notificacao-content">
+                            <div class="notificacao-title">Nova Recomendação</div>
+                            <div class="notificacao-text">Nova análise disponível para MSFT</div>
+                            <div class="notificacao-time">Há 30 minutos</div>
+                        </div>
                     </div>
-                    <img id="perfilIcon" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" style="cursor: pointer;"
-                        onclick="sair()" alt="">
-    
-                    <div class="hamburger">
-                        <div class="bar1"></div>
-                        <div class="bar2"></div>
-                        <div class="bar3"></div>
+                    <div class="notificacao-item">
+                        <div class="notificacao-content">
+                            <div class="notificacao-title">Alerta de Mercado</div>
+                            <div class="notificacao-text">Índice de volatilidade aumentou significativamente</div>
+                            <div class="notificacao-time">Há 1 hora</div>
+                        </div>
                     </div>
-                    <nav class="mobile-menu">
-                        <a href="dashboard.html">Dashboard</a>
-                        <a href="setores.html">Setores</a>
-                        <a href="acoes.html">Ações</a>
-                        <a href="comparacoes.html">Comparações</a>
-                        <a href="perfil.html">Perfil</a>
-                    </nav>
-    
+                </div>
+            </div>
+            <img id="perfilIcon" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" style="cursor: pointer;"
+                onclick="sair()" alt="">
+
+            <div class="hamburger">
+                <div class="bar1"></div>
+                <div class="bar2"></div>
+                <div class="bar3"></div>
+            </div>
+            <nav class="mobile-menu">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="setores.html">Setores</a>
+                <a href="acoes.html">Ações</a>
+                <a href="comparacoes.html">Comparações</a>
+                <a href="perfil.html">Perfil</a>
+            </nav>
+
         </div>
 
         <div id="mainContent">
@@ -82,7 +107,7 @@
                                     <h1>Beta</h1>
                                     <p>1.15</p>
                                 </div>
-                                
+
                                 <div>
                                     <h1>Volatilidade</h1>
                                     <p class="corLaranja">24.3%</p>
@@ -92,7 +117,7 @@
                                     <h1>Max Drawdown</h1>
                                     <p class="corVermelha">-15.2%</p>
                                 </div>
-                                
+
                                 <h1 class="azul">Alta</h1>
                             </div>
 
@@ -123,7 +148,7 @@
                                     <h1>Beta</h1>
                                     <p>0.92</p>
                                 </div>
-                                
+
                                 <div>
                                     <h1>Volatilidade</h1>
                                     <p class="corLaranja">18.7%</p>
@@ -133,14 +158,14 @@
                                     <h1>Max Drawdown</h1>
                                     <p class="corVermelha">-11.8%</p>
                                 </div>
-                                
+
                                 <h1 class="azul">Alta</h1>
                             </div>
 
                         </div>
 
 
-                         <div>
+                        <div>
                             <div class="numero">
 
                                 <h2>3</h2>
@@ -165,7 +190,7 @@
                                     <h1>Beta</h1>
                                     <p>1.08</p>
                                 </div>
-                                
+
                                 <div>
                                     <h1>Volatilidade</h1>
                                     <p class="corLaranja">22.1%</p>
@@ -175,7 +200,7 @@
                                     <h1>Max Drawdown</h1>
                                     <p class="corVermelha">-18.5%</p>
                                 </div>
-                                
+
                                 <h1 class="verde">Muito Alta</h1>
                             </div>
 
@@ -207,7 +232,7 @@
                                     <h1>Beta</h1>
                                     <p>1.32</p>
                                 </div>
-                                
+
                                 <div>
                                     <h1>Volatilidade</h1>
                                     <p class="corLaranja">28.4%</p>
@@ -217,7 +242,7 @@
                                     <h1>Max Drawdown</h1>
                                     <p class="corVermelha">-22.3%</p>
                                 </div>
-                                
+
                                 <h1 class="amarelo">Média</h1>
                             </div>
 
@@ -228,14 +253,31 @@
                 </div>
 
                 <div id="graphDash">
-                    
+
                 </div>
 
             </div>
 
         </div>
-        
+
     </div>
 </body>
+
 </html>
+
+<script>
+
+     document.querySelector('#notificacaoIcon').addEventListener('click', function(e) {
+            e.stopPropagation();
+            const dropdown = document.querySelector('.notificacao-dropdown');
+            dropdown.classList.toggle('active');
+        });
+
+        document.addEventListener('click', function(e) {
+            const dropdown = document.querySelector('.notificacao-dropdown');
+            if (!e.target.closest('.notificacao-container')) {
+                dropdown.classList.remove('active');
+            }
+        });
+</script>
 <script src="Style/js/fazerHamburguer.js"></script>

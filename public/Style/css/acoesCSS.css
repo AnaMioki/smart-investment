@@ -629,3 +629,56 @@ img#perfilIcon {
     transform: translateX(-50%) translateY(-4px);
   }
   
+
+    .notificacao-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 300px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    padding: 12px;
+    margin-top: 10px;
+}
+
+.notificacao-dropdown.active {
+    display: block;
+}
+
+.notificacao-item {
+    padding: 12px;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.notificacao-item:last-child {
+    border-bottom: none;
+}
+
+.notificacao-content {
+    flex: 1;
+}
+
+.notificacao-title {
+    font-weight: 600;
+    color: #004225;
+    margin-bottom: 4px;
+    font-size: 14px;
+}
+
+.notificacao-text {
+    color: #666;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.notificacao-time {
+    color: #999;
+    font-size: 12px;
+    margin-top: 4px;
+}
