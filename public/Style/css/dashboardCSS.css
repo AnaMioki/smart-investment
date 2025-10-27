@@ -225,6 +225,8 @@ img#perfilIcon {
 
 @media (max-width: 1000px) {
 
+
+
     #perfilIcon,
     .notification-container,
     .navbar {
@@ -246,6 +248,7 @@ img#perfilIcon {
         flex-direction: row !important;
         flex-wrap: wrap ;
     }
+    
 }
 
 
@@ -480,7 +483,7 @@ img#perfilIcon {
     padding: 12px;
     margin-top: 10px;
 
-      a{
+    a{
         text-decoration: none;
         color: #004225;
         font-weight: 600;
@@ -531,4 +534,64 @@ img#perfilIcon {
     color: #999;
     font-size: 12px;
     margin-top: 4px;
+}
+
+
+/* Parte dos gráficos */
+
+
+
+#graphDash{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 3vh;
+    flex-direction: row;
+    height: 100%;
+    flex-wrap: wrap;
+}
+
+#graphDash div{
+    display: flex; 
+    flex-direction: column;
+    padding: 4vh;
+    border: solid rgba(128, 128, 128, 0.202) 0.4vh;
+    background-color: #ffffff;
+    border-radius: 3vh ;
+    gap: 2vh;
+}
+
+#graphDash div h1{
+    font-weight: 100;
+    font-size: 1rem ;
+    color: #000;
+}
+
+#graphDash div canvas{
+    height: 46vh;
+
+}
+
+#graphGrande{
+    display: flex;
+    flex-direction: column;
+    gap: 1vh;
+    width: 100% !important; 
+
+    padding: 3vh;
+    border: solid rgba(128, 128, 128, 0.227) 0.4vh;
+    border-radius: 4vh;
+    justify-content: center;
+    background-color: #ffffff;
+}
+
+#graphGrande h1{
+    align-self: flex-start;
+    font-size: 1rem;
+    font-weight: 100;
+}
+
+#graphGrande canvas{
+    height: 60% !important;
+   width: 60% !important;
 }
