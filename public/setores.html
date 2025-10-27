@@ -25,30 +25,30 @@
             <div class="notification-container">
                 <span class="notification-badge">3</span>
                 <img id="notificacaoIcon" src="Style/assets/sinoNotificacao.svg" alt="">
-                  <div class="notificacao-dropdown">
-                        <div class="notificacao-item">
-                            <div class="notificacao-content">
-                                <div class="notificacao-title">Atualização de Preço</div>
-                                <div class="notificacao-text">AAPL atingiu sua meta de preço de R$180,00</div>
-                                <div class="notificacao-time">Há 5 minutos</div>
-                            </div>
+                <div class="notificacao-dropdown">
+                    <div class="notificacao-item">
+                        <div class="notificacao-content">
+                            <div class="notificacao-title">Atualização de Preço</div>
+                            <div class="notificacao-text">AAPL atingiu sua meta de preço de R$180,00</div>
+                            <div class="notificacao-time">Há 5 minutos</div>
                         </div>
-                        <div class="notificacao-item">
-                            <div class="notificacao-content">
-                                <div class="notificacao-title">Nova Recomendação</div>
-                                <div class="notificacao-text">Nova análise disponível para MSFT</div>
-                                <div class="notificacao-time">Há 30 minutos</div>
-                            </div>
-                        </div>
-                        <div class="notificacao-item">
-                            <div class="notificacao-content">
-                                <div class="notificacao-title">Alerta de Mercado</div>
-                                <div class="notificacao-text">Índice de volatilidade aumentou significativamente</div>
-                                <div class="notificacao-time">Há 1 hora</div>
-                            </div>
-                        </div>
-                         <a href="notificacoes.html">Ver todas as notificações</a>
                     </div>
+                    <div class="notificacao-item">
+                        <div class="notificacao-content">
+                            <div class="notificacao-title">Nova Recomendação</div>
+                            <div class="notificacao-text">Nova análise disponível para MSFT</div>
+                            <div class="notificacao-time">Há 30 minutos</div>
+                        </div>
+                    </div>
+                    <div class="notificacao-item">
+                        <div class="notificacao-content">
+                            <div class="notificacao-title">Alerta de Mercado</div>
+                            <div class="notificacao-text">Índice de volatilidade aumentou significativamente</div>
+                            <div class="notificacao-time">Há 1 hora</div>
+                        </div>
+                    </div>
+                    <a href="notificacoes.html">Ver todas as notificações</a>
+                </div>
             </div>
             <img id="perfilIcon" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" alt="">
 
@@ -109,9 +109,9 @@
                     <div>
                         <div>
                             <p>Maior <span class="tooltip left-edge">
-                                            Volatibilidade
-                                            <span class="tip">Mostra o quanto o preço oscila ao longo do tempo.</span>
-                                        </span></p>
+                                    Volatibilidade
+                                    <span class="tip">Mostra o quanto o preço oscila ao longo do tempo.</span>
+                                </span></p>
                             <h1 class="cor2">Energia</h1>
                         </div>
                         <img src="Style/assets/metricaSetores.svg" alt="imagem de volatibilidade" class="order3">
@@ -141,7 +141,7 @@
                     </div>
 
                     <div id="lista">
-                        <div>
+                        <div onclick="abrirAcoesSetor(this)">
                             <div class="numero">
 
                                 <h2>1</h2>
@@ -155,7 +155,8 @@
                                 <div>
                                     <h1><span class="tooltip left-edge">
                                             <strong>Retorno</strong>
-                                            <span class="tip">É o lucro ou prejuízo percentual do investimento em determinado período.</span>
+                                            <span class="tip">É o lucro ou prejuízo percentual do investimento em
+                                                determinado período.</span>
                                         </span></h1>
                                     <p class="corVerde">+18.5%</p>
                                 </div>
@@ -163,7 +164,8 @@
                                 <div>
                                     <h1><span class="tooltip left-edge">
                                             <strong>Sharpe</strong>
-                                            <span class="tip">Mostra quanto o investidor ganhou para cada unidade de risco assumido.</span>
+                                            <span class="tip">Mostra quanto o investidor ganhou para cada unidade de
+                                                risco assumido.</span>
                                         </span></h1>
                                     <p>0.76</p>
                                 </div>
@@ -171,7 +173,8 @@
                                 <div>
                                     <h1><span class="tooltip left-edge">
                                             <strong>Beta</strong>
-                                            <span class="tip">Indica o nível de sensibilidade do ativo ao mercado.</span>
+                                            <span class="tip">Indica o nível de sensibilidade do ativo ao
+                                                mercado.</span>
                                         </span></h1>
                                     <p>1.15</p>
                                 </div>
@@ -187,7 +190,8 @@
                                 <div>
                                     <h1><span class="tooltip left-edge">
                                             <strong>Max Drawdown</strong>
-                                            <span class="tip">É a maior perda desde o ponto mais alto até o mais baixo do investimento.</span>
+                                            <span class="tip">É a maior perda desde o ponto mais alto até o mais baixo
+                                                do investimento.</span>
                                         </span></h1>
                                     <p class="corVermelha">-15.2%</p>
                                 </div>
@@ -196,8 +200,23 @@
                             </div>
 
                         </div>
+                        <div class="acoesPorSetor" style="display: none;">
+                            <h2 class="tituloListaAcoes">Ações do setor de Tecnologia</h2>
+                            <ul class="listaAcoes">
+                                <li onclick="abrirInfoAcao(this)">Apple Inc. (AAPL)</li>
+                                <li onclick="abrirInfoAcao(this)">Microsoft Corp. (MSFT)</li>
+                                <li onclick="abrirInfoAcao(this)">Alphabet Inc. (GOOGL)</li>
+                                <li onclick="abrirInfoAcao(this)">Amazon.com Inc. (AMZN)</li>
+                                <li onclick="abrirInfoAcao(this)">Meta Platforms Inc. (META)</li>
+                                <li onclick="abrirInfoAcao(this)">NVIDIA Corp. (NVDA)</li>
+                                <li onclick="abrirInfoAcao(this)">Tesla Inc. (TSLA)</li>
+                                <li onclick="abrirInfoAcao(this)">Adobe Inc. (ADBE)</li>
+                                <li onclick="abrirInfoAcao(this)">Salesforce Inc. (CRM)</li>
+                                <li onclick="abrirInfoAcao(this)">Intel Corp. (INTC)</li>
+                        </div>
 
-                        <div>
+
+                        <div onclick="abrirAcoesSetor(this)">
                             <div class="numero">
 
                                 <h2>2</h2>
@@ -241,9 +260,22 @@
                             </div>
 
                         </div>
+                        <div class="acoesPorSetor" style="display: none;">
+                            <h2 class="tituloListaAcoes">Ações do setor de Saude</h2>
+                            <ul class="listaAcoes">
+                                <li onclick="abrirInfoAcao(this)">Johnson & Johnson (JNJ)</li>
+                                <li onclick="abrirInfoAcao(this)">Pfizer Inc. (PFE)</li>
+                                <li onclick="abrirInfoAcao(this)">UnitedHealth Group Inc. (UNH)</li>
+                                <li onclick="abrirInfoAcao(this)">AbbVie Inc. (ABBV)</li>
+                                <li onclick="abrirInfoAcao(this)">Merck & Co. Inc. (MRK)</li>
+                                <li onclick="abrirInfoAcao(this)">Moderna Inc. (MRNA)</li>
+                                <li onclick="abrirInfoAcao(this)">Bristol-Myers Squibb Co. (BMY)</li>
+                                <li onclick="abrirInfoAcao(this)">Amgen Inc. (AMGN)</li>
+                                <li onclick="abrirInfoAcao(this)">Gilead Sciences Inc. (GILD)</li>
+                                <li onclick="abrirInfoAcao(this)">Eli Lilly and Co. (LLY)</li>
+                        </div>
 
-
-                        <div>
+                        <div onclick="abrirAcoesSetor(this)">
                             <div class="numero">
 
                                 <h2>3</h2>
@@ -283,9 +315,21 @@
                             </div>
 
                         </div>
+                        <div class="acoesPorSetor" style="display: none;">
+                            <h2 class="tituloListaAcoes">Ações do setor de Financeiro</h2>
+                            <ul class="listaAcoes">
+                                <li onclick="abrirInfoAcao(this)">JPMorgan Chase & Co. (JPM)</li>
+                                <li onclick="abrirInfoAcao(this)">Goldman Sachs Group Inc. (GS)</li>
+                                <li onclick="abrirInfoAcao(this)">Bank of America Corp. (BAC)</li>
+                                <li onclick="abrirInfoAcao(this)">Wells Fargo & Co. (WFC)</li>
+                                <li onclick="abrirInfoAcao(this)">Citigroup Inc. (C)</li>
+                                <li onclick="abrirInfoAcao(this)">Morgan Stanley (MS)</li>
+                                <li onclick="abrirInfoAcao(this)">American Express Co. (AXP)</li>
+                                <li onclick="abrirInfoAcao(this)">Charles Schwab Corp. (SCHW)</li>
+                                <li onclick="abrirInfoAcao(this)">BlackRock Inc. (BLK)</li>
+                        </div>
 
-
-                        <div>
+                        <div onclick="abrirAcoesSetor(this)">
                             <div class="numero">
 
                                 <h2>4</h2>
@@ -326,6 +370,21 @@
 
                         </div>
 
+                        <div class="acoesPorSetor" style="display: none;">
+                            <h2 class="tituloListaAcoes">Ações do setor de Energia</h2>
+                            <ul class="listaAcoes">
+                                <li onclick="abrirInfoAcao(this)">Exxon Mobil Corp. (XOM)</li>
+                                <li onclick="abrirInfoAcao(this)">Chevron Corp. (CVX)</li>
+                                <li onclick="abrirInfoAcao(this)">Schlumberger Ltd. (SLB)</li>
+                                <li onclick="abrirInfoAcao(this)">ConocoPhillips (COP)</li>
+                                <li onclick="abrirInfoAcao(this)">Halliburton Co. (HAL)</li>
+                                <li onclick="abrirInfoAcao(this)">Baker Hughes Co. (BKR)</li>
+                                <li onclick="abrirInfoAcao(this)">EOG Resources Inc. (EOG)</li>
+                                <li onclick="abrirInfoAcao(this)">Phillips 66 (PSX)</li>
+                                <li onclick="abrirInfoAcao(this)">Marathon Petroleum Corp. (MPC)</li>
+                                <li onclick="abrirInfoAcao(this)">Occidental Petroleum Corp. (OXY)</li>
+                            </ul>
+                        </div>
                     </div>
 
                 </div>
@@ -415,14 +474,20 @@
     new Chart(ctxRadar, configRadar);
 </script>
 
-<!-- Script barra -->
 
 <script>
+    function abrirAcoesSetor(elemento) {
+        const acoesSetoriais = elemento.nextElementSibling;
+        if (acoesSetoriais && acoesSetoriais.classList.contains('acoesPorSetor')) {
+            acoesSetoriais.style.display = acoesSetoriais.style.display === 'block' ? 'none' : 'block';
+        }
+    }
+
     const ctx = document.getElementById('graficoBarra');
     new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['Tech', 'Saúd', 'Fina', 'Ener', ' Cons', 'Indu', 'Imob', 'Tele'],//Nomes setores
+            labels: ['Tech', 'Saúd', 'Fina', 'Ener', ' Cons', 'Indu', 'Imob', 'Tele'],
             datasets: [
                 {
                     label: 'Retorno',
@@ -463,18 +528,18 @@
             }
         }
     });
- document.querySelector('#notificacaoIcon').addEventListener('click', function(e) {
-            e.stopPropagation();
-            const dropdown = document.querySelector('.notificacao-dropdown');
-            dropdown.classList.toggle('active');
-        });
+    document.querySelector('#notificacaoIcon').addEventListener('click', function (e) {
+        e.stopPropagation();
+        const dropdown = document.querySelector('.notificacao-dropdown');
+        dropdown.classList.toggle('active');
+    });
 
-        document.addEventListener('click', function(e) {
-            const dropdown = document.querySelector('.notificacao-dropdown');
-            if (!e.target.closest('.notificacao-container')) {
-                dropdown.classList.remove('active');
-            }
-        });
+    document.addEventListener('click', function (e) {
+        const dropdown = document.querySelector('.notificacao-dropdown');
+        if (!e.target.closest('.notificacao-container')) {
+            dropdown.classList.remove('active');
+        }
+    });
 
 </script>
 
