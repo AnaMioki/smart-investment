@@ -523,3 +523,92 @@ select:focus {
 #slcRisco:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 15);
 }
+
+/* Opa */
+
+/* ==== QUESTIONÁRIO DENTRO DO FORMULÁRIO ==== */
+#questionario {
+  margin-top: 20px;
+  text-align: left;
+  color: #fff;
+  width: 100%;
+}
+
+.pergunta {
+  display: none;
+  background-color: rgba(255,255,255,0.05);
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 10px;
+}
+
+.pergunta.ativa {
+  display: block;
+}
+
+.pergunta p {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.pergunta label {
+  cursor: pointer;
+}
+
+.pergunta button {
+  margin-top: 10px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  background-color: #fff;
+  color: #004225;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.pergunta button:hover {
+  background-color: #f1f1f1;
+}
+
+/* ==== BOTÕES DE VOLTAR E FINALIZAR ==== */
+.botoesForm {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+#btnVoltar, #btnFinalizar {
+  flex: 1;
+  min-width: 140px;
+  max-width: 200px;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#btnVoltar {
+  background-color: #ccc;
+  color: #000;
+}
+
+#btnFinalizar {
+  background-color: #fff;
+  color: #004225;
+}
+
+#btnVoltar:hover, #btnFinalizar:hover {
+  opacity: 0.9;
+}
+
+@media (max-width: 600px) {
+  .botoesForm {
+    flex-direction: column;
+  }
+  #btnVoltar, #btnFinalizar {
+    width: 100%;
+  }
+}
