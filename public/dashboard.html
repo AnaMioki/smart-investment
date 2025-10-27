@@ -4,8 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Dashboard</title>
+    <link rel="icon" type="image/x-icon" href="Style/assets/smartLogoVetor.ico">
     <link rel="stylesheet" href="Style/css/dashboardCSS.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -255,10 +257,31 @@
 
                 <div id="graphDash">
 
+                    <div>
+                        <h1>Top 5 Retorno Médio por Setor</h1>
+                        <canvas id="rankSetor">
+                        </canvas>
+                    </div>
+
+                    <div>
+                        <h1>Evolução do Retorno Acumulado</h1>
+                        <canvas id="graphLinha"></canvas>
+                    </div>
+                </div>
+
+                <div id="graphGrande">
+                    <h1>Volatilidade x Volume Negociado por Setor</h1>
+                    <canvas id="volatilidadeVolume"></canvas>
                 </div>
 
             </div>
 
+        </div>
+
+        <div id="sobreposicaoLista">
+            <div>
+            
+            </div>
         </div>
 
     </div>
@@ -267,6 +290,199 @@
 </html>
 
 <script>
+
+
+    
+    function chamarGraficos(){
+         const ctx = document.getElementById('rankSetor');
+        
+        const ctx1 = document.getElementById('graphLinha');
+
+
+        const ctx2 = document.getElementById('volatilidadeVolume');
+
+    new Chart(ctx2, {
+      type: 'bar',
+      data: {
+        labels: ['Tecnologia', 'Saúde', 'Financeiro', 'Energia', 'Consumo', 'Industrial'],
+        datasets: [
+          {
+            label: 'Volatilidade (%)',
+            data: [30, 25, 28, 22, 20, 24], // valores fictícios (em %)
+            backgroundColor: '#b388eb', // roxo
+            borderRadius: 6,
+            barThickness: 15,
+          },
+          {
+            label: 'Volume (M)',
+            data: [450, 400, 500, 300, 350, 320], // valores fictícios (em milhões)
+            backgroundColor: '#4285f4', // azul
+            borderRadius: 6,
+            barThickness: 15,
+          }
+        ]
+      },
+      options: {
+        indexAxis: 'y', // barras horizontais
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              boxWidth: 20,
+              color: '#333'
+            }
+          },
+          
+        },
+        scales: {
+          x: {
+            beginAtZero: true,
+            grid: {
+              color: '#eee'
+            },
+            title: {
+              display: false
+            }
+          },
+          y: {
+            grid: {
+              display: false
+            },
+            ticks: {
+              color: '#333'
+            }
+          }
+        }
+      }
+    });
+
+
+
+    new Chart(ctx1, {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+        datasets: [
+          {
+            label: 'Energia',
+            data: [2, 3, 4, 5, 7, 9, 9.5, 10, 11, 11.5, 11.7, 12],
+            borderColor: '#EF4444',
+            backgroundColor: '#EF4444',
+            tension: 0.3,
+            fill: false,
+            pointRadius: 4,
+            pointBackgroundColor: '#fff',
+            pointBorderColor: '#EF4444',
+            pointBorderWidth: 2
+          },
+          {
+            label: 'Financeiro',
+            data: [3, 4, 5, 6, 8, 10, 11, 12, 12.5, 13, 13.2, 13.4],
+            borderColor: '#F59E0B',
+            backgroundColor: '#F59E0B',
+            tension: 0.3,
+            fill: false,
+            pointRadius: 4,
+            pointBackgroundColor: '#fff',
+            pointBorderColor: '#F59E0B',
+            pointBorderWidth: 2
+          },
+          {
+            label: 'Saúde',
+            data: [4, 5, 6, 8, 10, 12, 13, 14, 14.5, 15, 15.2, 15.3],
+            borderColor: '#10B981',
+            backgroundColor: '#10B981',
+            tension: 0.3,
+            fill: false,
+            pointRadius: 4,
+            pointBackgroundColor: '#fff',
+            pointBorderColor: '#10B981',
+            pointBorderWidth: 2
+          },
+          {
+            label: 'Tecnologia',
+            data: [5, 7, 6, 9, 12, 15, 14, 16, 17, 18, 18.5, 19],
+            borderColor: '#3B82F6',
+            backgroundColor: '#3B82F6',
+            tension: 0.3,
+            fill: false,
+            pointRadius: 4,
+            pointBackgroundColor: '#fff',
+            pointBorderColor: '#3B82F6',
+            pointBorderWidth: 2
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            suggestedMax: 20,
+            title: {
+              display: false
+            }
+          },
+          x: {
+            grid: {
+              display: true
+            }
+          }
+        }
+      }
+    });
+
+     
+        new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Tecnologia', 'Saúde', 'Financeiro', 'Energia', 'Industrial'],
+        datasets: [{
+          label: 'Retorno Médio (%)',
+          data: [20, 15, 13, 11, 9],
+          backgroundColor: [
+            '#3B82F6', // azul
+            '#10B981', // verde
+            '#F59E0B', // laranja
+            '#EF4444', // vermelho
+            '#8B5CF6'  // roxo
+          ],
+          borderRadius: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: false
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 5
+            },
+            title: {
+              display: true,
+              text: '% de Retorno'
+            }
+          }
+        }
+      }
+    });
+
+     }
+
+
+
+     chamarGraficos();
 
      document.querySelector('#notificacaoIcon').addEventListener('click', function(e) {
             e.stopPropagation();
