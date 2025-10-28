@@ -541,6 +541,223 @@
         }
     });
 
+    function abrirInfoAcao(elemento) {
+        const infoAcoes = {
+            'AAPL': {
+                nome: 'Apple Inc.',
+                ticker: 'AAPL',
+                preco: 187.50,
+                variacao: '+1.25%',
+                volume: '52.3M',
+                marketCap: '2.94T',
+                pe: 31.2,
+                dividendYield: '0.51%',
+                beta: 1.28,
+                setor: 'Tecnologia'
+            },
+            'MSFT': {
+                nome: 'Microsoft Corporation',
+                ticker: 'MSFT',
+                preco: 378.85,
+                variacao: '+0.89%',
+                volume: '23.1M',
+                marketCap: '2.82T',
+                pe: 36.8,
+                dividendYield: '0.81%',
+                beta: 0.92,
+                setor: 'Tecnologia'
+            },
+            'GOOGL': {
+                nome: 'Alphabet Inc.',
+                ticker: 'GOOGL',
+                preco: 140.12,
+                variacao: '+1.05%',
+                volume: '25.7M',
+                marketCap: '1.77T',
+                pe: 27.3,
+                dividendYield: '-',
+                beta: 1.06,
+                setor: 'Tecnologia'
+            },
+            'JNJ': {
+                nome: 'Johnson & Johnson',
+                ticker: 'JNJ',
+                preco: 165.30,
+                variacao: '+0.45%',
+                volume: '7.8M',
+                marketCap: '435.6B',
+                pe: 22.5,
+                dividendYield: '2.54%',
+                beta: 0.70,
+                setor: 'Saúde'
+            },
+            'PFE': {
+                nome: 'Pfizer Inc.',
+                ticker: 'PFE',
+                preco: 42.15,
+                variacao: '+0.75%',
+                volume: '18.4M',
+                marketCap: '237.8B',
+                pe: 13.8,
+                dividendYield: '3.12%',
+                beta: 0.85,
+                setor: 'Saúde'
+            },
+            'UNH': {
+                nome: 'UnitedHealth Group Incorporated',
+                ticker: 'UNH',
+                preco: 520.45,
+                variacao: '+0.60%',
+                volume: '3.2M',
+                marketCap: '450.2B',
+                pe: 21.4,
+                dividendYield: '1.30%',
+                beta: 0.95,
+                setor: 'Saúde'
+            },
+            'JPM': {
+                nome: 'JPMorgan Chase & Co.',
+                ticker: 'JPM',
+                preco: 145.20,
+                variacao: '+0.55%',
+                volume: '10.5M',
+                marketCap: '435.1B',
+                pe: 10.5,
+                dividendYield: '2.75%',
+                beta: 1.20,
+                setor: 'Financeiro'
+            },
+            'GS': {
+                nome: 'The Goldman Sachs Group, Inc.',
+                ticker: 'GS',
+                preco: 350.75,
+                variacao: '+0.80%',
+                volume: '2.8M',
+                marketCap: '135.4B',
+                pe: 9.8,
+                dividendYield: '2.20%',
+                beta: 1.15,
+                setor: 'Financeiro'
+            },
+            'BAC': {
+                nome: 'Bank of America Corporation',
+                ticker: 'BAC',
+                preco: 32.10,
+                variacao: '+0.65%',
+                volume: '30.2M',
+                marketCap: '280.3B',
+                pe: 11.2,
+                dividendYield: '2.10%',
+                beta: 1.10,
+                setor: 'Financeiro'
+            },
+            'XOM': {
+                nome: 'Exxon Mobil Corporation',
+                ticker: 'XOM',
+                preco: 102.50,
+                variacao: '+1.10%',
+                volume: '15.6M',
+                marketCap: '430.5B',
+                pe: 14.3,
+                dividendYield: '3.50%',
+                beta: 1.30,
+                setor: 'Energia'
+            },
+            'CVX': {
+                nome: 'Chevron Corporation',
+                ticker: 'CVX',
+                preco: 110.75,
+                variacao: '+0.95%',
+                volume: '12.4M',
+                marketCap: '320.8B',
+                pe: 15.1,
+                dividendYield: '3.80%',
+                beta: 1.25,
+                setor: 'Energia'
+            },
+            'SLB': {
+                nome: 'Schlumberger Limited',
+                ticker: 'SLB',
+                preco: 48.30,
+                variacao: '+1.20%',
+                volume: '8.9M',
+                marketCap: '120.4B',
+                pe: 18.7,
+                dividendYield: '2.90%',
+                beta: 1.40,
+                setor: 'Energia'
+            }
+
+        };
+
+        const ticker = elemento.textContent.match(/\((.*?)\)/)[1];
+        const info = infoAcoes[ticker];
+
+        if (!info) return;
+
+        const popup = document.createElement('div');
+        popup.className = 'popup-acao';
+        
+        popup.innerHTML = `
+            <div class="popup-conteudo">
+                <div class="popup-header">
+                    <h2>${info.nome}</h2>
+                    <span class="fechar-popup">&times;</span>
+                </div>
+                <div class="popup-info">
+                    <div class="info-principal">
+                        <div class="preco-atual">
+                            <h3>$${info.preco}</h3>
+                            <span class="${info.variacao.includes('+') ? 'variacao-positiva' : 'variacao-negativa'}">${info.variacao}</span>
+                        </div>
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Ticker</span>
+                            <span class="info-valor">${info.ticker}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Volume</span>
+                            <span class="info-valor">${info.volume}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Market Cap</span>
+                            <span class="info-valor">${info.marketCap}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">P/E</span>
+                            <span class="info-valor">${info.pe}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Dividend Yield</span>
+                            <span class="info-valor">${info.dividendYield}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Beta</span>
+                            <span class="info-valor">${info.beta}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Setor</span>
+                            <span class="info-valor">${info.setor}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(popup);
+
+        const fecharPopup = popup.querySelector('.fechar-popup');
+        fecharPopup.onclick = () => {
+            document.body.removeChild(popup);
+        };
+
+        document.addEventListener('click', (e) => {
+            if (!popup.querySelector('.popup-conteudo').contains(e.target) && !elemento.contains(e.target)) {
+                document.body.removeChild(popup);
+            }
+        });
+    }
 </script>
 
 <script src="Style/js/fazerHamburguer.js"></script>
