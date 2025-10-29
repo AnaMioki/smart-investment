@@ -233,6 +233,7 @@ img#perfilIcon {
         flex-direction: column;
         align-items: center;
         width: 100% !important;
+
     }
 
     
@@ -574,6 +575,7 @@ img#perfilIcon {
 .especificacao{
     display: flex;
     width: 30% !important;
+    align-items: center;
 }
 
 .especificacao h1{
