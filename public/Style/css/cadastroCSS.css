@@ -73,11 +73,9 @@ body {
 }
 
 #cadastroForm {
-   
     height: 60vh;
-    width: 50vw;
+    width: 40vw;
     background: linear-gradient(135deg, #3b8841, #004225);
-    margin-top: 8dvh;
     padding: 15px 40px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -152,7 +150,8 @@ body {
 }
 
 #redLogin {
-    margin-top: 10vh;
+    margin-top: 3vh;
+ 
     color: #fff;
     text-decoration: none;
 }
@@ -360,14 +359,14 @@ body {
     align-self: center;
     justify-self: center;
     top: 15vh;
-    left: 10vw;
+    left: 26vw;
     flex-direction: column;
     background-color: #004225;
     color: #FFF;
     text-align: center;
     margin-bottom: 5vh;
     padding: 20px;
-    width: 80%;
+    width: 50%;
     height: 58vh;
     z-index: 1;
     border-radius: 2rem;
