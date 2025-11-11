@@ -141,13 +141,83 @@
                     </div>
 
                     <div id="lista">
-                        <div onclick="abrirAcoesSetor(this)">
-                            <div class="numero">
 
-                                <h2>1</h2>
+                            <img src="Style/assets/Loading_icon.gif" alt="" >
+
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+   <div class="popup-conteudo">
+                <div class="popup-header">
+                    <h2>${info.nome}</h2>
+                    <span class="fechar-popup">&times;</span>
+                </div>
+                <div class="popup-info">
+                    <div class="info-principal">
+                        <div class="preco-atual">
+                            <h3>$${info.preco}</h3>
+                            <span class="${info.variacao.includes('+') ? 'variacao-positiva' : 'variacao-negativa'}">${info.variacao}</span>
+                            <img src="Style/assets/alvo.svg" width="35px" height="35px" alt="">
+                        </div>
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Ticker</span>
+                            <span class="info-valor">${info.ticker}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Preço médio</span>
+                            <span class="info-valor">${info.volume}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Maior preço</span>
+                            <span class="info-valor">${info.marketCap}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Menor preço</span>
+                            <span class="info-valor">${info.pe}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Volume</span>
+                            <span class="info-valor">${info.dividendYield}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Setor</span>
+                            <span class="info-valor">${info.setor}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+</html>
+
+<!-- Script radar -->
+<script>
+
+    async function carregarDados() {
+
+        const response = await fetch('/setores/receberSetores/');
+        const setores = await response.json();
+
+        lista.innerHTML = '';   
+        var cont = 0;
+
+        for (let setor of setores) {
+            cont++;
+            lista.innerHTML += `  
+              <div onclick="abrirAcoesSetor(this,'${setor.setor}')">
+                            <div class="numero">
+                                
+                                <h2>${cont}</h2>
                                 <div>
-                                    <h1>Tecnologia</h1>
-                                    <p>68 ações <br> disponíveis</p>
+                                    <h1>${setor.setor}</h1>
+                                    <p>${setor.quantidade} ações <br> disponíveis</p>
                                 </div>
                             </div>
 
@@ -163,16 +233,15 @@
 
                                 <div>
                                     <h1><span class="tooltip left-edge">
-                                            <strong>Sharpe</strong>
-                                            <span class="tip">Mostra quanto o investidor ganhou para cada unidade de
-                                                risco assumido.</span>
+                                            <strong>DRE</strong>
+                                            <span class="tip">Demonstrativo de resultado em exercicio .</span>
                                         </span></h1>
                                     <p>0.76</p>
                                 </div>
 
                                 <div>
                                     <h1><span class="tooltip left-edge">
-                                            <strong>Beta</strong>
+                                            <strong>EBITDA</strong>
                                             <span class="tip">Indica o nível de sensibilidade do ativo ao
                                                 mercado.</span>
                                         </span></h1>
@@ -202,201 +271,19 @@
                         </div>
                         <div class="acoesPorSetor" style="display: none;">
                             <h2 class="tituloListaAcoes">Ações do setor de Tecnologia</h2>
-                            <ul class="listaAcoes">
-                                <li onclick="abrirInfoAcao(this)">Apple Inc. (AAPL)</li>
-                                <li onclick="abrirInfoAcao(this)">Microsoft Corp. (MSFT)</li>
-                                <li onclick="abrirInfoAcao(this)">Alphabet Inc. (GOOGL)</li>
-                                <li onclick="abrirInfoAcao(this)">Amazon.com Inc. (AMZN)</li>
-                                <li onclick="abrirInfoAcao(this)">Meta Platforms Inc. (META)</li>
-                                <li onclick="abrirInfoAcao(this)">NVIDIA Corp. (NVDA)</li>
-                                <li onclick="abrirInfoAcao(this)">Tesla Inc. (TSLA)</li>
-                                <li onclick="abrirInfoAcao(this)">Adobe Inc. (ADBE)</li>
-                                <li onclick="abrirInfoAcao(this)">Salesforce Inc. (CRM)</li>
-                                <li onclick="abrirInfoAcao(this)">Intel Corp. (INTC)</li>
+                            <ul class="listaAcoes" id="acoes_${setor.setor}">
+                               
                         </div>
+            `;
+        }
 
 
-                        <div onclick="abrirAcoesSetor(this)">
-                            <div class="numero">
+    }
 
-                                <h2>2</h2>
-                                <div>
-                                    <h1>Saúde</h1>
-                                    <p>54 ações <br> disponíveis</p>
-                                </div>
-                            </div>
+    carregarDados();
+</script>
 
-                            <div class="infos">
-                                <div>
-                                    <h1>Retorno</h1>
-                                    <p class="corVerde">+15.2%</p>
-                                </div>
 
-                                <div>
-                                    <h1>Sharpe</h1>
-                                    <p>0.81</p>
-                                </div>
-
-                                <div>
-                                    <h1>Beta</h1>
-                                    <p>0.92</p>
-                                </div>
-
-                                <div>
-                                    <h1><span class="tooltip left-edge">
-                                            <strong>Volatilidade</strong>
-                                            <span class="tip">Explicação breve sobre o significado da palavra, sem sair
-                                                da tela.</span>
-                                        </span></h1>
-                                    <p class="corLaranja">18.7%</p>
-                                </div>
-
-                                <div>
-                                    <h1>Max Drawdown</h1>
-                                    <p class="corVermelha">-11.8%</p>
-                                </div>
-
-                                <h1 class="azul">Alta</h1>
-                            </div>
-
-                        </div>
-                        <div class="acoesPorSetor" style="display: none;">
-                            <h2 class="tituloListaAcoes">Ações do setor de Saude</h2>
-                            <ul class="listaAcoes">
-                                <li onclick="abrirInfoAcao(this)">Johnson & Johnson (JNJ)</li>
-                                <li onclick="abrirInfoAcao(this)">Pfizer Inc. (PFE)</li>
-                                <li onclick="abrirInfoAcao(this)">UnitedHealth Group Inc. (UNH)</li>
-                                <li onclick="abrirInfoAcao(this)">AbbVie Inc. (ABBV)</li>
-                                <li onclick="abrirInfoAcao(this)">Merck & Co. Inc. (MRK)</li>
-                                <li onclick="abrirInfoAcao(this)">Moderna Inc. (MRNA)</li>
-                                <li onclick="abrirInfoAcao(this)">Bristol-Myers Squibb Co. (BMY)</li>
-                                <li onclick="abrirInfoAcao(this)">Amgen Inc. (AMGN)</li>
-                                <li onclick="abrirInfoAcao(this)">Gilead Sciences Inc. (GILD)</li>
-                                <li onclick="abrirInfoAcao(this)">Eli Lilly and Co. (LLY)</li>
-                        </div>
-
-                        <div onclick="abrirAcoesSetor(this)">
-                            <div class="numero">
-
-                                <h2>3</h2>
-                                <div>
-                                    <h1>Financeiro</h1>
-                                    <p>72 ações <br> disponíveis</p>
-                                </div>
-                            </div>
-
-                            <div class="infos">
-                                <div>
-                                    <h1>Retorno</h1>
-                                    <p class="corVerde">+12.8%</p>
-                                </div>
-
-                                <div>
-                                    <h1>Sharpe</h1>
-                                    <p>0.58</p>
-                                </div>
-
-                                <div>
-                                    <h1>Beta</h1>
-                                    <p>1.08</p>
-                                </div>
-
-                                <div>
-                                    <h1>Volatilidade</h1>
-                                    <p class="corLaranja">22.1%</p>
-                                </div>
-
-                                <div>
-                                    <h1>Max Drawdown</h1>
-                                    <p class="corVermelha">-18.5%</p>
-                                </div>
-
-                                <h1 class="verde">Muito Alta</h1>
-                            </div>
-
-                        </div>
-                        <div class="acoesPorSetor" style="display: none;">
-                            <h2 class="tituloListaAcoes">Ações do setor de Financeiro</h2>
-                            <ul class="listaAcoes">
-                                <li onclick="abrirInfoAcao(this)">JPMorgan Chase & Co. (JPM)</li>
-                                <li onclick="abrirInfoAcao(this)">Goldman Sachs Group Inc. (GS)</li>
-                                <li onclick="abrirInfoAcao(this)">Bank of America Corp. (BAC)</li>
-                                <li onclick="abrirInfoAcao(this)">Wells Fargo & Co. (WFC)</li>
-                                <li onclick="abrirInfoAcao(this)">Citigroup Inc. (C)</li>
-                                <li onclick="abrirInfoAcao(this)">Morgan Stanley (MS)</li>
-                                <li onclick="abrirInfoAcao(this)">American Express Co. (AXP)</li>
-                                <li onclick="abrirInfoAcao(this)">Charles Schwab Corp. (SCHW)</li>
-                                <li onclick="abrirInfoAcao(this)">BlackRock Inc. (BLK)</li>
-                        </div>
-
-                        <div onclick="abrirAcoesSetor(this)">
-                            <div class="numero">
-
-                                <h2>4</h2>
-                                <div>
-                                    <h1>Energia</h1>
-                                    <p>38 ações <br> disponíveis</p>
-                                </div>
-                            </div>
-
-                            <div class="infos">
-                                <div>
-                                    <h1>Retorno</h1>
-                                    <p class="corVerde">+11.5%</p>
-                                </div>
-
-                                <div>
-                                    <h1>Sharpe</h1>
-                                    <p>0.41</p>
-                                </div>
-
-                                <div>
-                                    <h1>Beta</h1>
-                                    <p>1.32</p>
-                                </div>
-
-                                <div>
-                                    <h1>Volatilidade</h1>
-                                    <p class="corLaranja">28.4%</p>
-                                </div>
-
-                                <div>
-                                    <h1>Max Drawdown</h1>
-                                    <p class="corVermelha">-22.3%</p>
-                                </div>
-
-                                <h1 class="amarelo">Média</h1>
-                            </div>
-
-                        </div>
-
-                        <div class="acoesPorSetor" style="display: none;">
-                            <h2 class="tituloListaAcoes">Ações do setor de Energia</h2>
-                            <ul class="listaAcoes">
-                                <li onclick="abrirInfoAcao(this)">Exxon Mobil Corp. (XOM)</li>
-                                <li onclick="abrirInfoAcao(this)">Chevron Corp. (CVX)</li>
-                                <li onclick="abrirInfoAcao(this)">Schlumberger Ltd. (SLB)</li>
-                                <li onclick="abrirInfoAcao(this)">ConocoPhillips (COP)</li>
-                                <li onclick="abrirInfoAcao(this)">Halliburton Co. (HAL)</li>
-                                <li onclick="abrirInfoAcao(this)">Baker Hughes Co. (BKR)</li>
-                                <li onclick="abrirInfoAcao(this)">EOG Resources Inc. (EOG)</li>
-                                <li onclick="abrirInfoAcao(this)">Phillips 66 (PSX)</li>
-                                <li onclick="abrirInfoAcao(this)">Marathon Petroleum Corp. (MPC)</li>
-                                <li onclick="abrirInfoAcao(this)">Occidental Petroleum Corp. (OXY)</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-        </div>
-    </div>
-</body>
-
-</html>
-
-<!-- Script radar -->
 
 <script>
     const ctxRadar = document.getElementById('graficoRadar').getContext('2d');
@@ -476,7 +363,26 @@
 
 
 <script>
-    function abrirAcoesSetor(elemento) {
+
+    async function abrirAcoesSetor(elemento, setor) {
+        const nome_lista = document.getElementById(`acoes_${setor}`);
+
+        nome_lista.innerHTML = '<img src="Style/assets/Loading_icon.gif" alt="Carregando...">';
+
+        const response = await fetch(`/setores/buscarAcoesSetor/${setor}`);
+        const dados = await response.json();
+
+
+
+        console.log(dados);
+
+        nome_lista.innerHTML = '';
+        for (let acao of dados) {
+
+            nome_lista.innerHTML += `<li onclick="abrirInfoAcao(this, '${acao.ticker}')">${acao.nome} (${acao.ticker})</li>`;
+        }
+
+
         const acoesSetoriais = elemento.nextElementSibling;
         if (acoesSetoriais && acoesSetoriais.classList.contains('acoesPorSetor')) {
             acoesSetoriais.style.display = acoesSetoriais.style.display === 'block' ? 'none' : 'block';
@@ -541,163 +447,16 @@
         }
     });
 
-    function abrirInfoAcao(elemento) {
-        const infoAcoes = {
-            'AAPL': {
-                nome: 'Apple Inc.',
-                ticker: 'AAPL',
-                preco: 187.50,
-                variacao: '+1.25%',
-                volume: '52.3M',
-                marketCap: '2.94T',
-                pe: 31.2,
-                dividendYield: '0.51%',
-                beta: 1.28,
-                setor: 'Tecnologia'
-            },
-            'MSFT': {
-                nome: 'Microsoft Corporation',
-                ticker: 'MSFT',
-                preco: 378.85,
-                variacao: '+0.89%',
-                volume: '23.1M',
-                marketCap: '2.82T',
-                pe: 36.8,
-                dividendYield: '0.81%',
-                beta: 0.92,
-                setor: 'Tecnologia'
-            },
-            'GOOGL': {
-                nome: 'Alphabet Inc.',
-                ticker: 'GOOGL',
-                preco: 140.12,
-                variacao: '+1.05%',
-                volume: '25.7M',
-                marketCap: '1.77T',
-                pe: 27.3,
-                dividendYield: '-',
-                beta: 1.06,
-                setor: 'Tecnologia'
-            },
-            'JNJ': {
-                nome: 'Johnson & Johnson',
-                ticker: 'JNJ',
-                preco: 165.30,
-                variacao: '+0.45%',
-                volume: '7.8M',
-                marketCap: '435.6B',
-                pe: 22.5,
-                dividendYield: '2.54%',
-                beta: 0.70,
-                setor: 'Saúde'
-            },
-            'PFE': {
-                nome: 'Pfizer Inc.',
-                ticker: 'PFE',
-                preco: 42.15,
-                variacao: '+0.75%',
-                volume: '18.4M',
-                marketCap: '237.8B',
-                pe: 13.8,
-                dividendYield: '3.12%',
-                beta: 0.85,
-                setor: 'Saúde'
-            },
-            'UNH': {
-                nome: 'UnitedHealth Group Incorporated',
-                ticker: 'UNH',
-                preco: 520.45,
-                variacao: '+0.60%',
-                volume: '3.2M',
-                marketCap: '450.2B',
-                pe: 21.4,
-                dividendYield: '1.30%',
-                beta: 0.95,
-                setor: 'Saúde'
-            },
-            'JPM': {
-                nome: 'JPMorgan Chase & Co.',
-                ticker: 'JPM',
-                preco: 145.20,
-                variacao: '+0.55%',
-                volume: '10.5M',
-                marketCap: '435.1B',
-                pe: 10.5,
-                dividendYield: '2.75%',
-                beta: 1.20,
-                setor: 'Financeiro'
-            },
-            'GS': {
-                nome: 'The Goldman Sachs Group, Inc.',
-                ticker: 'GS',
-                preco: 350.75,
-                variacao: '+0.80%',
-                volume: '2.8M',
-                marketCap: '135.4B',
-                pe: 9.8,
-                dividendYield: '2.20%',
-                beta: 1.15,
-                setor: 'Financeiro'
-            },
-            'BAC': {
-                nome: 'Bank of America Corporation',
-                ticker: 'BAC',
-                preco: 32.10,
-                variacao: '+0.65%',
-                volume: '30.2M',
-                marketCap: '280.3B',
-                pe: 11.2,
-                dividendYield: '2.10%',
-                beta: 1.10,
-                setor: 'Financeiro'
-            },
-            'XOM': {
-                nome: 'Exxon Mobil Corporation',
-                ticker: 'XOM',
-                preco: 102.50,
-                variacao: '+1.10%',
-                volume: '15.6M',
-                marketCap: '430.5B',
-                pe: 14.3,
-                dividendYield: '3.50%',
-                beta: 1.30,
-                setor: 'Energia'
-            },
-            'CVX': {
-                nome: 'Chevron Corporation',
-                ticker: 'CVX',
-                preco: 110.75,
-                variacao: '+0.95%',
-                volume: '12.4M',
-                marketCap: '320.8B',
-                pe: 15.1,
-                dividendYield: '3.80%',
-                beta: 1.25,
-                setor: 'Energia'
-            },
-            'SLB': {
-                nome: 'Schlumberger Limited',
-                ticker: 'SLB',
-                preco: 48.30,
-                variacao: '+1.20%',
-                volume: '8.9M',
-                marketCap: '120.4B',
-                pe: 18.7,
-                dividendYield: '2.90%',
-                beta: 1.40,
-                setor: 'Energia'
-            }
+    async function abrirInfoAcao(elemento, ticker) {
 
-        };
+        const response = await fetch(`/setores/buscarAcoesUnico/${ticker}`);
+        const info = await response.json();
 
-        const ticker = elemento.textContent.match(/\((.*?)\)/)[1];
-        const info = infoAcoes[ticker];
-
-        if (!info) return;
+        console.log(info);
 
         const popup = document.createElement('div');
         popup.className = 'popup-acao';
-        
+
         popup.innerHTML = `
             <div class="popup-conteudo">
                 <div class="popup-header">
@@ -708,7 +467,7 @@
                     <div class="info-principal">
                         <div class="preco-atual">
                             <h3>$${info.preco}</h3>
-                            <span class="${info.variacao.includes('+') ? 'variacao-positiva' : 'variacao-negativa'}">${info.variacao}</span>
+                            <span></span>
                         </div>
                     </div>
                     <div class="info-grid">
@@ -717,24 +476,20 @@
                             <span class="info-valor">${info.ticker}</span>
                         </div>
                         <div class="info-item">
-                            <span class="info-label">Volume</span>
+                            <span class="info-label">Preço médio</span>
                             <span class="info-valor">${info.volume}</span>
                         </div>
                         <div class="info-item">
-                            <span class="info-label">Market Cap</span>
+                            <span class="info-label">Maior preço</span>
                             <span class="info-valor">${info.marketCap}</span>
                         </div>
                         <div class="info-item">
-                            <span class="info-label">P/E</span>
+                            <span class="info-label">Menor preço</span>
                             <span class="info-valor">${info.pe}</span>
                         </div>
                         <div class="info-item">
-                            <span class="info-label">Dividend Yield</span>
+                            <span class="info-label">Volume</span>
                             <span class="info-valor">${info.dividendYield}</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">Beta</span>
-                            <span class="info-valor">${info.beta}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Setor</span>
@@ -754,7 +509,7 @@
 
         document.addEventListener('click', (e) => {
             if (!popup.querySelector('.popup-conteudo').contains(e.target) && !elemento.contains(e.target)) {
-                document.body.removeChild(popup);
+                document.body.appendChild(popup);
             }
         });
     }
