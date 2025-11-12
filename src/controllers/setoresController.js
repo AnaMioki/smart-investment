@@ -31,9 +31,11 @@ function buscarAcoesSetor(req, res) {
     });
 }
 
-function buscarAcoesUnico(req, res) {
+
+
+function buscarAcoesUnicas(req, res) {
     var ticker = req.params.ticker;
-    setoresModel.buscarAcoesUnico(ticker).then(function (resultado) {
+    setoresModel.buscarAcoesUnicas(ticker).then(function (resultado) {
         if (resultado.length > 0) {
             res.json(resultado);
         } else {
@@ -49,5 +51,5 @@ function buscarAcoesUnico(req, res) {
 module.exports = {
     receberSetores,
     buscarAcoesSetor,
-    buscarAcoesUnico
+    buscarAcoesUnicas
 }

@@ -12,8 +12,10 @@ rota.get('/buscarAcoesSetor/:setor', function (req , res) {
     setoresController.buscarAcoesSetor(req , res);
 });
 
-rota.get('/buscarAcoesUnico/:ticker', function (req , res) {
-    setoresController.buscarAcoesUnico(req , res);
+rota.get('/buscarAcoesUnicas/:ticker', function (req , res) {
+    setoresController.buscarAcoesUnicas(req , res);
 });
+
+
 
 module.exports = rota;

@@ -12,7 +12,8 @@ function buscarAcoesSetor(setor) {
     return database.executar(instrucaoSql)
 }
 
-function buscarAcoesUnico(ticker) {
+
+function buscarAcoesUnicas(ticker) {
     var instrucaoSql = `SELECT 
     e.*, 
     TRUNCATE(AVG(a.precoFechamento),2)AS media_preco_fechamento,
@@ -30,8 +31,10 @@ LIMIT 1;`;
 }
 
 
+
+
 module.exports = {
     receberSetores,
     buscarAcoesSetor,
-    buscarAcoesUnico
+    buscarAcoesUnicas
 }

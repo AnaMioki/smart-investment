@@ -154,47 +154,6 @@
     </div>
 </body>
 
-   <div class="popup-conteudo">
-                <div class="popup-header">
-                    <h2>${info.nome}</h2>
-                    <span class="fechar-popup">&times;</span>
-                </div>
-                <div class="popup-info">
-                    <div class="info-principal">
-                        <div class="preco-atual">
-                            <h3>$${info.preco}</h3>
-                            <span class="${info.variacao.includes('+') ? 'variacao-positiva' : 'variacao-negativa'}">${info.variacao}</span>
-                            <img src="Style/assets/alvo.svg" width="35px" height="35px" alt="">
-                        </div>
-                    </div>
-                    <div class="info-grid">
-                        <div class="info-item">
-                            <span class="info-label">Ticker</span>
-                            <span class="info-valor">${info.ticker}</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">Preço médio</span>
-                            <span class="info-valor">${info.volume}</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">Maior preço</span>
-                            <span class="info-valor">${info.marketCap}</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">Menor preço</span>
-                            <span class="info-valor">${info.pe}</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">Volume</span>
-                            <span class="info-valor">${info.dividendYield}</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">Setor</span>
-                            <span class="info-valor">${info.setor}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
 </html>
 
 <!-- Script radar -->
@@ -447,12 +406,15 @@
         }
     });
 
+
+
+    
     async function abrirInfoAcao(elemento, ticker) {
 
-        const response = await fetch(`/setores/buscarAcoesUnico/${ticker}`);
-        const info = await response.json();
+        const resposta = await fetch(`/setores/buscarAcoesUnicas/${ticker}`);
+        const dados = await resposta.json();
 
-        console.log(info);
+        console.log(dados[0]);
 
         const popup = document.createElement('div');
         popup.className = 'popup-acao';
@@ -460,40 +422,40 @@
         popup.innerHTML = `
             <div class="popup-conteudo">
                 <div class="popup-header">
-                    <h2>${info.nome}</h2>
+                    <h2>${dados[0].nome}</h2>
                     <span class="fechar-popup">&times;</span>
                 </div>
                 <div class="popup-info">
                     <div class="info-principal">
                         <div class="preco-atual">
-                            <h3>$${info.preco}</h3>
+                            <h3>$${dados[0].media_preco_fechamento}</h3>
                             <span></span>
                         </div>
                     </div>
                     <div class="info-grid">
                         <div class="info-item">
                             <span class="info-label">Ticker</span>
-                            <span class="info-valor">${info.ticker}</span>
+                            <span class="info-valor">${dados[0].ticker}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Preço médio</span>
-                            <span class="info-valor">${info.volume}</span>
+                            <span class="info-valor">${dados[0].media_preco_fechamento}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Maior preço</span>
-                            <span class="info-valor">${info.marketCap}</span>
+                            <span class="info-valor">${dados[0].max_preco_alto}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Menor preço</span>
-                            <span class="info-valor">${info.pe}</span>
+                            <span class="info-valor">${dados[0].min_preco_baixo}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Volume</span>
-                            <span class="info-valor">${info.dividendYield}</span>
+                            <span class="info-valor">${dados[0].media_volume}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Setor</span>
-                            <span class="info-valor">${info.setor}</span>
+                            <span class="info-valor">${dados[0].setor}</span>
                         </div>
                     </div>
                 </div>
