@@ -2,328 +2,331 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link rel="icon" type="image/x-icon" href="Style/assets/smartLogoVetor.ico">
-    <link rel="stylesheet" href="Style/css/dashboardCSS.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link rel="icon" type="image/x-icon" href="Style/assets/smartLogoVetor.ico">
+  <link rel="stylesheet" href="Style/css/dashboardCSS.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
-    <div id="mainContainer">
-        <div id="header">
-            <img id="logo" src="Style/assets/smartLogoVetor.svg" alt="logoSmartInvestment">
-            <div class="navbar">
-                <a href="dashboard.html" class="selected">Dashboard</a>
-                <a href="setores.html">Setores</a>
-                <a href="acoes.html">Ações</a>
-                <a href="comparacoes.html">Comparações</a>
-                <a href="perfil.html">Perfil</a>
-            </div>
+  <div id="mainContainer">
+    <div id="header">
+      <img id="logo" src="Style/assets/smartLogoVetor.svg" alt="logoSmartInvestment">
+      <div class="navbar">
+        <a href="dashboard.html" class="selected">Dashboard</a>
+        <a href="setores.html">Setores</a>
+        <a href="acoes.html">Ações</a>
+        <a href="comparacoes.html">Comparações</a>
+        <a href="perfil.html">Perfil</a>
+      </div>
 
-            <div class="notification-container">
-                <span class="notification-badge">3</span>
-                <img id="notificacaoIcon" src="Style/assets/sinoNotificacao.svg" alt="">
-                <div class="notificacao-dropdown">
-                    <div class="notificacao-item">
-                        <div class="notificacao-content">
-                            <div class="notificacao-title">Atualização de Preço</div>
-                            <div class="notificacao-text">AAPL atingiu sua meta de preço de R$180,00</div>
-                            <div class="notificacao-time">Há 5 minutos</div>
-                        </div>
-                    </div>
-                    <div class="notificacao-item">
-                        <div class="notificacao-content">
-                            <div class="notificacao-title">Nova Recomendação</div>
-                            <div class="notificacao-text">Nova análise disponível para MSFT</div>
-                            <div class="notificacao-time">Há 30 minutos</div>
-                        </div>
-                    </div>
-                    <div class="notificacao-item">
-                        <div class="notificacao-content">
-                            <div class="notificacao-title">Alerta de Mercado</div>
-                            <div class="notificacao-text">Índice de volatilidade aumentou significativamente</div>
-                            <div class="notificacao-time">Há 1 hora</div>
-                        </div>
-                    </div>
-                     <a href="notificacoes.html">Ver todas as notificações</a>
-                </div>
+      <div class="notification-container">
+        <span class="notification-badge">3</span>
+        <img id="notificacaoIcon" src="Style/assets/sinoNotificacao.svg" alt="">
+        <div class="notificacao-dropdown">
+          <div class="notificacao-item">
+            <div class="notificacao-content">
+              <div class="notificacao-title">Atualização de Preço</div>
+              <div class="notificacao-text">AAPL atingiu sua meta de preço de R$180,00</div>
+              <div class="notificacao-time">Há 5 minutos</div>
             </div>
-            <img id="perfilIcon" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" style="cursor: pointer;"
-                onclick="sair()" alt="">
-
-            <div class="hamburger">
-                <div class="bar1"></div>
-                <div class="bar2"></div>
-                <div class="bar3"></div>
+          </div>
+          <div class="notificacao-item">
+            <div class="notificacao-content">
+              <div class="notificacao-title">Nova Recomendação</div>
+              <div class="notificacao-text">Nova análise disponível para MSFT</div>
+              <div class="notificacao-time">Há 30 minutos</div>
             </div>
-            <nav class="mobile-menu">
-                <a href="dashboard.html">Dashboard</a>
-                <a href="setores.html">Setores</a>
-                <a href="acoes.html">Ações</a>
-                <a href="comparacoes.html">Comparações</a>
-                <a href="perfil.html">Perfil</a>
-            </nav>
-
+          </div>
+          <div class="notificacao-item">
+            <div class="notificacao-content">
+              <div class="notificacao-title">Alerta de Mercado</div>
+              <div class="notificacao-text">Índice de volatilidade aumentou significativamente</div>
+              <div class="notificacao-time">Há 1 hora</div>
+            </div>
+          </div>
+          <a href="notificacoes.html">Ver todas as notificações</a>
         </div>
+      </div>
+      <img id="perfilIcon" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" style="cursor: pointer;"
+        onclick="sair()" alt="">
 
-        <div id="mainContent">
-
-            <div id="contentPrincipal">
-                <div id="topoDash">
-                    <h1>Ranking de Setores</h1>
-                    <select id="selectDash">
-                        <option value="3m">3 meses</option>
-                        <option value="5m">5 meses</option>
-                        <option value="9m">9 meses</option>
-                        <option value="1" selected>1 ano</option>
-                        <option value="2">2 anos</option>
-                        <option value="3">3 anos</option>
-                    </select>
-                </div>
-
-                <div id="listSetores">
-                    <div id="lista">
-                        <div>
-                            <div class="numero">
-
-                                <h2>1</h2>
-                                <div>
-                                    <h1>Tecnologia</h1>
-                                    <p>68 ações <br> disponíveis</p>
-                                </div>
-                            </div>
-
-                            <div class="infos">
-                                <div>
-                                    <h1>Retorno</h1>
-                                    <p class="corVerde">+18.5%</p>
-                                </div>
-
-                                <div>
-                                    <h1>Sharpe</h1>
-                                    <p>0.76</p>
-                                </div>
-
-                                <div>
-                                    <h1>Beta</h1>
-                                    <p>1.15</p>
-                                </div>
-
-                                <div>
-                                    <h1>Volatilidade</h1>
-                                    <p class="corLaranja">24.3%</p>
-                                </div>
-
-                                <div>
-                                    <h1>Max Drawdown</h1>
-                                    <p class="corVermelha">-15.2%</p>
-                                </div>
-
-                                <h1 class="azul">Alta</h1>
-                            </div>
-
-                        </div>
-
-                        <div>
-                            <div class="numero">
-
-                                <h2>2</h2>
-                                <div>
-                                    <h1>Saúde</h1>
-                                    <p>54 ações <br> disponíveis</p>
-                                </div>
-                            </div>
-
-                            <div class="infos">
-                                <div>
-                                    <h1>Retorno</h1>
-                                    <p class="corVerde">+15.2%</p>
-                                </div>
-
-                                <div>
-                                    <h1>Sharpe</h1>
-                                    <p>0.81</p>
-                                </div>
-
-                                <div>
-                                    <h1>Beta</h1>
-                                    <p>0.92</p>
-                                </div>
-
-                                <div>
-                                    <h1>Volatilidade</h1>
-                                    <p class="corLaranja">18.7%</p>
-                                </div>
-
-                                <div>
-                                    <h1>Max Drawdown</h1>
-                                    <p class="corVermelha">-11.8%</p>
-                                </div>
-
-                                <h1 class="azul">Alta</h1>
-                            </div>
-
-                        </div>
-
-
-                        <div>
-                            <div class="numero">
-
-                                <h2>3</h2>
-                                <div>
-                                    <h1>Financeiro</h1>
-                                    <p>72 ações <br> disponíveis</p>
-                                </div>
-                            </div>
-
-                            <div class="infos">
-                                <div>
-                                    <h1>Retorno</h1>
-                                    <p class="corVerde">+12.8%</p>
-                                </div>
-
-                                <div>
-                                    <h1>Sharpe</h1>
-                                    <p>0.58</p>
-                                </div>
-
-                                <div>
-                                    <h1>Beta</h1>
-                                    <p>1.08</p>
-                                </div>
-
-                                <div>
-                                    <h1>Volatilidade</h1>
-                                    <p class="corLaranja">22.1%</p>
-                                </div>
-
-                                <div>
-                                    <h1>Max Drawdown</h1>
-                                    <p class="corVermelha">-18.5%</p>
-                                </div>
-
-                                <h1 class="verde">Muito Alta</h1>
-                            </div>
-
-                        </div>
-
-
-                        <div>
-                            <div class="numero">
-
-                                <h2>4</h2>
-                                <div>
-                                    <h1>Energia</h1>
-                                    <p>38 ações <br> disponíveis</p>
-                                </div>
-                            </div>
-
-                            <div class="infos">
-                                <div>
-                                    <h1>Retorno</h1>
-                                    <p class="corVerde">+11.5%</p>
-                                </div>
-
-                                <div>
-                                    <h1>Sharpe</h1>
-                                    <p>0.41</p>
-                                </div>
-
-                                <div>
-                                    <h1>Beta</h1>
-                                    <p>1.32</p>
-                                </div>
-
-                                <div>
-                                    <h1>Volatilidade</h1>
-                                    <p class="corLaranja">28.4%</p>
-                                </div>
-
-                                <div>
-                                    <h1>Max Drawdown</h1>
-                                    <p class="corVermelha">-22.3%</p>
-                                </div>
-
-                                <h1 class="amarelo">Média</h1>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div id="graphDash">
-
-                    <div>
-                        <h1>Top 5 Retorno Médio por Setor</h1>
-                        <canvas id="rankSetor">
-                        </canvas>
-                    </div>
-
-                    <div>
-                        <h1>Evolução do Retorno Acumulado</h1>
-                        <canvas id="graphLinha"></canvas>
-                    </div>
-                </div>
-
-                <div id="graphGrande">
-                    <h1>Volatilidade x Volume Negociado por Setor</h1>
-                    <canvas id="volatilidadeVolume"></canvas>
-                </div>
-
-            </div>
-
-        </div>
-
-        <div id="sobreposicaoLista">
-            <div>
-            
-            </div>
-        </div>
+      <div class="hamburger">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </div>
+      <nav class="mobile-menu">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="setores.html">Setores</a>
+        <a href="acoes.html">Ações</a>
+        <a href="comparacoes.html">Comparações</a>
+        <a href="perfil.html">Perfil</a>
+      </nav>
 
     </div>
+
+    <div id="mainContent">
+
+      <div id="contentPrincipal">
+        <div id="topoDash">
+          <h1>Ranking de Setores</h1>
+          <select id="selectDash">
+            <option value="3m">3 meses</option>
+            <option value="5m">5 meses</option>
+            <option value="9m">9 meses</option>
+            <option value="1" selected>1 ano</option>
+            <option value="2">2 anos</option>
+            <option value="3">3 anos</option>
+          </select>
+        </div>
+
+        <div id="listSetores">
+
+
+          <!-- <div>
+            <div class="numero">
+
+              <h2>2</h2>
+              <div>
+                <h1>Saúde</h1>
+                <p>54 ações <br> disponíveis</p>
+              </div>
+            </div>
+
+            <div class="infos">
+              <div>
+                <h1>Retorno</h1>
+                <p class="corVerde">+15.2%</p>
+              </div>
+
+              <div>
+                <h1>Sharpe</h1>
+                <p>0.81</p>
+              </div>
+
+              <div>
+                <h1>Beta</h1>
+                <p>0.92</p>
+              </div>
+
+              <div>
+                <h1>Volatilidade</h1>
+                <p class="corLaranja">18.7%</p>
+              </div>
+
+              <div>
+                <h1>Max Drawdown</h1>
+                <p class="corVermelha">-11.8%</p>
+              </div>
+
+              <h1 class="azul">Alta</h1>
+            </div>
+
+          </div>
+
+
+          <div>
+            <div class="numero">
+
+              <h2>3</h2>
+              <div>
+                <h1>Financeiro</h1>
+                <p>72 ações <br> disponíveis</p>
+              </div>
+            </div>
+
+            <div class="infos">
+              <div>
+                <h1>Retorno</h1>
+                <p class="corVerde">+12.8%</p>
+              </div>
+
+              <div>
+                <h1>Sharpe</h1>
+                <p>0.58</p>
+              </div>
+
+              <div>
+                <h1>Beta</h1>
+                <p>1.08</p>
+              </div>
+
+              <div>
+                <h1>Volatilidade</h1>
+                <p class="corLaranja">22.1%</p>
+              </div>
+
+              <div>
+                <h1>Max Drawdown</h1>
+                <p class="corVermelha">-18.5%</p>
+              </div>
+
+              <h1 class="verde">Muito Alta</h1>
+            </div>
+
+          </div>
+
+
+          <div>
+            <div class="numero">
+
+              <h2>4</h2>
+              <div>
+                <h1>Energia</h1>
+                <p>38 ações <br> disponíveis</p>
+              </div>
+            </div>
+
+            <div class="infos">
+              <div>
+                <h1>Retorno</h1>
+                <p class="corVerde">+11.5%</p>
+              </div>
+
+              <div>
+                <h1>Sharpe</h1>
+                <p>0.41</p>
+              </div>
+
+              <div>
+                <h1>Beta</h1>
+                <p>1.32</p>
+              </div>
+
+              <div>
+                <h1>Volatilidade</h1>
+                <p class="corLaranja">28.4%</p>
+              </div>
+
+              <div>
+                <h1>Max Drawdown</h1>
+                <p class="corVermelha">-22.3%</p>
+              </div>
+
+              <h1 class="amarelo">Média</h1>
+            </div>
+
+          </div> -->
+
+        </div>
+
+      </div>
+
+      <div id="graphDash">
+
+        <div>
+          <h1>Top 5 Retorno Médio por Setor</h1>
+          <canvas id="rankSetor">
+          </canvas>
+        </div>
+
+        <div>
+          <h1>Evolução do Retorno Acumulado</h1>
+          <canvas id="graphLinha"></canvas>
+        </div>
+      </div>
+
+      <div id="graphGrande">
+        <h1>Volatilidade x Volume Negociado por Setor</h1>
+        <canvas id="volatilidadeVolume"></canvas>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div id="sobreposicaoLista">
+    <div>
+
+    </div>
+  </div>
+
+  </div>
 </body>
 
 </html>
 
 <script>
+  window.onload = chamarGraficos, listarSetores;
 
+  function listarSetores() {
+    fetch('/dashboard/receberDashboard/')
+      .then(response => response.json())
+      .then(setores => {
+        const listSetoresDiv = document.getElementById('listSetores');
+        listSetoresDiv.innerHTML = '';
 
-    
-    function chamarGraficos(){
-         const ctx = document.getElementById('rankSetor');
-        
-        const ctx1 = document.getElementById('graphLinha');
+        setores.listaSetores.forEach((setor, index) => {
+          const setorDiv = document.createElement('div');
 
+          setorDiv.innerHTML = `
+            <div class="numero">
+              <h2>${index + 1}</h2>
+              <div>
+                <h1>${setor.nome}</h1>
+                <p>${setor.qtdAcoes} ações <br> disponíveis</p>
+              </div>
+            </div>
+            <div class="infos">
+              <div>
+                <h1>Retorno</h1>
+                <p class="${setor.retorno >= 0 ? 'corVerde' : 'corVermelha'}">${setor.retorno >= 0 ? '+' : ''}${setor.retorno}%</p>
+              </div>
+              <div>
+                <h1></h1>
+                <p>${setor.sharpe}</p>
+              </div>
+              <div> 
+                <h1>Beta</h1>
+                <p>${setor.beta}</p>
+              </div>
+              <div>
+                <h1>Volatilidade</h1>
+                <p class="${setor.volatilidade >= 20 ? 'corVermelha' : setor.volatilidade >= 15 ? 'corLaranja' : 'corVerde'}">${setor.volatilidade}%</p>
+              </div>
 
-        const ctx2 = document.getElementById('volatilidadeVolume');
+  }
+          `;
 
+          listSetoresDiv.appendChild(setorDiv);
+        });
+      })
+      .catch(error => console.error('Erro ao carregar os setores:', error));
+  }
+
+  async function chamarGraficos() {
+    const response = await fetch('/dashboard/receberDashboard/');
+    const setores = await response.json();
+
+    const ctx = document.getElementById('rankSetor');
+    const ctx1 = document.getElementById('graphLinha');
+    const ctx2 = document.getElementById('volatilidadeVolume');
     new Chart(ctx2, {
       type: 'bar',
       data: {
-        labels: ['Tecnologia', 'Saúde', 'Financeiro', 'Energia', 'Consumo', 'Industrial'],
+        labels: setores.labelsVolatilidadeVolume,
         datasets: [
           {
             label: 'Volatilidade (%)',
-            data: [30, 25, 28, 22, 20, 24], // valores fictícios (em %)
-            backgroundColor: '#b388eb', // roxo
+            data: setores.volatilidadeData,
+            backgroundColor: '#b388eb',
             borderRadius: 6,
             barThickness: 15,
           },
           {
             label: 'Volume (M)',
-            data: [450, 400, 500, 300, 350, 320], // valores fictícios (em milhões)
-            backgroundColor: '#4285f4', // azul
+            data: setores.volumeData,
+            backgroundColor: '#4285f4',
             borderRadius: 6,
             barThickness: 15,
           }
         ]
       },
       options: {
-        indexAxis: 'y', // barras horizontais
+        indexAxis: 'y',
         responsive: true,
         plugins: {
           legend: {
@@ -333,7 +336,143 @@
               color: '#333'
             }
           },
-          
+
+        },
+        scales: {
+          x: {
+            beginAtZero: true,
+            grid: {
+              color: '#eee'
+            },
+            title: {
+              display: false
+            }
+          },
+          y: {
+            grid: {
+              display: false
+            },
+            ticks: {
+              color: '#333'
+            }
+          }
+        }
+      }
+    });
+  }
+
+  new Chart(ctx1, {
+    type: 'line',
+    data: {
+      labels: setores.labelsEvolucaoRetorno,
+      datasets: setores.evolucaoRetornoDatasets
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'bottom'
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          suggestedMax: 20,
+          title: {
+            display: false
+          }
+        },
+        x: {
+          grid: {
+            display: true
+          }
+        }
+      }
+    }
+  });
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: setores.labelsRankSetor,
+      datasets: [{
+        label: 'Retorno Médio (%)',
+        data: setores.retornosRankSetor,
+        backgroundColor: [
+          '#3B82F6',
+          '#10B981',
+          '#F59E0B',
+          '#EF4444',
+          '#8B5CF6'
+        ],
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: false
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            stepSize: 5
+          },
+          title: {
+            display: true,
+            text: '% de Retorno'
+          }
+        }
+      }
+    }
+  });
+
+
+
+
+  function chamarGraficos() {
+    const ctx = document.getElementById('rankSetor');
+
+    const ctx1 = document.getElementById('graphLinha');
+
+
+    const ctx2 = document.getElementById('volatilidadeVolume');
+
+    new Chart(ctx2, {
+      type: 'bar',
+      data: {
+        labels: ['Tecnologia', 'Saúde', 'Financeiro', 'Energia', 'Consumo', 'Industrial'],
+        datasets: [
+          {
+            label: 'Volatilidade (%)',
+            data: [30, 25, 28, 22, 20, 24],
+            backgroundColor: '#b388eb',
+            borderRadius: 6,
+            barThickness: 15,
+          },
+          {
+            label: 'Volume (M)',
+            data: [450, 400, 500, 300, 350, 320],
+            backgroundColor: '#4285f4',
+            borderRadius: 6,
+            barThickness: 15,
+          }
+        ]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              boxWidth: 20,
+              color: '#333'
+            }
+          },
+
         },
         scales: {
           x: {
@@ -438,8 +577,8 @@
       }
     });
 
-     
-        new Chart(ctx, {
+
+    new Chart(ctx, {
       type: 'bar',
       data: {
         labels: ['Tecnologia', 'Saúde', 'Financeiro', 'Energia', 'Industrial'],
@@ -447,11 +586,11 @@
           label: 'Retorno Médio (%)',
           data: [20, 15, 13, 11, 9],
           backgroundColor: [
-            '#3B82F6', // azul
-            '#10B981', // verde
-            '#F59E0B', // laranja
-            '#EF4444', // vermelho
-            '#8B5CF6'  // roxo
+            '#3B82F6',
+            '#10B981',
+            '#F59E0B',
+            '#EF4444',
+            '#8B5CF6'
           ],
           borderRadius: 6
         }]
@@ -478,23 +617,23 @@
       }
     });
 
-     }
+  }
 
 
 
-     chamarGraficos();
+  chamarGraficos();
 
-     document.querySelector('#notificacaoIcon').addEventListener('click', function(e) {
-            e.stopPropagation();
-            const dropdown = document.querySelector('.notificacao-dropdown');
-            dropdown.classList.toggle('active');
-        });
+  document.querySelector('#notificacaoIcon').addEventListener('click', function (e) {
+    e.stopPropagation();
+    const dropdown = document.querySelector('.notificacao-dropdown');
+    dropdown.classList.toggle('active');
+  });
 
-        document.addEventListener('click', function(e) {
-            const dropdown = document.querySelector('.notificacao-dropdown');
-            if (!e.target.closest('.notificacao-container')) {
-                dropdown.classList.remove('active');
-            }
-        });
+  document.addEventListener('click', function (e) {
+    const dropdown = document.querySelector('.notificacao-dropdown');
+    if (!e.target.closest('.notificacao-container')) {
+      dropdown.classList.remove('active');
+    }
+  });
 </script>
 <script src="Style/js/fazerHamburguer.js"></script>
