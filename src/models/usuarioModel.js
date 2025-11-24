@@ -32,7 +32,21 @@ function cadastrar(nome, dtNascimento, email, senha, perfil) {
     return database.executar(instrucaoSql);
 }
 
+
+function alterar(perfil, email) {
+    console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function alterar(): ", perfil)
+
+    var instrucaoSql = `
+        UPDATE usuario
+        SET perfil = '${perfil}'
+        WHERE email = '${email}';
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
 module.exports = {
     autenticar,
-    cadastrar
+    cadastrar,
+    alterar
 };

@@ -97,7 +97,20 @@ function cadastrar(req, res) {
 
 }
 
+function alterar(req, res) {
+    var email = req.body.emailServer;
+    var novoPerfil = req.body.perfilServer;
+
+    usuarioModel.alterar(novoPerfil, email)
+        .then(resultado => res.json(resultado))
+        .catch(erro => {
+            console.log("Erro ao alterar perfil: ", erro.sqlMessage);
+            res.status(500).json(erro.sqlMessage);
+        });
+}
+
 module.exports = {
     autenticar,
-    cadastrar
+    cadastrar,
+    alterar
 }
