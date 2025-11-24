@@ -99,11 +99,11 @@
                     </div>
 
                     <div class="perfilInvestidor">
-                        <div class="perfilOpcao" id="iniciante">
+                        <div class="perfilOpcao" id="conservador">
                             <div class="perfilHeader">
                                 <span class="check"></span>
-                                <div class="perfilTitulo">Iniciante</div>
-                                <span class="perfilTag iniciante">iniciante</span>
+                                <div class="perfilTitulo">Conservador</div>
+                                <span class="perfilTag conservador">conservador</span>
                             </div>
                             <div class="perfilDesc">
                                 Para investidores que estão começando e buscam aprender sobre o mercado
@@ -116,11 +116,11 @@
                             </ul>
                         </div>
 
-                        <div class="perfilOpcao selected" id="conservador">
+                        <div class="perfilOpcao" id="moderado">
                             <div class="perfilHeader">
-                                <span class="check active"></span>
-                                <div class="perfilTitulo">Conservador</div>
-                                <span class="perfilTag conservador">conservador</span>
+                                <span class="check"></span>
+                                <div class="perfilTitulo">Moderado</div>
+                                <span class="perfilTag iniciante">moderado</span>
                             </div>
                             <div class="perfilDesc">
                                 Para investidores que priorizam segurança e retornos consistentes
@@ -165,7 +165,6 @@
 <script src="Style/js/fazerHamburguer.js"></script>
 
 <script>
-
     cancelarEdicao = () => {
         const buttons = document.querySelector('.actions-buttons');
         buttons.style.display = 'none';
@@ -180,7 +179,7 @@
 
         const perfilRisco = document.getElementById('perfilRisco').innerText.toLowerCase();
         const perfilMap = {
-            'iniciante': 'iniciante',
+            'moderado': 'moderado',
             'conservador': 'conservador',
             'arrojado': 'arrojado'
         };
@@ -208,6 +207,9 @@
         if (selectedOption) {
             const novoPerfil = selectedOption.id;
             document.getElementById('perfilRisco').innerText = novoPerfil.charAt(0).toUpperCase() + novoPerfil.slice(1);
+            
+            var email = sessionStorage.EMAIL_USUARIO;
+            alterarPerfil(novoPerfil, email)
 
             sessionStorage.PERFIL_USUARIO = novoPerfil.charAt(0).toUpperCase() + novoPerfil.slice(1);
         }
@@ -241,6 +243,21 @@
         var nome = sessionStorage.NOME_USUARIO;
         var perfil = sessionStorage.PERFIL_USUARIO;
 
+        if(perfil == "Conservador") {
+            const elem = document.getElementById("conservador");
+            elem.classList.add("selected");
+        }
+
+        if(perfil == "Moderado") {
+            const elem = document.getElementById("moderado");
+            elem.classList.add("selected");
+        }
+
+        if(perfil == "Arrojado") {
+            const elem = document.getElementById("arrojado");
+            elem.classList.add("selected");
+        }
+
         console.log(perfil)
         escritaEmail.innerHTML = email;
         usuario.innerHTML = nome;
@@ -261,4 +278,42 @@
                 dropdown.classList.remove('active');
             }
         });
+    
+    function alterarPerfil(novoPerfil, email) {
+        fetch("/usuarios/alterar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                emailServer: email,
+                perfilServer: novoPerfil
+            })
+        }).then(function (resposta) {
+            console.log("ESTOU NO THEN DO entrar()!")
+
+            if (resposta.ok) {
+                console.log(resposta);
+
+
+                resposta.json().then(json => {
+                    console.log("PERFIL_USUARIO salvo no sessionStorage:", sessionStorage.ID_USUARIO);
+                    setTimeout(function () {}, 1000); // apenas para exibir o loading
+                });
+            } else {
+                resposta.text().then(msg => alert(msg));
+                console.log("Houve um erro ao tentar realizar a atualização do perfil de investidor!");
+                alert("Houve um erro ao tentar realizar a atualização do perfil de investidor!")
+                // resposta.text().then(texto => {
+                //     console.error(texto);
+                // });
+            }
+
+        }).catch(function (erro) {
+            console.log(erro);
+        })
+
+        return false;
+    }
+
 </script>
