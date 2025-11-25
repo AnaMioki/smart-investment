@@ -39,8 +39,6 @@ app.use("/usuarios", usuarioRouter);
 app.use("/setores", setorRouter);
 app.use("/acoes", acoesRouter);
 // app.use("/acoes", require("./src/routes/acoes"));
-
-
 // app.use("/avisos", avisosRouter);
 // app.use("/medidas", medidasRouter);
 // app.use("/aquarios", aquariosRouter);

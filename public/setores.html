@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setores</title>
+    <link rel="icon" type="image/x-icon" href="Style/assets/smartLogoVetor.ico">
+    <link rel="stylesheet" href="Style/css/setoresCSS.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div id="mainContainer">
+        <div id="header">
+            <img id="logo" src="Style/assets/smartLogoVetor.svg" alt="logoSmartInvestment">
+            <div class="navbar">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="setores.html" class="selected">Setores</a>
+                <a href="acoes.html">Ações</a>
+                <a href="comparacoes.html">Comparações</a>
+                <a href="perfil.html">Perfil</a>
+            </div>
+
+            <div class="notification-container">
+                <span class="notification-badge">3</span>
+                <img id="notificacaoIcon" src="Style/assets/sinoNotificacao.svg" alt="">
+                <div class="notificacao-dropdown">
+                    <div class="notificacao-item">
+                        <div class="notificacao-content">
+                            <div class="notificacao-title">Atualização de Preço</div>
+                            <div class="notificacao-text">AAPL atingiu sua meta de preço de R$180,00</div>
+                            <div class="notificacao-time">Há 5 minutos</div>
+                        </div>
+                    </div>
+                    <div class="notificacao-item">
+                        <div class="notificacao-content">
+                            <div class="notificacao-title">Nova Recomendação</div>
+                            <div class="notificacao-text">Nova análise disponível para MSFT</div>
+                            <div class="notificacao-time">Há 30 minutos</div>
+                        </div>
+                    </div>
+                    <div class="notificacao-item">
+                        <div class="notificacao-content">
+                            <div class="notificacao-title">Alerta de Mercado</div>
+                            <div class="notificacao-text">Índice de volatilidade aumentou significativamente</div>
+                            <div class="notificacao-time">Há 1 hora</div>
+                        </div>
+                    </div>
+                    <a href="notificacoes.html">Ver todas as notificações</a>
+                </div>
+            </div>
+            <img id="perfilIcon" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" alt="">
+
+            <div class="hamburger">
+                <div class="bar1"></div>
+                <div class="bar2"></div>
+                <div class="bar3"></div>
+            </div>
+            <nav class="mobile-menu">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="setores.html">Setores</a>
+                <a href="acoes.html">Ações</a>
+                <a href="comparacoes.html">Comparações</a>
+                <a href="perfil.html">Perfil</a>
+            </nav>
+
+        </div>
+        <div id="mainContent">
+            <div id="mainExp">
+                <div id="selectSetores">
+                    <h1>Análise de setores</h1>
+                    <div>
+                        <select name="seletorPeriodo" id="selectPeriodo">
+                            <option value="3m">3 meses</option>
+                            <option value="5m">5 meses</option>
+                            <option value="9m">9 meses</option>
+                            <option value="1" selected>1 ano</option>
+                            <option value="2">2 anos</option>
+                            <option value="3">3 anos</option>
+                        </select>
+                        <select name="seletorTipo" id="selectTipo">
+                            <option value="retorno" selected>Por retorno</option>
+                            <option value="volatibilidade">Por volatibilidade</option>
+                            <option value="valor">Por valor</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="kpiSetores">
+
+                    <div>
+                        <div>
+                            <p>Total de Setores</p>
+                            <h1>8</h1>
+                        </div>
+                        <img src="Style/assets/flechaSetores.svg" alt="imagem seta para cima (como ações)"
+                            class="order1">
+                    </div>
+
+                    <div>
+                        <div>
+                            <p>Melhor Performer</p>
+                            <h1 class="cor1">Tecnologia</h1>
+                        </div>
+                        <img src="Style/assets/setaPraCimaSetores.svg" alt="Imagem seta para cima" class="order2">
+                    </div>
+
+                    <div>
+                        <div>
+                            <p>Maior <span class="tooltip left-edge">
+                                    Volatibilidade
+                                    <span class="tip">Mostra o quanto o preço oscila ao longo do tempo.</span>
+                                </span></p>
+                            <h1 class="cor2">Energia</h1>
+                        </div>
+                        <img src="Style/assets/metricaSetores.svg" alt="imagem de volatibilidade" class="order3">
+                    </div>
+
+                </div>
+
+                <div id="grafSetores">
+                    <div>
+                        <h1>Comparativo Multidimensional</h1>
+                        <canvas id="graficoRadar"></canvas>
+                    </div>
+
+                    <div>
+                        <h1>Retorno vs Volatilidade vs Sharpe</h1>
+                        <canvas id="graficoBarra"></canvas>
+                    </div>
+                </div>
+
+                <div id="listSetores">
+                    <div id="topoSetor">
+                        <h1>Todos os Setores</h1>
+                        <label for="searchSetor">
+                            <img src="Style/assets/lupaSetores.svg">
+                            <input type="search" id="searchSetor" placeholder="Buscar setor...">
+                        </label>
+                    </div>
+
+                    <div id="lista">
+
+                            <img src="Style/assets/Loading_icon.gif" alt="" >
+
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<!-- Script radar -->
+<script>
+
+    async function carregarDados() {
+
+        const response = await fetch('/setores/receberSetores/');
+        const setores = await response.json();
+
+        lista.innerHTML = '';   
+        var cont = 0;
+
+        for (let setor of setores) {
+            cont++;
+            lista.innerHTML += `  
+              <div onclick="abrirAcoesSetor(this,'${setor.setor}')">
+                            <div class="numero">
+                                
+                                <h2>${cont}</h2>
+                                <div>
+                                    <h1>${setor.setor}</h1>
+                                    <p>${setor.quantidade} ações <br> disponíveis</p>
+                                </div>
+                            </div>
+
+                            <div class="infos">
+                                <div>
+                                    <h1><span class="tooltip left-edge">
+                                            <strong>Retorno</strong>
+                                            <span class="tip">É o lucro ou prejuízo percentual do investimento em
+                                                determinado período.</span>
+                                        </span></h1>
+                                    <p class="corVerde">+18.5%</p>
+                                </div>
+
+                                <div>
+                                    <h1><span class="tooltip left-edge">
+                                            <strong>DRE</strong>
+                                            <span class="tip">Demonstrativo de resultado em exercicio .</span>
+                                        </span></h1>
+                                    <p>0.76</p>
+                                </div>
+
+                                <div>
+                                    <h1><span class="tooltip left-edge">
+                                            <strong>EBITDA</strong>
+                                            <span class="tip">Indica o nível de sensibilidade do ativo ao
+                                                mercado.</span>
+                                        </span></h1>
+                                    <p>1.15</p>
+                                </div>
+
+                                <div>
+                                    <h1><span class="tooltip left-edge">
+                                            <strong>Volatilidade</strong>
+                                            <span class="tip">Mostra o quanto o preço oscila ao longo do tempo.</span>
+                                        </span></h1>
+                                    <p class="corLaranja">24.3%</p>
+                                </div>
+
+                                <div>
+                                    <h1><span class="tooltip left-edge">
+                                            <strong>Max Drawdown</strong>
+                                            <span class="tip">É a maior perda desde o ponto mais alto até o mais baixo
+                                                do investimento.</span>
+                                        </span></h1>
+                                    <p class="corVermelha">-15.2%</p>
+                                </div>
+
+                                <h1 class="azul">Alta</h1>
+                            </div>
+
+                        </div>
+                        <div class="acoesPorSetor" style="display: none;">
+                            <h2 class="tituloListaAcoes">Ações do setor de Tecnologia</h2>
+                            <ul class="listaAcoes" id="acoes_${setor.setor}">
+                               
+                        </div>
+            `;
+        }
+
+
+    }
+
+    carregarDados();
+</script>
+
+
+
+<script>
+    const ctxRadar = document.getElementById('graficoRadar').getContext('2d');
+
+    const dataRadar = {
+        labels: ['Retorno', 'Sharpe', 'Liquidez', 'Estabilidade'],
+        datasets: [
+            {
+                label: 'Financeiro',
+                data: [90, 85, 98, 85],
+                fill: true,
+                backgroundColor: 'rgba(255, 159, 64, 0.2)', // laranja
+                borderColor: 'rgb(255, 159, 64)',
+                pointRadius: 0
+            },
+            {
+                label: 'Saúde',
+                data: [96, 90, 90, 90],
+                fill: true,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)', // verde
+                borderColor: 'rgb(75, 192, 192)',
+                pointRadius: 0
+            },
+            {
+                label: 'Tecnologia',
+                data: [90, 85, 90, 60],
+                fill: true,
+                backgroundColor: 'rgba(54, 162, 235, 0.2)', // azul
+                borderColor: 'rgb(54, 162, 235)',
+                pointRadius: 0
+            }
+        ]
+    };
+
+    const configRadar = {
+        type: 'radar',
+        data: dataRadar,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        boxWidth: 20,
+                        padding: 15
+                    }
+                },
+                title: {
+                    display: false
+                }
+            },
+            elements: {
+                line: {
+                    borderWidth: 1
+                }
+            },
+            scales: {
+                r: {
+                    angleLines: {
+                        display: false
+                    },
+                    pointLabels: {
+                        font: {
+                            size: 14
+                        }
+                    },
+                    ticks: {
+                        display: false
+                    }
+                }
+            }
+        },
+    };
+
+    new Chart(ctxRadar, configRadar);
+</script>
+
+
+<script>
+
+    async function abrirAcoesSetor(elemento, setor) {
+        const nome_lista = document.getElementById(`acoes_${setor}`);
+
+        nome_lista.innerHTML = '<img src="Style/assets/Loading_icon.gif" alt="Carregando...">';
+
+        const response = await fetch(`/setores/buscarAcoesSetor/${setor}`);
+        const dados = await response.json();
+
+
+
+        console.log(dados);
+
+        nome_lista.innerHTML = '';
+        for (let acao of dados) {
+
+            nome_lista.innerHTML += `<li onclick="abrirInfoAcao(this, '${acao.ticker}')">${acao.nome} (${acao.ticker})</li>`;
+        }
+
+
+        const acoesSetoriais = elemento.nextElementSibling;
+        if (acoesSetoriais && acoesSetoriais.classList.contains('acoesPorSetor')) {
+            acoesSetoriais.style.display = acoesSetoriais.style.display === 'block' ? 'none' : 'block';
+        }
+    }
+
+    const ctx = document.getElementById('graficoBarra');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Tech', 'Saúd', 'Fina', 'Ener', ' Cons', 'Indu', 'Imob', 'Tele'],
+            datasets: [
+                {
+                    label: 'Retorno',
+                    data: [18, 13, 10, 9, 8, 7, 6, 7],
+                    backgroundColor: '#10B981' //verde
+                },
+                {
+                    label: 'Sharpe',
+                    data: [7, 8, 6, 4, 5, 4, 4, 4],
+                    backgroundColor: '#8B5CF6' // roxo
+                },
+                {
+                    label: 'Volatilidade',
+                    data: [24, 22, 28, 15, 18, 17, 15, 15],
+                    backgroundColor: '#F59E0B' // laranja
+                }
+            ]
+        },
+        options: {
+            scales: {
+                x: {
+                },
+                y: {
+
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        boxWidth: 20
+                    }
+                }
+            }
+        }
+    });
+    document.querySelector('#notificacaoIcon').addEventListener('click', function (e) {
+        e.stopPropagation();
+        const dropdown = document.querySelector('.notificacao-dropdown');
+        dropdown.classList.toggle('active');
+    });
+
+    document.addEventListener('click', function (e) {
+        const dropdown = document.querySelector('.notificacao-dropdown');
+        if (!e.target.closest('.notificacao-container')) {
+            dropdown.classList.remove('active');
+        }
+    });
+
+
+
+    
+    async function abrirInfoAcao(elemento, ticker) {
+
+        const resposta = await fetch(`/setores/buscarAcoesUnicas/${ticker}`);
+        const dados = await resposta.json();
+
+        console.log(dados[0]);
+
+        const popup = document.createElement('div');
+        popup.className = 'popup-acao';
+
+        popup.innerHTML = `
+            <div class="popup-conteudo">
+                <div class="popup-header">
+                    <h2>${dados[0].nome}</h2>
+                    <span class="fechar-popup">&times;</span>
+                </div>
+                <div class="popup-info">
+                    <div class="info-principal">
+                        <div class="preco-atual">
+                            <h3>$${dados[0].media_preco_fechamento}</h3>
+                            <span></span>
+                        </div>
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Ticker</span>
+                            <span class="info-valor">${dados[0].ticker}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Preço médio</span>
+                            <span class="info-valor">${dados[0].media_preco_fechamento}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Maior preço</span>
+                            <span class="info-valor">${dados[0].max_preco_alto}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Menor preço</span>
+                            <span class="info-valor">${dados[0].min_preco_baixo}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Volume</span>
+                            <span class="info-valor">${dados[0].media_volume}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Setor</span>
+                            <span class="info-valor">${dados[0].setor}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(popup);
+
+        const fecharPopup = popup.querySelector('.fechar-popup');
+        fecharPopup.onclick = () => {
+            document.body.removeChild(popup);
+        };
+
+        document.addEventListener('click', (e) => {
+            if (!popup.querySelector('.popup-conteudo').contains(e.target) && !elemento.contains(e.target)) {
+                document.body.appendChild(popup);
+            }
+        });
+    }
+</script>
+
+<script src="Style/js/fazerHamburguer.js"></script>

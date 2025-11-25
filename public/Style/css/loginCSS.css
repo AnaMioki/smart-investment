@@ -24,9 +24,24 @@ body {
     position: absolute;
     top: 10px;
     right: 0.1vw;
-    width: 8vw;
-    height: 11vh;
+    display: flex;
+    width: 20vw;
+    height: 5vh;
     cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    img{
+        width: 10%;
+        height: 70%;
+        object-fit: contain;
+    };
+}
+
+#btnIndex:hover {
+    transition: all 0.3s ease-in-out;
+    opacity: 0.5;
 }
 
 #loginContainer {
@@ -317,4 +332,12 @@ body {
     #redCadastro {
         margin-top: 3vh;
     }
+}
+
+.olho {
+    position: absolute;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
 }

@@ -13,7 +13,8 @@
 
     <main>
         <div id="mainContainer">
-            <img id="btnIndex" src="Style/assets/home.svg" onclick="backIndex()" alt="">
+           <a id="btnIndex" onclick="backIndex()"><img src="Style/assets/arrow_back.svg" alt=""> Retornar à página inicial</a>
+            <!-- <img id="btnIndex" src="Style/assets/home.svg" onclick="backIndex()" alt=""> -->
             <div id="loginContainer">
                 <h1>Bem-vindo de volta!</h1>
                 <p>Insira suas credenciais para acessar sua conta.</p>
@@ -29,6 +30,7 @@
                         <div class="grupoInput">
                             <input type="password" id="senha" required placeholder=" ">
                             <label for="senha">Senha</label>
+                             <img class="olho" onclick="exibirSenha()" src="Style/assets/inivisivel.svg">
                         </div>
                         <button onclick="logar()" id="btnLogar">Entrar</button>
 
@@ -52,6 +54,20 @@
     backIndex = () => {
         window.location.href = 'index.html';
     }
+
+     exibirSenha = () => {
+        const senhaInput = document.getElementById('senha');
+        const olhoIcon = document.querySelector('.olho');
+
+        if (senhaInput.type === 'password') {
+            senhaInput.type = 'text';
+            olhoIcon.src = 'Style/assets/visivel.svg';
+        } else {
+            senhaInput.type = 'password';
+            olhoIcon.src = 'Style/assets/inivisivel.svg';
+        }
+    };
+
 
     logar = () => {
         // const username = document.getElementById('username').value;
@@ -100,11 +116,12 @@
                     console.log(JSON.stringify(json));
                     sessionStorage.EMAIL_USUARIO = json.email;
                     sessionStorage.NOME_USUARIO = json.nome;
+                    sessionStorage.PERFIL_USUARIO = json.perfil;
                     sessionStorage.ID_USUARIO = json.idUsuario;
-
+                    
                     console.log("ID_USUARIO salvo no sessionStorage:", sessionStorage.ID_USUARIO);
                     setTimeout(function () {
-                        window.location = "./home.html";
+                        window.location = "./perfil.html";
                     }, 1000); // apenas para exibir o loading
 
                 });

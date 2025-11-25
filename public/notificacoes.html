@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifição</title>
+    <link rel="icon" type="image/x-icon" href="Style/assets/smartLogoVetor.ico">
+    <link rel="stylesheet" href="Style/css/notificacoesCSS.css">
+</head>
+
+<body>
+    <div id="mainContainer">
+        <div id="header">
+            <img id="logo" src="Style/assets/smartLogoVetor.svg" alt="logoSmartInvestment">
+            <div class="navbar">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="setores.html">Setores</a>
+                <a href="acoes.html">Ações</a>
+                <a href="comparacoes.html">Comparações</a>
+                <a href="perfil.html">Perfil</a>
+            </div>
+
+            <div class="notification-container">
+                <span class="notification-badge">3</span>
+                <img id="notificacaoIcon" src="Style/assets/sinoNotificacao.svg" alt="">
+              
+            </div>
+            <img id="perfilIcon" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" alt="">
+
+            <div class="hamburger">
+                <div class="bar1"></div>
+                <div class="bar2"></div>
+                <div class="bar3"></div>
+            </div>
+            <nav class="mobile-menu">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="setores.html">Setores</a>
+                <a href="acoes.html">Ações</a>
+                <a href="comparacoes.html">Comparações</a>
+                <a href="perfil.html">Perfil</a>
+            </nav>
+
+        </div>
+
+        <div id="mainNotification">
+            <div id="mainExp">
+                <div id="topNotification">
+                    <div>
+                        <h1>Notificações</h1>
+                        <p>Acompanhe alertas e oportunidades do mercado</p>
+                    </div>
+                    <h2>2 novas</h2>
+                </div>
+
+                <div id="selectNotification">
+                    <div>
+                        <p class="selected">Todas</p>
+                        <p>Não lidas</p>
+                        <p>Configurações</p>
+                    </div>
+                </div>
+
+                <div id="listNotificacoes">
+                    <p><span>3</span> notificações no total</p>
+
+                    <div class="setorLista">
+                        <div>
+                            <div>
+                                <img src="Style/assets/alertaNotificação.svg" class="alerta">
+                                <div>
+                                    <h1>Volatilidade Alta - setor Tecnologia</h1>
+                                    <p>O setor de tecnologia apresentou aumento de 15% na volatilidade no ultimo dia.
+                                    </p>
+                                    <h2>Há 5 min</p>
+                                </div>
+                            </div>
+                            <div class="newNotify"></div>
+                        </div>
+
+
+
+                        <div>
+                            <div>
+                                <img src="Style/assets/setaParaCimaNotificacao.svg" class="informacao">
+                                <div>
+                                    <h1>Oportunidade identificada</h1>
+                                    <p>Ações do setor de energia renovável com retorno acumulado de 8.3% no último
+                                        trimestre</p>
+                                    <h2>Há 2 horas</p>
+                                </div>
+                            </div>
+                            <div class="newNotify"></div>
+                        </div>
+
+                        <div>
+                            <div>
+                                <img src="Style/assets/setaParaCimaNotificacao.svg" class="informacao">
+                                <div>
+                                    <h1>Liquidez Aumentada</h1>
+                                    <p>Setor de commodites apresenta aumento de 25% no volume negociado.</p>
+                                    <h2>ontem</p>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script> </script>
+<script src="Style/js/fazerHamburguer.js"></script>

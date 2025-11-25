@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil</title>
+    <link rel="icon" type="image/x-icon" href="Style/assets/smartLogoVetor.ico">
+    <link rel="stylesheet" href="Style/css/perfilCSS.css">
+</head>
+
+<body>
+
+    <div id="mainContainer" onload="carregarDados()">
+        <div class="container">
+            <div id="alertaAlteracao" style="display: none;"><span></span></div>
+
+            <div id="header">
+                <img id="logo" src="Style/assets/smartLogoVetor.svg" alt="logoSmartInvestment">
+                <div class="navbar">
+                    <a href="dashboard.html">Dashboard</a>
+                    <a href="setores.html">Setores</a>
+                    <a href="acoes.html">Ações</a>
+                    <a href="comparacoes.html">Comparações</a>
+                    <a href="perfil.html" class="selected">Perfil</a>
+                </div>
+
+                <div class="notification-container">
+                    <span class="notification-badge">3</span>
+                    <img id="notificacaoIcon" src="Style/assets/sinoNotificacao.svg" alt="">
+                      <div class="notificacao-dropdown">
+                        <div class="notificacao-item">
+                            <div class="notificacao-content">
+                                <div class="notificacao-title">Atualização de Preço</div>
+                                <div class="notificacao-text">AAPL atingiu sua meta de preço de R$180,00</div>
+                                <div class="notificacao-time">Há 5 minutos</div>
+                            </div>
+                        </div>
+                        <div class="notificacao-item">
+                            <div class="notificacao-content">
+                                <div class="notificacao-title">Nova Recomendação</div>
+                                <div class="notificacao-text">Nova análise disponível para MSFT</div>
+                                <div class="notificacao-time">Há 30 minutos</div>
+                            </div>
+                        </div>
+                        <div class="notificacao-item">
+                            <div class="notificacao-content">
+                                <div class="notificacao-title">Alerta de Mercado</div>
+                                <div class="notificacao-text">Índice de volatilidade aumentou significativamente</div>
+                                <div class="notificacao-time">Há 1 hora</div>
+                            </div>
+                        </div>
+                         <a href="notificacoes.html">Ver todas as notificações</a>
+                    </div>
+                </div>
+                <img id="perfilIcon" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" style="cursor: pointer;"
+                    onclick="sair()" alt="">
+
+                <div class="hamburger">
+                    <div class="bar1"></div>
+                    <div class="bar2"></div>
+                    <div class="bar3"></div>
+                </div>
+                <nav class="mobile-menu">
+                    <a href="dashboard.html">Dashboard</a>
+                    <a href="setores.html">Setores</a>
+                    <a href="acoes.html">Ações</a>
+                    <a href="comparacoes.html">Comparações</a>
+                    <a href="perfil.html">Perfil</a>
+                </nav>
+
+            </div>
+
+            <div id="content">
+                <h1>Configurações de perfil</h1>
+                <div class="section">
+                    <h2>Informações Pessoais</h2>
+                    <div id="sectionContent">
+                        <img id="imgPerfil" src="Style/assets/pefilIconAzul.svg" alt="">
+                        <div class="info">
+                            <p id="usuario"></p>
+                            <p id="email"><img src="Style/assets/emailIcon.svg" alt=""><span id="escritaEmail"></span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <span id="perfilRisco"></span>
+
+                </div>
+
+                <div class="section">
+                    <img id="pencilIcon" onclick="editarPerfil()" src="Style/assets/pencilIcon.svg" alt="">
+                    <h2>Perfil de Investidor</h2>
+                    <div id="aviso">
+                        <img src="Style/assets/avisoIcon.svg" alt="">
+                        <p>Seu perfil de investidor determina quais ações e setores são recomendados para você. Escolha
+                            o perfil que melhor reflete sua tolerância a risco e objetivos de investimento.
+                        </p>
+                    </div>
+
+                    <div class="perfilInvestidor">
+                        <div class="perfilOpcao" id="conservador">
+                            <div class="perfilHeader">
+                                <span class="check"></span>
+                                <div class="perfilTitulo">Conservador</div>
+                                <span class="perfilTag conservador">conservador</span>
+                            </div>
+                            <div class="perfilDesc">
+                                Para investidores que estão começando e buscam aprender sobre o mercado
+                            </div>
+                            <ul class="perfilFeatures">
+                                <li>Ações de empresas consolidadas e conhecidas</li>
+                                <li>Setores com menor volatilidade</li>
+                                <li>Foco em aprendizado e estabilidade</li>
+                                <li>Recomendações mais conservadoras</li>
+                            </ul>
+                        </div>
+
+                        <div class="perfilOpcao" id="moderado">
+                            <div class="perfilHeader">
+                                <span class="check"></span>
+                                <div class="perfilTitulo">Moderado</div>
+                                <span class="perfilTag iniciante">moderado</span>
+                            </div>
+                            <div class="perfilDesc">
+                                Para investidores que priorizam segurança e retornos consistentes
+                            </div>
+                            <ul class="perfilFeatures">
+                                <li>Ações com bom histórico de dividendos</li>
+                                <li>Empresas com fundamentos sólidos</li>
+                                <li>Volatilidade moderada</li>
+                                <li>Equilíbrio entre risco e retorno</li>
+                            </ul>
+                        </div>
+
+                        <div class="perfilOpcao" id="arrojado">
+                            <div class="perfilHeader">
+                                <span class="check"></span>
+                                <div class="perfilTitulo">Arrojado</div>
+                                <span class="perfilTag arrojado">arrojado</span>
+                            </div>
+                            <div class="perfilDesc">
+                                Para investidores experientes que buscam maiores retornos e aceitam mais risco
+                            </div>
+                            <ul class="perfilFeatures">
+                                <li>Ações de crescimento acelerado</li>
+                                <li>Maior volatilidade aceita</li>
+                                <li>Potencial de retornos elevados</li>
+                                <li>Empresas inovadoras e disruptivas</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="actions-buttons" style="display: none;">
+                        <button class="btn-cancel" onclick="cancelarEdicao()">Cancelar</button>
+                        <button class="btn-save" onclick="salvarEdicao()">Salvar Alterações</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script src="Style/js/fazerHamburguer.js"></script>
+
+<script>
+    cancelarEdicao = () => {
+        const buttons = document.querySelector('.actions-buttons');
+        buttons.style.display = 'none';
+        pencilIcon.style.opacity = '0.6';
+
+        const perfilOptions = document.querySelectorAll('.perfilOpcao');
+        perfilOptions.forEach(option => {
+            option.classList.remove('selected');
+            const checks = document.querySelectorAll('.check');
+            checks.forEach(check => check.classList.remove('active'));
+        });
+
+        const perfilRisco = document.getElementById('perfilRisco').innerText.toLowerCase();
+        const perfilMap = {
+            'moderado': 'moderado',
+            'conservador': 'conservador',
+            'arrojado': 'arrojado'
+        };
+
+        const selectedPerfil = perfilMap[perfilRisco];
+        if (selectedPerfil) {
+            const selectedOption = document.getElementById(selectedPerfil);
+            selectedOption.classList.add('selected');
+            selectedOption.querySelector('.check').classList.add('active');
+        }
+    }
+
+    salvarEdicao = () => {
+        const buttons = document.querySelector('.actions-buttons');
+        buttons.style.display = 'none';
+        pencilIcon.style.opacity = '0.6';
+        alertaAlteracao.style.backgroundColor = '#01663083';
+        alertaAlteracao.style.display = 'block';
+        alertaAlteracao.querySelector('span').innerText = 'Perfil alterado com sucesso!';
+        setTimeout(() => {
+            alertaAlteracao.style.display = 'none';
+        }, 3000);
+
+        const selectedOption = document.querySelector('.perfilOpcao.selected');
+        if (selectedOption) {
+            const novoPerfil = selectedOption.id;
+            document.getElementById('perfilRisco').innerText = novoPerfil.charAt(0).toUpperCase() + novoPerfil.slice(1);
+            
+            var email = sessionStorage.EMAIL_USUARIO;
+            alterarPerfil(novoPerfil, email)
+
+            sessionStorage.PERFIL_USUARIO = novoPerfil.charAt(0).toUpperCase() + novoPerfil.slice(1);
+        }
+    }
+
+    editarPerfil = () => {
+        const buttons = document.querySelector('.actions-buttons');
+        buttons.style.display = 'flex';
+        pencilIcon.style.opacity = '1';
+
+        const perfilOptions = document.querySelectorAll('.perfilOpcao');
+        perfilOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                perfilOptions.forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+
+                const checks = document.querySelectorAll('.check');
+                checks.forEach(check => check.classList.remove('active'));
+                option.querySelector('.check').classList.add('active');
+            });
+        });
+    }
+
+    function sair() {
+        sessionStorage.clear();
+        window.location.href = "./login.html";
+    }
+
+    function carregarDados() {
+        var email = sessionStorage.EMAIL_USUARIO;
+        var nome = sessionStorage.NOME_USUARIO;
+        var perfil = sessionStorage.PERFIL_USUARIO;
+
+        if(perfil == "Conservador") {
+            const elem = document.getElementById("conservador");
+            elem.classList.add("selected");
+        }
+
+        if(perfil == "Moderado") {
+            const elem = document.getElementById("moderado");
+            elem.classList.add("selected");
+        }
+
+        if(perfil == "Arrojado") {
+            const elem = document.getElementById("arrojado");
+            elem.classList.add("selected");
+        }
+
+        console.log(perfil)
+        escritaEmail.innerHTML = email;
+        usuario.innerHTML = nome;
+        perfilRisco.innerHTML = perfil;
+    }
+
+    carregarDados();
+
+     document.querySelector('#notificacaoIcon').addEventListener('click', function(e) {
+            e.stopPropagation();
+            const dropdown = document.querySelector('.notificacao-dropdown');
+            dropdown.classList.toggle('active');
+        });
+
+        document.addEventListener('click', function(e) {
+            const dropdown = document.querySelector('.notificacao-dropdown');
+            if (!e.target.closest('.notificacao-container')) {
+                dropdown.classList.remove('active');
+            }
+        });
+    
+    function alterarPerfil(novoPerfil, email) {
+        fetch("/usuarios/alterar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                emailServer: email,
+                perfilServer: novoPerfil
+            })
+        }).then(function (resposta) {
+            console.log("ESTOU NO THEN DO entrar()!")
+
+            if (resposta.ok) {
+                console.log(resposta);
+
+
+                resposta.json().then(json => {
+                    console.log("PERFIL_USUARIO salvo no sessionStorage:", sessionStorage.ID_USUARIO);
+                    setTimeout(function () {}, 1000); // apenas para exibir o loading
+                });
+            } else {
+                resposta.text().then(msg => alert(msg));
+                console.log("Houve um erro ao tentar realizar a atualização do perfil de investidor!");
+                alert("Houve um erro ao tentar realizar a atualização do perfil de investidor!")
+                // resposta.text().then(texto => {
+                //     console.error(texto);
+                // });
+            }
+
+        }).catch(function (erro) {
+            console.log(erro);
+        })
+
+        return false;
+    }
+
+</script>

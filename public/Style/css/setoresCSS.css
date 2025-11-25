@@ -1,0 +1,880 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+
+
+body {
+    height: 100%;
+    width: 100%;
+    display: flex;
+}
+
+#mainContainer {
+    height: 100dvh;
+    width: 100%;
+}
+
+#header {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 9vh;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+}
+
+;
+
+#logo {
+    max-width: 9vh;
+    height: 9vh;
+    margin-left: 5px;
+    object-fit: contain;
+    display: block;
+    flex-shrink: 0;
+}
+
+#logo img,
+img#logo {
+    width: 14vh;
+    height: 14ch;
+    object-fit: contain;
+    display: block;
+}
+
+.navbar {
+    display: flex;
+    width: 100%;
+    gap: 5vh;
+    align-items: center;
+    justify-content: center;
+    padding: 0 2vh;
+}
+
+.selected {
+    background-color: #004225;
+    color: #fff;
+}
+
+.navbar .selected {
+    background-color: #016630;
+    color: #fff;
+    padding: 1vh 1.5vh;
+    border-radius: 10px;
+}
+
+.navbar a.selected:hover {
+    color: #fff;
+    transform: none;
+    text-decoration: none;
+}
+
+.navbar a {
+    margin: 2vh;
+    text-decoration: none;
+    color: #000;
+    font-size: 2.5vh;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.navbar a:hover {
+    color: #168500d2;
+    transform: scale(1.09);
+    text-decoration: underline #004225;
+}
+
+#mainContainer {
+    height: 100dvh;
+    width: 100%;
+}
+#perfilIcon {
+    max-width: 9vh;
+    height: 9vh;
+    margin-left: 5px;
+    object-fit: contain;
+    display: block;
+    flex-shrink: 0;
+}
+
+#notificacaoIcon {
+    max-width: 7vh;
+    height: 7vh;
+    fill: white !important;
+    margin-left: 5px;
+    object-fit: contain;
+    display: block;
+    flex-shrink: 0;
+}
+
+#perfilIcon img,
+img#perfilIcon {
+    width: 16vh;
+    height: 16ch;
+    object-fit: contain;
+    display: block;
+}
+
+.notification-container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -0.5vh;
+    right: -0.5vh;
+    background-color: #016630;
+    color: white;
+    font-size: 1.9vh;
+    font-weight: bold;
+    min-width: 2vh;
+    height: 2.5vh;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.8vh;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+}
+
+
+.notification-container #notificacaoIcon {
+    max-width: 4vh;
+    height: 4vh;
+    object-fit: contain;
+    display: block;
+}
+/* Mobile menu (oculto por padrão) */
+.mobile-menu {
+    display: none;
+    flex-direction: column;
+    background-color: #ffffff;
+    position: absolute;
+    top: 7vh; /* altura do header */
+    right: 2vh;
+    width: 50vw;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 1vh;
+    padding: 2vh;
+    z-index: 999;
+}
+
+.mobile-menu a {
+    padding: 1.5vh 0;
+    color: #000;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 2vh;
+    transition: all 0.3s ease;
+}
+
+.mobile-menu a:hover {
+    color: #016630;
+    text-decoration: underline;
+}
+
+.mobile-menu.active {
+    display: flex;
+}
+
+
+@media (max-width: 1000px) {
+    
+    #perfilIcon, .notification-container, .navbar{
+        display: none !important;
+    }
+    
+    .hamburger {
+       display: flex !important;
+    }
+
+
+
+#kpiSetores{
+
+    gap: 2vh;
+    flex-direction: column;
+}
+#kpiSetores div{
+    width: 100% !important;
+
+}
+
+    #grafSetores{
+    flex-direction: column;
+    }
+
+    #grafSetores div{
+    width: 100% !important;
+    }
+
+
+    #topoSetor{
+        flex-direction: column;
+        align-items: self-start !important;
+    }
+
+    #lista div{
+        flex-direction: column;
+    }
+
+    .numero{
+        flex-direction: row !important;
+    }
+
+    .infos{
+        flex-direction: row !important;
+        flex-wrap: wrap ;
+    }
+}
+ 
+
+
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-evenly;
+    width: 30px;
+    height: 100%;
+    cursor: pointer;
+    margin-right: 2vh;
+}
+
+
+.hamburger .bar1,
+.hamburger .bar2,
+.hamburger .bar3 {
+  height: 3px;
+  width: 100%;
+  background-color: #000;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  transform-origin: center;
+  margin: 0.6vh 0; 
+}
+
+.hamburger.active .bar1 {
+  transform: rotate(45deg) translateX(2vh) translateY(2vh);
+  width: 40px;
+}
+
+.hamburger.active .bar2 {
+  opacity: 0;
+}
+
+.hamburger.active .bar3 {
+  transform: rotate(-45deg) translateX(1vh) translateY(-1vh);
+  width: 40px;
+}
+
+
+
+
+/* Parte de conteúdo principal */
+
+#mainContent{
+    display: flex;
+    height: 100%;
+    width: 100%;
+   
+    padding: 3dvh;
+}
+
+#mainExp{
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    background-color: #f9fafb;
+    flex-direction: column;
+    gap: 2vh;
+}
+
+#selectSetores{
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+}
+
+#selectSetores h1{
+    font-weight: 500;    
+    font-size: 1rem;
+}
+#selectSetores div select{
+    cursor: pointer;
+    background-color: #f3f3f5;
+    border: none;
+    font-size: 1rem;
+    padding: 1vh;
+    font-weight: 100;
+    transition: 0.4s;
+    border-radius: 0.3dvh;
+}
+
+/* #selectSetores div select:hover{
+    transform: scale(1.03);
+    font-weight: 100;
+} */
+
+#selectSetores div{
+    display: flex;
+    gap: 2vh;
+}
+
+
+/* Parte das KPIS do setor */
+
+#kpiSetores{
+    display: flex;
+
+    justify-content: space-between;
+}
+
+#kpiSetores div{
+    width: 32%;
+    border-radius: 1.3vh;
+    padding: 2vh;
+    transition: 0.5s;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    background-color: #ffffff;
+    border: solid 0.1vh #0000001e;
+}
+
+/* #kpiSetores div:hover{
+    transform: scale(1.05);
+} */
+
+#kpiSetores div div{
+    display: flex;
+    flex-direction: column;
+    align-items: self-start;
+    gap: 1vh;
+    border: none;
+    width: auto;
+}
+
+#kpiSetores div p{
+    font-size: 1rem;
+    color: #000;
+}
+
+#kpiSetores div h1{
+    font-size: 1.3rem;
+    font-weight: 200;
+}
+
+#kpiSetores div img{
+    border-radius: 50%;
+    padding: 2.4vh;
+    height: 10vh;
+}
+
+.order1{
+    background-color: #DBEAFE;
+}
+
+.order2{
+    background-color:#DCFCE7 ;
+}
+
+.order3{
+    background-color: #FFEDD4;
+}
+
+.cor1{
+    color: #00A63E;
+}
+
+.cor2{
+    color: #F54800;
+}
+
+
+#grafSetores{
+    display: flex;
+    width: 100%;
+    padding: 2vh 0;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+#grafSetores div{
+    width: 49%;
+    align-items: center;
+    border-radius: 2vh;
+    padding: 4vh;
+    transition: 0.5s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #ffffff;
+}
+
+/* #grafSetores div:hover{
+    transform: scale(1.05);
+} */
+
+#grafSetores div h1{
+    align-self: self-start;
+    font-size: 1.2rem;
+    font-weight: 100;
+}
+
+#graficoRadar{
+  width: 30vw !important;
+  height: 50vh !important;   /* <-- ESSENCIAL para deixar o gráfico quadrado */
+}
+
+#graficoBarra{
+    max-width: 100% !important;
+    min-width: 50% !important;
+    max-height: 87% !important;
+    
+}
+
+
+/* Lista de setores */
+
+
+#listSetores{
+    display: flex;
+    width: 100%;
+    background-color: #ffffff;
+    flex-direction: column;
+    padding: 3vh;
+    gap: 5vh;
+}
+
+#topoSetor{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+}
+
+#topoSetor h1{
+    font-weight: 100;
+    font-size: 1.4rem;
+}
+
+#topoSetor label{
+    display: flex;
+    background-color: #f3f3f5;
+    border-radius: 1vh;
+    transition: 0.5s;
+    cursor: pointer;
+}
+#topoSetor label img{
+    width: 7vh;
+    padding: 0 2vh ;
+}
+
+#topoSetor label input{
+    background-color: #f3f3f5;
+    border: none;
+    padding: 1vh;
+    border-radius: 2vh;
+    font-size: 1.3rem;
+}
+
+
+#topoSetor label input::placeholder{
+    color: gray;
+}
+
+#topoSetor label:hover{
+    transform: scale(1.03);
+}
+
+#lista{
+    display: flex;
+    flex-direction: column;
+    gap: 6vh;
+}
+
+#lista div{
+    justify-content: space-between;
+    display: flex;
+    padding: 1vh;
+    border: solid #00000012;
+    border-radius: 2vh;
+    width: 100%;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+/* #lista div:hover{
+    transform: scale(1.02);
+} */
+
+.numero{
+    padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border: none !important;
+    width: 20% !important;
+}
+
+.numero h2{
+    height: 60%;
+    text-align: center ;
+    align-items: center;
+    background-color: #DBEAFE;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    display: flex;
+    padding: 4vh;
+    justify-content: center;
+}
+
+.numero div{
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1vh;
+    border: none !important;
+}
+
+.numero div h1{
+    font-size: 1.6rem;
+    font-weight: 100;
+    color: #000;
+}
+
+.numero div p{
+    font-size: 1rem;
+}
+
+
+.infos{
+    display: flex;
+    width: 70% !important;
+    align-items: center;
+    border: none !important;
+}
+
+.infos div{
+    display: flex;
+    flex-direction: column;
+    border: none !important;
+}
+
+.infos div h1{
+    font-size: 1.3rem;
+    font-weight: 300;
+}
+
+.infos div p{
+    font-size: 1.5rem;
+}
+
+.corVerde{
+    color: #00A63E;
+}
+
+.corLaranja{
+    color: #F54900;
+}
+
+.corVermelha{
+    color: #E7000B;
+}
+
+.azul{
+    font-size: 1rem;
+    color: #193CB8;
+    background-color: #DBEAFE;
+    padding: 2vh 3vh;
+    border-radius: 2vh;
+}
+
+.verde{
+    font-size: 1rem;
+    color: #016630;
+    background-color: #DCFCE7;
+    padding: 2vh 3vh;
+    border-radius: 2vh;
+}
+
+.amarelo{
+    font-size: 1rem;
+    color: #894B00;
+    background-color: #FEF9C2;
+    padding: 2vh 3vh;
+    border-radius: 2vh;
+}
+
+/* Teste */
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: help;
+  }
+
+  /* O BALÃO DE TEXTO */
+  .tooltip .tip {
+    position: absolute;
+    bottom: 120%;               /* aparece acima por padrão */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #111;
+    color: #fff;
+    text-align: center;
+    padding: 8px 12px;
+    border-radius: 6px;
+    white-space: normal;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    z-index: 10;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    width: max-content;
+    max-width: 220px;
+  }
+
+  /* Setinha do tooltip */
+  .tooltip .tip::after {
+    content: "";
+    position: absolute;
+    top: 100%; /* padrão: aparece abaixo do balão (pois o balão está acima da palavra) */
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: #111 transparent transparent transparent;
+  }
+
+  /* MOSTRAR AO PASSAR O MOUSE */
+  .tooltip:hover .tip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(-4px);
+  }
+
+    .notificacao-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 300px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    padding: 12px;
+    margin-top: 10px;
+
+      a{
+        text-decoration: none;
+        color: #004225;
+        font-weight: 600;
+        display: block;
+        text-align: center;
+        margin-top: 8px;
+    }
+
+    a:hover{
+        opacity: 0.7;
+    }
+}
+
+.notificacao-dropdown.active {
+    display: block;
+}
+
+.notificacao-item {
+    padding: 12px;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.notificacao-item:last-child {
+    border-bottom: none;
+}
+
+.notificacao-content {
+    flex: 1;
+}
+
+.notificacao-title {
+    font-weight: 600;
+    color: #004225;
+    margin-bottom: 4px;
+    font-size: 14px;
+}
+
+.notificacao-text {
+    color: #666;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.notificacao-time {
+    color: #999;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.acoesPorSetor{
+    display: flex;
+    gap: 2vh;
+    flex-direction: column;
+}
+
+.tituloListaAcoes {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.listaAcoes {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1vh;
+}
+
+.listaAcoes li {
+    background-color: #f9f9f9;
+    padding: 12px 16px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.listaAcoes li:hover {
+    background-color: #f1f1f1;
+}
+
+.popup-acao {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-conteudo {
+    background-color: white;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    padding: 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.popup-header {
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.popup-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.fechar-popup {
+    font-size: 1.8rem;
+    color: #666;
+    cursor: pointer;
+    padding: 0 8px;
+}
+
+.fechar-popup:hover {
+    color: #333;
+}
+
+.popup-info {
+    padding: 20px;
+}
+
+.info-principal {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.preco-atual {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+}
+
+.preco-atual h3 {
+    font-size: 2rem;
+    margin: 0;
+    color: #333;
+}
+
+.variacao-positiva {
+    color: #16a34a;
+    font-weight: 500;
+}
+
+.variacao-negativa {
+    color: #dc2626;
+    font-weight: 500;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.info-label {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.info-valor {
+    color: #333;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+@media (max-width: 600px) {
+    .popup-conteudo {
+        width: 95%;
+        margin: 10px;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+}

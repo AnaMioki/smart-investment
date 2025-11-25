@@ -68,6 +68,7 @@
         </div>
         <div id="mainContent">
 
+
             <div id="mainAcoes">
                 <div id="selectAcoes">
                     <h1>Análise de Ações</h1>
@@ -104,6 +105,7 @@
                                         determinado período.</span>
                                 </span> Médio
                             </p>
+
                             <h1 class="verde">+21.8%</h1>
                         </div>
                         <img src="Style/assets/setaPraCimaSetores.svg" class="fundoVerde">
@@ -115,6 +117,7 @@
                                     Volatilidade <span class="tip">Mostra o quanto o preço oscila ao longo do
                                         tempo.</span>
                                 </span> Média</p>
+
                             <h1 class="laranja">26.7%</h1>
                         </div>
                         <img src="Style/assets/metricaSetores.svg" class="fundoLaranja">
@@ -126,6 +129,7 @@
                                     P/E <span class="tip">(Price to Earnings) é o índice preço/lucro, que mostra quantas
                                         vezes o lucro anual de uma empresa está sendo pago pelo preço da ação</span>
                                 </span> Médio</p>
+
                             <h1 class="roxo">35.2</h1>
                         </div>
                         <img src="Style/assets/sifrao.svg" class="fundoRoxo">
@@ -151,12 +155,14 @@
                     <!-- alterando aqui!  -->
                     <div id="listaAcoes">
                         <div class="descricao">
-                            <div class="tipo">
+                            <!-- <div class="tipo">
                                 <img src="Style/assets/imagemVazia.webp">
+
                                 <h1>Ação</h1>
                                 <h1>Setor</h1>
                                 <h1>Preço</h1>
                                 <h1><span class="tooltip left-edge">
+
                                         Retorno
                                         <span class="tip">É o lucro ou prejuízo percentual do investimento em
                                             determinado período.</span>
@@ -172,9 +178,11 @@
                                         Beta
                                         <span class="tip">Indica o nível de sensibilidade do ativo ao mercado.</span>
                                     </span></h1>
+
                                 <h1>Volume</h1>
-                            </div>
+                            </div> -->
                         </div>
+
 
 
                         <!-- modelo da acao -->
@@ -223,6 +231,7 @@
                             </div>
                         </div>
                         <!-- <div>
+
                             <div class="tipo">
                                 <img src="Style/assets/estrelaCheia.svg">
                                 <div>
@@ -330,6 +339,7 @@
                         </div> -->
 
 
+
                     </div>
 
                 </div>
@@ -339,6 +349,7 @@
 
         </div>
     </div>
+
 
 
 
@@ -409,34 +420,36 @@
         }
     });
 
+    //document.querySelector('#notificacaoIcon').addEventListener('click', function (e) { e.stopPropagation(); const dropdown = document.querySelector('.notificacao-dropdown'); dropdown.classList.toggle('active'); });
+
     async function carregarAcoes() {
-    try {
-        const resposta = await fetch("/acoes/listarTodas");
+        try {
+            const resposta = await fetch("/acoes/listarTodas");
 
-        if (!resposta.ok) {
-            console.error("Erro ao buscar ações:", resposta.status);
-            return;
+            if (!resposta.ok) {
+                console.error("Erro ao buscar ações:", resposta.status);
+                return;
+            }
+
+            const lista = await resposta.json();
+            renderizarAcoes(lista);
+
+        } catch (erro) {
+            console.error("Erro no fetch:", erro);
         }
-
-        const lista = await resposta.json();
-        renderizarAcoes(lista);
-
-    } catch (erro) {
-        console.error("Erro no fetch:", erro);
     }
-}
 
-function renderizarAcoes(lista) {
-    const container = document.getElementById("listaAcoes");
+    function renderizarAcoes(lista) {
+        const container = document.getElementById("listaAcoes");
 
-    // limpa cards antigos, exceto o cabeçalho
-    container.querySelectorAll(".card").forEach(c => c.remove());
+        // limpa cards antigos, exceto o cabeçalho
+        container.querySelectorAll(".card").forEach(c => c.remove());
 
-    lista.forEach(acao => {
-        const card = document.createElement("div");
-        card.classList.add("card");
+        lista.forEach(acao => {
+            const card = document.createElement("div");
+            card.classList.add("card");
 
-        card.innerHTML = `
+            card.innerHTML = `
             <div>
                 <div class="tipo">
                     <img class="icon-favorito" src="Style/assets/estrelaCheia.svg">
@@ -464,16 +477,16 @@ function renderizarAcoes(lista) {
             </div>
         `;
 
-        // redireciona ao clicar
-        card.addEventListener("click", () => {
-            window.location.href = `acao.html?id=${acao.idEmpresa}`;
+            // redireciona ao clicar
+            card.addEventListener("click", () => {
+                window.location.href = `acao.html?id=${acao.idEmpresa}`;
+            });
+
+            container.appendChild(card);
         });
+    }
 
-        container.appendChild(card);
-    });
-}
-
-carregarAcoes();
+    carregarAcoes();
 
 
 
@@ -584,7 +597,6 @@ carregarAcoes();
     //         console.error("Erro ao desfavoritar:", erro);
     //     }
     // }
-
 
 </script>
 
