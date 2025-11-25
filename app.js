@@ -21,6 +21,8 @@ var app = express();
 
 var indexRouter = require("./src/routes/index");
 var usuarioRouter = require("./src/routes/usuarios");
+var setorRouter = require("./src/routes/setores");
+var acoesRouter = require("./src/routes/acoes");
 // var avisosRouter = require("./src/routes/avisos");
 // var medidasRouter = require("./src/routes/medidas");
 // var aquariosRouter = require("./src/routes/aquarios");
@@ -34,6 +36,11 @@ app.use(cors());
 
 app.use("/", indexRouter);
 app.use("/usuarios", usuarioRouter);
+app.use("/setores", setorRouter);
+app.use("/acoes", acoesRouter);
+// app.use("/acoes", require("./src/routes/acoes"));
+
+
 // app.use("/avisos", avisosRouter);
 // app.use("/medidas", medidasRouter);
 // app.use("/aquarios", aquariosRouter);
