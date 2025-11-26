@@ -12,6 +12,11 @@
 <body>
 
     <main>
+        <div id="msg" class="container-txt">
+          <div class="caixa-de-texto-container" id="caixaTexto">
+            <p id="texto-caixa">Alterações realizadas com sucesso</p>
+          </div>
+    </div>
         <div id="mainContainer">
            <a id="btnIndex" onclick="backIndex()"><img src="Style/assets/arrow_back.svg" alt=""> Retornar à página inicial</a>
             <!-- <img id="btnIndex" src="Style/assets/home.svg" onclick="backIndex()" alt=""> -->
@@ -88,7 +93,7 @@
 
 
         if (emailVar == "" || senhaVar == "") {
-            alert("Campos vazios.")
+            mensagemErro("Campos vazios.")
             return false;
         }
 
@@ -122,17 +127,15 @@
                     console.log("ID_USUARIO salvo no sessionStorage:", sessionStorage.ID_USUARIO);
                     setTimeout(function () {
                         window.location = "./perfil.html";
-                    }, 1000); // apenas para exibir o loading
+                    }, 1000);
 
                 });
 
             } else {
-                resposta.text().then(msg => alert(msg));
+                resposta.text().then(msg => mensagemErro(msg));
                 console.log("Houve um erro ao tentar realizar o login!");
-                alert("Houve um erro ao tentar realizar o login!")
-                // resposta.text().then(texto => {
-                //     console.error(texto);
-                // });
+                mensagemErro("Houve um erro ao tentar realizar o login!")
+           
             }
 
         }).catch(function (erro) {
@@ -143,4 +146,14 @@
 
     }
 
+
+    function mensagemErro(mensagem){
+    const msg = document.getElementById("msg");
+    msg.classList.add("ativa");
+    const atributoMensagem = document.getElementById("texto-caixa");
+    atributoMensagem.innerHTML=`${mensagem}`;
+    setTimeout(() => {
+        msg.classList.remove("ativa")
+    }, 1500);
+}
 </script>
