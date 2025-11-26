@@ -10,7 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
-<body>
+<body onload="carregarDados('')">
     <div id="mainContainer">
         <div id="header">
             <img id="logo" src="Style/assets/smartLogoVetor.svg" alt="logoSmartInvestment">
@@ -71,13 +71,17 @@
                 <div id="selectSetores">
                     <h1>Análise de setores</h1>
                     <div>
-                        <select name="seletorPeriodo" id="selectPeriodo">
-                            <option value="3m">3 meses</option>
-                            <option value="5m">5 meses</option>
-                            <option value="9m">9 meses</option>
+                        <select name="seletorPeriodo" id="selectPeriodo" onchange="carregarDados('')">
                             <option value="1" selected>1 ano</option>
                             <option value="2">2 anos</option>
                             <option value="3">3 anos</option>
+                            <option value="4">4 anos</option>
+                            <option value="5">5 anos</option>
+                            <option value="6">6 anos</option>
+                            <option value="7">7 anos</option>
+                            <option value="8">8 anos</option>
+                            <option value="9">9 anos</option>
+                            <option value="10">10 anos</option>
                         </select>
                         <select name="seletorTipo" id="selectTipo">
                             <option value="retorno" selected>Por retorno</option>
@@ -92,7 +96,7 @@
                     <div>
                         <div>
                             <p>Total de Setores</p>
-                            <h1>8</h1>
+                            <h1 id="total_setores_kpi"></h1>
                         </div>
                         <img src="Style/assets/flechaSetores.svg" alt="imagem seta para cima (como ações)"
                             class="order1">
@@ -135,8 +139,8 @@
                     <div id="topoSetor">
                         <h1>Todos os Setores</h1>
                         <label for="searchSetor">
-                            <img src="Style/assets/lupaSetores.svg">
-                            <input type="search" id="searchSetor" placeholder="Buscar setor...">
+                            <img src="Style/assets/lupaSetores.svg" onclick="carregarDados(searchSetor.value)">
+                            <input type="search" id="searchSetor" placeholder="Buscar setor..." onchange="carregarDados(this.value  )">
                         </label>
                     </div>
 
@@ -159,9 +163,14 @@
 <!-- Script radar -->
 <script>
 
-    async function carregarDados() {
-
-        const response = await fetch('/setores/receberSetores/');
+    async function carregarDados(valor) {
+        var response;
+        
+        if(valor == ''){
+            response = await fetch('/setores/receberSetores/');
+        }else{
+             response = await fetch(`/setores/receberSetoresParam/${valor}`);
+        }
         const setores = await response.json();
 
         lista.innerHTML = '';   
@@ -229,17 +238,17 @@
 
                         </div>
                         <div class="acoesPorSetor" style="display: none;">
-                            <h2 class="tituloListaAcoes">Ações do setor de Tecnologia</h2>
+                            <h2 class="tituloListaAcoes">Ações do setor de ${setor.setor}</h2>
                             <ul class="listaAcoes" id="acoes_${setor.setor}">
                                
                         </div>
             `;
         }
 
-
+        total_setores_kpi.innerHTML = cont;
+        searchSetor.value = '';
     }
 
-    carregarDados();
 </script>
 
 
@@ -330,15 +339,16 @@
 
         const response = await fetch(`/setores/buscarAcoesSetor/${setor}`);
         const dados = await response.json();
-
-
-
+ 
+        var periodo = selectPeriodo.value;  
+        
+       
         console.log(dados);
 
         nome_lista.innerHTML = '';
         for (let acao of dados) {
 
-            nome_lista.innerHTML += `<li onclick="abrirInfoAcao(this, '${acao.ticker}')">${acao.nome} (${acao.ticker})</li>`;
+            nome_lista.innerHTML += `<li onclick="abrirInfoAcao(this, '${acao.ticker}', ${periodo})">${acao.nome} (${acao.ticker})</li>`;
         }
 
 
@@ -347,6 +357,8 @@
             acoesSetoriais.style.display = acoesSetoriais.style.display === 'block' ? 'none' : 'block';
         }
     }
+
+    
 
     const ctx = document.getElementById('graficoBarra');
     new Chart(ctx, {
@@ -409,26 +421,38 @@
 
 
     
-    async function abrirInfoAcao(elemento, ticker) {
+    async function abrirInfoAcao(elemento, ticker, anos) {
 
-        const resposta = await fetch(`/setores/buscarAcoesUnicas/${ticker}`);
+        console.log(elemento, ticker)
+        const resposta = await fetch(`/setores/buscarAcoesUnicas/${ticker}/${anos}`);
         const dados = await resposta.json();
-
         console.log(dados[0]);
 
         const popup = document.createElement('div');
         popup.className = 'popup-acao';
 
+
+        var mensagem = "";
+
+        if(anos == 1){
+            mensagem = "Periodo: 1 ano."
+        }else{
+            mensagem = `Periodo: ${anos} anos.`;
+        };
+
         popup.innerHTML = `
             <div class="popup-conteudo">
                 <div class="popup-header">
+                    <div class="dentro-popup">
                     <h2>${dados[0].nome}</h2>
+                    <img src="${dados[0].logo}">
+                    </div>
                     <span class="fechar-popup">&times;</span>
                 </div>
                 <div class="popup-info">
                     <div class="info-principal">
                         <div class="preco-atual">
-                            <h3>$${dados[0].media_preco_fechamento}</h3>
+                            <h3>R$${dados[0].media_preco_fechamento}</h3>
                             <span></span>
                         </div>
                     </div>
@@ -439,15 +463,15 @@
                         </div>
                         <div class="info-item">
                             <span class="info-label">Preço médio</span>
-                            <span class="info-valor">${dados[0].media_preco_fechamento}</span>
+                            <span class="info-valor">R$${dados[0].media_preco_fechamento}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Maior preço</span>
-                            <span class="info-valor">${dados[0].max_preco_alto}</span>
+                            <span class="info-valor">R$${dados[0].max_preco_alto}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Menor preço</span>
-                            <span class="info-valor">${dados[0].min_preco_baixo}</span>
+                            <span class="info-valor">R$${dados[0].min_preco_baixo}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Volume</span>
@@ -469,11 +493,15 @@
             document.body.removeChild(popup);
         };
 
-        document.addEventListener('click', (e) => {
-            if (!popup.querySelector('.popup-conteudo').contains(e.target) && !elemento.contains(e.target)) {
-                document.body.appendChild(popup);
+        document.addEventListener('click', fecharFora);
+
+        function fecharFora(e) {
+            if (!popup.querySelector('.popup-conteudo').contains(e.target)) {
+                popup.remove();
+                document.removeEventListener('click', fecharFora);
             }
-        });
+        }
+
     }
 </script>
 
