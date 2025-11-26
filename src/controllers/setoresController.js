@@ -1,8 +1,25 @@
-var setoresModel = require("../models/setoresModel");
+        var setoresModel = require("../models/setoresModel");
 
 
 function receberSetores(req, res) {
     setoresModel.receberSetores().then(function (resultado) {
+        if (resultado.length > 0) {
+            res.json(resultado);
+
+        } else {
+            res.status(204).send("Nenhuma postagem encontrada!")
+        }
+    }).catch(function (erro) {
+        console.log(erro);
+        console.log("Houve um erro ao buscar as postagens.", erro.sqlMessage);
+        res.status(500).json(erro.sqlMessage);
+    });
+}
+
+function receberSetoresParam(req, res) {
+    var setor = req.params.setor;
+
+    setoresModel.receberSetoresParam(setor).then(function (resultado) {
         if (resultado.length > 0) {
             res.json(resultado);
 
@@ -35,7 +52,8 @@ function buscarAcoesSetor(req, res) {
 
 function buscarAcoesUnicas(req, res) {
     var ticker = req.params.ticker;
-    setoresModel.buscarAcoesUnicas(ticker).then(function (resultado) {
+    var anos = req.params.anos;
+    setoresModel.buscarAcoesUnicas(ticker,anos).then(function (resultado) {
         if (resultado.length > 0) {
             res.json(resultado);
         } else {
@@ -51,5 +69,6 @@ function buscarAcoesUnicas(req, res) {
 module.exports = {
     receberSetores,
     buscarAcoesSetor,
-    buscarAcoesUnicas
+    buscarAcoesUnicas,
+    receberSetoresParam
 }
