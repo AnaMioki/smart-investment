@@ -21,8 +21,8 @@ perfil VARCHAR(20),
 		CHECK (perfil IN ('Conservador', 'Moderado', 'Arrojado'))
 );
 
-INSERT INTO usuario (nome, dtNascimento, email, senha, perfil) VALUES
-('Alexandre Silva', '1990-05-15', 'alexandre@example.com', 'senha123', 'Arrojado');
+-- INSERT INTO usuario (nome, dtNascimento, email, senha, perfil) VALUES
+-- ('Alexandre Silva', '1990-05-15', 'alexandre@example.com', 'senha123', 'Arrojado');
 
 CREATE TABLE empresa (
 idEmpresa INT PRIMARY KEY AUTO_INCREMENT,
@@ -30,6 +30,11 @@ nome VARCHAR(80) NOT NULL,
 ticker VARCHAR(10) NOT NULL,
 setor VARCHAR(30) NOT NULL
 );
+
+-- insert into empresa (nome, ticker, setor) values
+-- ('Empresa3 Exemplo S.A.', 'EXES', 'Saude'),
+-- ('Empresa4 Teste Ltda.', 'EMTE', 'Tecnologia');
+
 
 CREATE TABLE acoes (
 idAcoes INT PRIMARY KEY AUTO_INCREMENT,
