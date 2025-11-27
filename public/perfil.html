@@ -28,7 +28,7 @@
                 <div class="notification-container">
                     <span class="notification-badge">3</span>
                     <img id="notificacaoIcon" src="Style/assets/sinoNotificacao.svg" alt="">
-                      <div class="notificacao-dropdown">
+                    <div class="notificacao-dropdown">
                         <div class="notificacao-item">
                             <div class="notificacao-content">
                                 <div class="notificacao-title">Atualização de Preço</div>
@@ -50,7 +50,7 @@
                                 <div class="notificacao-time">Há 1 hora</div>
                             </div>
                         </div>
-                         <a href="notificacoes.html">Ver todas as notificações</a>
+                        <a href="notificacoes.html">Ver todas as notificações</a>
                     </div>
                 </div>
                 <img id="perfilIcon" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" style="cursor: pointer;"
@@ -79,9 +79,16 @@
                         <img id="imgPerfil" src="Style/assets/pefilIconAzul.svg" alt="">
                         <div class="info">
                             <p id="usuario"></p>
-                            <p id="email"><img src="Style/assets/emailIcon.svg" alt=""><span id="escritaEmail"></span>
+                            <p id="email"><span id="escritaEmail"></span>
                             </p>
+                            <img class="btnEditar" onclick="editarDadosPerfil()" src="Style/assets/pencilIcon.svg"
+                                alt="">
+                            <div class="actions-user-buttons" style="display: none;">
+                                <button class="btn-cancel" onclick="cancelarEdicaoDados()">Cancelar</button>
+                                <button class="btn-save" onclick="salvarEdicaoDados()">Salvar Alterações</button>
+                            </div>
                         </div>
+
                     </div>
 
                     <span id="perfilRisco"></span>
@@ -99,23 +106,6 @@
                     </div>
 
                     <div class="perfilInvestidor">
-                        <div class="perfilOpcao" id="iniciante">
-                            <div class="perfilHeader">
-                                <span class="check"></span>
-                                <div class="perfilTitulo">Iniciante</div>
-                                <span class="perfilTag iniciante">iniciante</span>
-                            </div>
-                            <div class="perfilDesc">
-                                Para investidores que estão começando e buscam aprender sobre o mercado
-                            </div>
-                            <ul class="perfilFeatures">
-                                <li>Ações de empresas consolidadas e conhecidas</li>
-                                <li>Setores com menor volatilidade</li>
-                                <li>Foco em aprendizado e estabilidade</li>
-                                <li>Recomendações mais conservadoras</li>
-                            </ul>
-                        </div>
-
                         <div class="perfilOpcao selected" id="conservador">
                             <div class="perfilHeader">
                                 <span class="check active"></span>
@@ -130,6 +120,23 @@
                                 <li>Empresas com fundamentos sólidos</li>
                                 <li>Volatilidade moderada</li>
                                 <li>Equilíbrio entre risco e retorno</li>
+                            </ul>
+                        </div>
+
+                        <div class="perfilOpcao" id="moderado">
+                            <div class="perfilHeader">
+                                <span class="check"></span>
+                                <div class="perfilTitulo">Moderado</div>
+                                <span class="perfilTag moderado">moderado</span>
+                            </div>
+                            <div class="perfilDesc">
+                                Para investidores que estão começando e buscam aprender sobre o mercado
+                            </div>
+                            <ul class="perfilFeatures">
+                                <li>Ações de empresas consolidadas e conhecidas</li>
+                                <li>Setores com menor volatilidade</li>
+                                <li>Foco em aprendizado e estabilidade</li>
+                                <li>Recomendações mais conservadoras</li>
                             </ul>
                         </div>
 
@@ -165,6 +172,208 @@
 <script src="Style/js/fazerHamburguer.js"></script>
 
 <script>
+    if (sessionStorage.getItem('ID_USUARIO') === null) {
+        showLoginCard(6);
+    }
+
+    const escritaEmail = document.getElementById('escritaEmail');
+    const usuario = document.getElementById('usuario');
+    const perfilRisco = document.getElementById('perfilRisco');
+    const pencilIcon = document.getElementById('pencilIcon');
+    const alertaAlteracao = document.getElementById('alertaAlteracao');
+
+    function escapeHtml(str) {
+        return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+    }
+
+    function editarDadosPerfil() {
+        const nomeAtual = usuario.innerText.trim();
+        const emailAtual = escritaEmail.innerText.trim();
+        usuario.dataset.orig = nomeAtual;
+        escritaEmail.dataset.orig = emailAtual;
+        usuario.classList.add('editing');
+        escritaEmail.classList.add('editing');
+        usuario.innerHTML = `<span class="view-text">${escapeHtml(nomeAtual)}</span><input id="inputNome" class="edit-input" value="${escapeHtml(nomeAtual)}">`;
+        escritaEmail.innerHTML = `<span class="view-text">${escapeHtml(emailAtual)}</span><input id="inputEmail" class="edit-input" value="${escapeHtml(emailAtual)}">`;
+        document.querySelector('.actions-user-buttons').style.display = 'flex';
+        pencilIcon.style.opacity = '1';
+        setTimeout(() => document.getElementById('inputNome').focus(), 50);
+    }
+
+    function cancelarEdicaoDados() {
+        const buttons = document.querySelector('.actions-user-buttons');
+        buttons.style.display = 'none';
+        pencilIcon.style.opacity = '0.6';
+        const nomeOrig = usuario.dataset.orig || sessionStorage.NOME_USUARIO || '';
+        const emailOrig = escritaEmail.dataset.orig || sessionStorage.EMAIL_USUARIO || '';
+        usuario.classList.remove('editing');
+        escritaEmail.classList.remove('editing');
+        usuario.innerText = nomeOrig;
+        escritaEmail.innerText = emailOrig;
+        delete usuario.dataset.orig;
+        delete escritaEmail.dataset.orig;
+    }
+
+    function validarEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function showAlerta(mensagem, duracao = 3000, bg = '#016630') {
+        const alerta = document.getElementById('alertaAlteracao');
+        alerta.innerHTML = `
+            <div class="alerta-conteudo">
+                <span class="alerta-texto">${mensagem}</span>
+                <div class="alerta-progress"><div class="alerta-progress-bar"></div></div>
+            </div>
+        `;
+        alerta.style.display = 'flex';
+        alerta.style.backgroundColor = bg;
+        alerta.style.opacity = '1';
+        const barra = alerta.querySelector('.alerta-progress-bar');
+        barra.style.transition = `width ${duracao}ms linear`;
+        barra.style.width = '100%';
+        requestAnimationFrame(() => barra.style.width = '0%');
+        setTimeout(() => {
+            alerta.style.opacity = '0';
+            setTimeout(() => {
+                alerta.style.display = 'none';
+                alerta.innerHTML = '';
+            }, 300);
+        }, duracao);
+    }
+
+    function salvarEdicaoDados() {
+        const inputNome = document.getElementById('inputNome');
+        const inputEmail = document.getElementById('inputEmail');
+        if (!inputNome || !inputEmail) return;
+        const novoNome = inputNome.value.trim();
+        const novoEmail = inputEmail.value.trim();
+        if (!novoNome) return;
+        if (!validarEmail(novoEmail)) {
+            inputEmail.classList.add('invalid');
+            setTimeout(() => inputEmail.classList.remove('invalid'), 1600);
+            return;
+        }
+        const buttons = document.querySelector('.actions-user-buttons');
+        if (buttons) buttons.style.display = 'none';
+        if (pencilIcon) pencilIcon.style.opacity = '0.6';
+        usuario.classList.remove('editing');
+        escritaEmail.classList.remove('editing');
+        usuario.innerText = novoNome;
+        escritaEmail.innerText = novoEmail;
+        sessionStorage.NOME_USUARIO = novoNome;
+        sessionStorage.EMAIL_USUARIO = novoEmail;
+        showAlerta('Dados alterados com sucesso!', 3000, '#016630');
+        fetch('/usuarios/atualizarDados', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                idUsuario: sessionStorage.ID_USUARIO,
+                novoNome: novoNome,
+                novoEmail: novoEmail
+            })
+        }).then(response => {
+            if (!response.ok) throw new Error('Erro ao atualizar dados no servidor.');
+            return response.json();
+        }).catch(error => {
+            console.error('Erro:', error);
+        });
+    }
+
+    salvarEdicao = () => {
+        const buttons = document.querySelector('.actions-buttons');
+        if (buttons) buttons.style.display = 'none';
+        if (pencilIcon) pencilIcon.style.opacity = '0.6';
+        showAlerta('Perfil alterado com sucesso!', 3000, '#016630');
+        const selectedOption = document.querySelector('.perfilOpcao.selected');
+        if (selectedOption) {
+            const novoPerfil = selectedOption.id;
+            const perfilCapitalizado = novoPerfil.charAt(0).toUpperCase() + novoPerfil.slice(1);
+            const perfilEl = document.getElementById('perfilRisco');
+            if (perfilEl) perfilEl.innerText = perfilCapitalizado;
+            aplicarCorPerfil(novoPerfil);
+            sessionStorage.PERFIL_USUARIO = perfilCapitalizado;
+            fetch('/usuarios/atualizarPerfil', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    idUsuario: sessionStorage.ID_USUARIO,
+                    novoPerfil: sessionStorage.PERFIL_USUARIO
+                })
+            }).then(response => {
+                if (!response.ok) throw new Error('Erro ao atualizar perfil no servidor.');
+                return response.json();
+            }).catch(error => {
+                console.error('Erro:', error);
+            });
+        }
+    }
+
+    async function carregarDados() {
+        if (!sessionStorage.ID_USUARIO) {
+            showLoginCard(6);
+            return;
+        }
+
+        let perfilFromServer = null;
+        try {
+            const resp = await fetch('/usuarios/buscarUsuarios', { method: 'GET', headers: { 'Content-Type': 'application/json' } });
+            if (resp.ok) {
+                const usuarios = await resp.json();
+                const usuarioObj = usuarios.find(u => String(u.idUsuario) === String(sessionStorage.ID_USUARIO));
+                if (usuarioObj) {
+                    escritaEmail.innerText = usuarioObj.email || sessionStorage.EMAIL_USUARIO || '';
+                    usuario.innerText = usuarioObj.nome || sessionStorage.NOME_USUARIO || '';
+                    perfilFromServer = usuarioObj.perfil || '';
+                }
+            }
+        } catch (e) { }
+
+        if (!perfilFromServer) {
+            perfilFromServer = sessionStorage.PERFIL_USUARIO || '';
+        }
+
+        if (perfilFromServer) {
+            sessionStorage.PERFIL_USUARIO = perfilFromServer;
+            aplicarPerfilSelecionado(perfilFromServer);
+            aplicarCorPerfil(perfilFromServer);
+        } else {
+            perfilRisco.innerText = '';
+            aplicarCorPerfil('');
+        }
+    }
+
+    function aplicarPerfilSelecionado(perfilValor) {
+        const perfilId = perfilValor.toString().toLowerCase();
+        perfilRisco.innerText = perfilValor.charAt(0).toUpperCase() + perfilValor.slice(1);
+        document.querySelectorAll('.perfilOpcao').forEach(option => {
+            const isSelected = option.id === perfilId;
+            option.classList.toggle('selected', isSelected);
+            const check = option.querySelector('.check');
+            if (check) check.classList.toggle('active', isSelected);
+        });
+        aplicarCorPerfil(perfilValor);
+    }
+
+    function aplicarCorPerfil(perfilValor) {
+        const p = (perfilValor || '').toString().toLowerCase();
+        const el = document.getElementById('perfilRisco');
+        if (!el) return;
+        el.style.display = 'inline-block';
+        if (p === 'conservador') {
+            el.style.color = '#016630';
+            el.style.backgroundColor = '#e6f4ea';
+        } else if (p === 'moderado') {
+            el.style.color = '#b95f00';
+            el.style.backgroundColor = '#fff4e6';
+        } else if (p === 'arrojado') {
+            el.style.color = '#c0262e';
+            el.style.backgroundColor = '#fdecea';
+        } else {
+            el.style.color = '#333';
+
+        }
+    }
 
     cancelarEdicao = () => {
         const buttons = document.querySelector('.actions-buttons');
@@ -178,18 +387,21 @@
             checks.forEach(check => check.classList.remove('active'));
         });
 
-        const perfilRisco = document.getElementById('perfilRisco').innerText.toLowerCase();
+        const perfilRiscoTexto = document.getElementById('perfilRisco').innerText.toLowerCase();
         const perfilMap = {
-            'iniciante': 'iniciante',
             'conservador': 'conservador',
+            'moderado': 'moderado',
             'arrojado': 'arrojado'
         };
 
-        const selectedPerfil = perfilMap[perfilRisco];
+        const selectedPerfil = perfilMap[perfilRiscoTexto];
         if (selectedPerfil) {
             const selectedOption = document.getElementById(selectedPerfil);
             selectedOption.classList.add('selected');
             selectedOption.querySelector('.check').classList.add('active');
+            aplicarCorPerfil(selectedPerfil);
+        } else {
+            aplicarCorPerfil('');
         }
     }
 
@@ -208,8 +420,21 @@
         if (selectedOption) {
             const novoPerfil = selectedOption.id;
             document.getElementById('perfilRisco').innerText = novoPerfil.charAt(0).toUpperCase() + novoPerfil.slice(1);
-
+            aplicarCorPerfil(novoPerfil);
             sessionStorage.PERFIL_USUARIO = novoPerfil.charAt(0).toUpperCase() + novoPerfil.slice(1);
+            fetch('/usuarios/atualizarPerfil', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    idUsuario: sessionStorage.ID_USUARIO,
+                    novoPerfil: sessionStorage.PERFIL_USUARIO
+                })
+            }).then(response => {
+                if (!response.ok) throw new Error('Erro ao atualizar perfil no servidor.');
+                return response.json();
+            }).catch(error => {
+                console.error('Erro:', error);
+            });
         }
     }
 
@@ -236,29 +461,18 @@
         window.location.href = "./login.html";
     }
 
-    function carregarDados() {
-        var email = sessionStorage.EMAIL_USUARIO;
-        var nome = sessionStorage.NOME_USUARIO;
-        var perfil = sessionStorage.PERFIL_USUARIO;
-
-        console.log(perfil)
-        escritaEmail.innerHTML = email;
-        usuario.innerHTML = nome;
-        perfilRisco.innerHTML = perfil;
-    }
-
     carregarDados();
 
-     document.querySelector('#notificacaoIcon').addEventListener('click', function(e) {
-            e.stopPropagation();
-            const dropdown = document.querySelector('.notificacao-dropdown');
-            dropdown.classList.toggle('active');
-        });
+    document.querySelector('#notificacaoIcon').addEventListener('click', function (e) {
+        e.stopPropagation();
+        const dropdown = document.querySelector('.notificacao-dropdown');
+        dropdown.classList.toggle('active');
+    });
 
-        document.addEventListener('click', function(e) {
-            const dropdown = document.querySelector('.notificacao-dropdown');
-            if (!e.target.closest('.notificacao-container')) {
-                dropdown.classList.remove('active');
-            }
-        });
+    document.addEventListener('click', function (e) {
+        const dropdown = document.querySelector('.notificacao-dropdown');
+        if (!e.target.closest('.notification-container')) {
+            dropdown.classList.remove('active');
+        }
+    });
 </script>

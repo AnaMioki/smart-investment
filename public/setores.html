@@ -50,7 +50,7 @@
                     <a href="notificacoes.html">Ver todas as notificações</a>
                 </div>
             </div>
-            <img id="perfilIcon" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" alt="">
+            <img id="perfilIcon" onclick="sair()" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" alt="">
 
             <div class="hamburger">
                 <div class="bar1"></div>
@@ -199,6 +199,11 @@
 
 <!-- Script radar -->
 <script>
+
+     function sair() {
+        sessionStorage.clear();
+        window.location.href = "./login.html";
+    }
 
     async function carregarDados() {
 
@@ -363,6 +368,60 @@
 
 
 <script>
+
+      if (sessionStorage.getItem('ID_USUARIO')===null) {
+            showLoginCard(6);
+        }
+
+        function showLoginCard(seconds) {
+            const overlay = document.createElement('div');
+            overlay.className = 'login-overlay';
+            overlay.innerHTML = `
+                <div class="login-card">
+                    <h3>É necessário fazer login</h3>
+                    <p>Você precisa entrar para acessar esta página. Redirecionando em <span id="login-timer">${seconds}</span>s</p>
+                    <div class="progress"><div class="progress-bar"></div></div>
+                    <div class="login-actions">
+                        <button id="btnLoginNow">Ir para login</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+
+            const bar = overlay.querySelector('.progress-bar');
+            const timerEl = overlay.querySelector('#login-timer');
+            const btnNow = overlay.querySelector('#btnLoginNow');
+
+            let remaining = seconds;
+            timerEl.textContent = remaining;
+
+            const totalMs = seconds * 1000;
+            const start = Date.now();
+
+            const interval = setInterval(() => {
+                const elapsed = Date.now() - start;
+                const pct = Math.min(100, (elapsed / totalMs) * 100);
+                bar.style.width = pct + '%';
+                const secLeft = Math.ceil((totalMs - elapsed) / 1000);
+                timerEl.textContent = secLeft > 0 ? secLeft : 0;
+                if (pct >= 100) {
+                    clearInterval(interval);
+                    window.location.href = 'login.html';
+                }
+            }, 100);
+
+            btnNow.addEventListener('click', () => {
+                clearInterval(interval);
+                window.location.href = 'login.html';
+            });
+
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    clearInterval(interval);
+                    overlay.remove();
+                }
+            });
+        }
 
     async function abrirAcoesSetor(elemento, setor) {
         const nome_lista = document.getElementById(`acoes_${setor}`);

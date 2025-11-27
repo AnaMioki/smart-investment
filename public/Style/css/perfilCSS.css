@@ -171,23 +171,57 @@ img#perfilIcon {
 }
 
 #alertaAlteracao {
-    background-color: #00ad51;
-    z-index: 2;
-    position: fixed;
-    margin-top: 2vh;
-    margin-left: 2vh;
-    width: 20vw;
-    height: 6vh;
-    border-radius: 2vh;
-    border: #004225 solid 2px;
-    transition: all 0.5s ease;
-    text-align: center;
-    padding-top: 1.5vh;
-    font-size: 1rem;
-    font-weight: 700;
-    color: white;
-    justify-content: center;
+    display: none;
     align-items: center;
+    justify-content: center;
+    position: fixed;
+    bottom: 2vh;
+    right: 2vh;
+    z-index: 1100;
+    min-width: 360px;
+    height: 8vh;
+    max-width: 36vw;
+    padding: 0.8vh 1vh;
+    border-radius: 10px;
+    color: #fff;
+    box-shadow: 0 8px 26px rgba(0,0,0,0.18);
+    transition: opacity 0.28s ease, transform 0.28s ease;
+    opacity: 0;
+    overflow: hidden;
+}
+
+#alertaAlteracao .alerta-conteudo {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 3vh;
+}
+
+#alertaAlteracao .alerta-texto {
+    font-weight: 700;
+    font-size: 1.1rem;
+    display: block;
+    text-align: left;
+}
+
+#alertaAlteracao .alerta-progress {
+    width: 100%;
+    height: 6px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+#alertaAlteracao .alerta-progress-bar {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(255,255,255,0.92), rgba(255,255,255,0.7));
+    border-radius: 999px;
+    transform-origin: left center;
+}
+
+@media (max-width: 900px) {
+    #alertaAlteracao { right: 1.2vh; left: 1.2vh; max-width: calc(100% - 2.4vh); }
 }
 
 /* Mobile menu (oculto por padrão) */
@@ -439,7 +473,7 @@ img#perfilIcon {
     text-align: center;
 }
 
-.iniciante {
+.moderado  {
     background-color: #6b7280;
 }
 
@@ -579,4 +613,169 @@ img#perfilIcon {
     color: #999;
     font-size: 12px;
     margin-top: 4px;
+}
+
+
+.login-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.45);
+    z-index: 1200;
+}
+
+.login-card {
+    width: 92%;
+    max-width: 480px;
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    text-align: center;
+    color: #222;
+}
+
+.login-card h3 {
+    margin-bottom: 6px;
+    font-size: 1.4rem;
+}
+
+.login-card p {
+    margin-bottom: 14px;
+    color: #555;
+    font-size: 0.98rem;
+}
+
+.progress {
+    width: 100%;
+    height: 10px;
+    background: #eef3ee;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 14px;
+}
+
+.progress-bar {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg,#54b987,#16a34a);
+    transition: width 0.08s linear;
+}
+
+.login-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.login-actions button {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+#btnLoginNow {
+    background: linear-gradient(180deg,#0ea46a,#087a47);
+    color: #fff;
+}
+
+@media (max-width: 480px) {
+    .login-card { padding: 16px; }
+    .login-actions { flex-direction: column; gap: 8px; }
+    #btnLoginNow { width: 100%; }
+}
+
+.btnEditar {
+position: absolute;
+right: 2vh;
+top: 2vh;
+width: 5vh;
+cursor: pointer;
+}
+
+.actions-user-buttons {
+    display: flex;
+    gap: 2vh;
+    position: absolute;
+    bottom: 2vh;
+    right: 2vh;
+}
+
+#inputNome, #inputEmail {
+    font-size: 2.8vh;
+    padding: 0.5vh;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+}
+
+.edit-input {
+    display: inline-block;
+    width: calc(100% - 2vh);
+    max-width: 42vw;
+    margin-left: 0.8vh;
+    padding: 0.4vh 0.8vh;
+    font-size: 2.6vh;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: linear-gradient(180deg, #fffdfd, #f7faf9);
+    box-shadow: 0 4px 12px rgba(6, 30, 15, 0.03);
+    transition: box-shadow 0.18s ease, border-color 0.18s ease, transform 0.12s ease;
+    outline: none;
+}
+
+.edit-input:focus {
+    border-color: rgba(1,102,204,0.12);
+    box-shadow: 0 8px 18px rgba(1,102,204,0.06);
+    transform: translateY(-1px);
+}
+
+#usuario.editing .view-text,
+#email.editing .view-text,
+#escritaEmail.editing .view-text {
+    opacity: 0.45;
+    transition: opacity 0.12s ease;
+}
+
+.invalid {
+    border-color: #dc2626 !important;
+    box-shadow: 0 6px 14px rgba(220,38,38,0.08) !important;
+    animation: shake 0.16s linear 0 2;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+    100% { transform: translateX(0); }
+}
+
+.actions-user-buttons {
+    display: none;
+    gap: 2vh;
+    position: absolute;
+    bottom: 2vh;
+    right: 2vh;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.actions-user-buttons[style*="display: flex"] {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.edit-input::-webkit-input-placeholder {
+    color: #9aa4a6;
+}
+
+@media (max-width: 800px) {
+    .edit-input { max-width: 70vw; font-size: 2.4vh; width: 100%; }
+    .actions-user-buttons { right: 1.2vh; bottom: 1.2vh; }
 }

@@ -10,6 +10,7 @@ body {
     background-color: #f4f4f4;
     color: #333;
     padding: 20px;
+    overflow: hidden;
 }
 
 #mainContainer {
@@ -96,18 +97,8 @@ img#logo {
 }
 
 #perfilIcon {
-    max-width: 9vh;
-    height: 9vh;
-    margin-left: 5px;
-    object-fit: contain;
-    display: block;
-    flex-shrink: 0;
-}
-
-#notificacaoIcon {
-    max-width: 7vh;
-    height: 7vh;
-    fill: white !important;
+    max-width:  6vh;
+    height: 6vh;
     margin-left: 5px;
     object-fit: contain;
     display: block;
@@ -120,71 +111,6 @@ img#perfilIcon {
     height: 16ch;
     object-fit: contain;
     display: block;
-}
-
-.notification-container {
-    position: relative;
-    display: inline-block;
-    cursor: pointer;
-}
-
-.notification-badge {
-    position: absolute;
-    top: -0.5vh;
-    right: -0.5vh;
-    background-color: #016630;
-    color: white;
-    font-size: 1.9vh;
-    font-weight: bold;
-    min-width: 2vh;
-    height: 2.5vh;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.8vh;
-    box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
-}
-
-
-.notification-container #notificacaoIcon {
-    max-width: 4vh;
-    height: 4vh;
-    object-fit: contain;
-    display: block;
-}
-
-#pencilIcon {
-    width: 3.5vh;
-    height: 3.5vh;
-    position: absolute;
-    top: 2vh;
-    right: 2vh;
-    cursor: pointer;
-    opacity: 0.6;
-    transition: transform 0.3s ease;
-}
-
-#pencilIcon:hover {
-    opacity: 1 !important;
-}
-
-#alertaAlteracao {
-    background-color: #00ad51;
-    z-index: 2;
-    position: fixed;
-    margin-top: 2vh;
-    margin-left: 2vh;
-    width: 35vw;
-    height: 10vh;
-    border-radius: 2vh;
-    border: #004225 solid 2px;
-    transition: all 0.5s ease;
-    text-align: center;
-    padding-top: 2vh;
-    font-size: 2rem;
-    font-weight: 700;
-    color: white;
 }
 
 /* Mobile menu (oculto por padrão) */
@@ -287,4 +213,102 @@ img#perfilIcon {
 .hamburger.active .bar3 {
     transform: rotate(-45deg) translateX(1vh) translateY(-1vh);
     width: 40px;
+}
+
+#mainContent {
+    padding: 2vh;
+    h1 {
+        color: #004225;
+    }
+    p{
+        font-size: 2vh;
+        font-weight: 400;
+    }
+}
+
+#footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    padding: 1vh;
+    background-color: #ffffff;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 2vh;
+}
+
+.user-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+    margin-top: 3vh;
+    overflow-y: auto;
+    max-height: 70vh;
+    padding: 1vh;
+    border-radius: 8px;
+    background: linear-gradient(180deg, rgba(0,0,0,0.01), rgba(0,0,0,0.02));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+}
+
+.user-list::-webkit-scrollbar {
+    width: 10px;
+}
+
+.user-list::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 6px 0;
+}
+
+.user-list::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #cfead8, #9ed9b8);
+    border-radius: 10px;
+    border: 2px solid rgba(255,255,255,0.4);
+}
+
+.user-list::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #b6e2c6, #84cf9f);
+}
+
+.user-list {
+    scrollbar-width: auto;
+    scrollbar-color: #004225 transparent;
+}
+
+.user-card {
+    background-color: #ffffff;
+    padding: 2vh;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.06);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.user-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+}
+
+.buttons {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    gap: 1vh;
+    margin-top: 1vh;
+}
+
+.buttons img {
+    width: 4.5vh;
+    height: 4.5vh;
+    cursor: pointer;
+    transition: transform 0.15s ease, filter 0.15s ease;
+    border-radius: 8px;
+    padding: 0.2vh;
+}
+
+.buttons img:hover {
+    transform: scale(1.06);
+    filter: brightness(0.95);
 }
