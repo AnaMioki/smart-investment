@@ -160,7 +160,6 @@
 
 </html>
 
-<!-- Script radar -->
 <script>
 
      function sair() {
@@ -168,9 +167,16 @@
         window.location.href = "./login.html";
     }
 
-    async function carregarDados() {
+    async function carregarDados(valor) {
 
-        const response = await fetch('/setores/receberSetores/');
+        var response;
+        
+        if(valor == ''){
+            response = await fetch('/setores/receberSetores/');
+        }else{
+             response = await fetch(`/setores/receberSetoresParam/${valor}`);
+        }
+        
         const setores = await response.json();
 
         lista.innerHTML = '';   
@@ -248,7 +254,6 @@
         total_setores_kpi.innerHTML = cont;
         searchSetor.value = '';
     }
-
 </script>
 
 
