@@ -6,11 +6,11 @@ router.get("/", function (req, res) {
 });
 
 
-router.post("/postarSlack", function (req, res){
+router.post("/postarSlack", async (req, res) => {
     const dados = req.body;
 
     try {
-        const resposta =  fetch(process.env.URL_SLACK_CHAMADO, {
+        const resposta = await fetch(process.env.URL_SLACK_CHAMADO, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
