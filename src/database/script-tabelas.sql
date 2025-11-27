@@ -21,6 +21,9 @@ perfil VARCHAR(20),
 		CHECK (perfil IN ('Conservador', 'Moderado', 'Arrojado'))
 );
 
+INSERT INTO usuario (nome, dtNascimento, email, senha, perfil) VALUES
+('Alexandre Silva', '1990-05-15', 'alexandre@example.com', 'senha123', 'Arrojado');
+
 CREATE TABLE empresa (
 idEmpresa INT PRIMARY KEY AUTO_INCREMENT,
 nome VARCHAR(80) NOT NULL,
