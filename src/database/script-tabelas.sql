@@ -88,10 +88,10 @@ CONSTRAINT primariesKeyInfoEmpresa PRIMARY KEY (idInfo, fkEmpresa)
 -- ('Bruno Cordeiro', '1985-09-23', 'bruno.cordeiro@email.com', 'senha123', 'Moderado'),
 -- ('Carla Menezes', '1998-02-15', 'carla.menezes@email.com', 'senha123', 'Arrojado');
 
--- INSERT INTO empresa (nome, ticker, setor, logo) VALUES
--- ('Vale S.A.', 'VALE3', 'Mineração', 'vale_logo.png'),
--- ('Petrobras', 'PETR4', 'Energia', 'petrobras_logo.png'),
--- ('Itaú Unibanco', 'ITUB4', 'Financeiro', 'itau_logo.png');
+INSERT INTO empresa (nome, ticker, setor, logo) VALUES
+('Vale S.A.', 'VALE3', 'Mineração', 'vale_logo.png'),
+('Petrobras', 'PETR4', 'Energia', 'petrobras_logo.png'),
+('Itaú Unibanco', 'ITUB4', 'Financeiro', 'itau_logo.png');
 
 -- INSERT INTO acoes (
 --  dtAtual, precoAbertura, precoFechamento, precoMaisAlto, precoMaisBaixo, volume, ticker, fkEmpresa

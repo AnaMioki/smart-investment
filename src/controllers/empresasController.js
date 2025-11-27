@@ -34,7 +34,8 @@ function editarEmpresa(req, res) {
         idEmpresa: id,
         nomeEmpresa: body.nomeEmpresa ?? body.nome ?? '',
         setor: body.setor ?? '',
-        ticker: body.ticker ?? body.cod ?? ''
+        ticker: body.ticker ?? body.cod ?? '',
+        logoURL: body.logoURL ?? body.logo ?? ''
     };
 
     empresasModel.editarEmpresa(dados)

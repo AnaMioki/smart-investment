@@ -37,7 +37,8 @@
 
             <!-- botão verde para adicionar empresa -->
             <div style="margin: 1.2rem 0;">
-                <button id="btnAdicionarEmpresa" class="btn primary add-empresa-btn" onclick="abrirCadastroEmpresa()">Adicionar empresa</button>
+                <button id="btnAdicionarEmpresa" class="btn primary add-empresa-btn"
+                    onclick="abrirCadastroEmpresa()">Adicionar empresa</button>
             </div>
 
             <div class="action-list">
@@ -62,7 +63,7 @@
 </html>
 <script src="Style/js/fazerHamburguer.js"></script>
 <script>
- window.onload = function() {
+    window.onload = function () {
         carregarEmpresas();
     };
 
@@ -151,18 +152,21 @@
             empresas.forEach(empresa => {
                 const id = empresa.idEmpresa ?? empresa.id ?? empresa.ID ?? empresa._id;
                 const nome = empresa.nomeEmpresa ?? empresa.nome ?? empresa.companyName ?? '';
-                const ticker = empresa.ticker ?? empresa.cod ?? '';
+                const ticker = empresa.ticker ?? empresa.cod ?? empresa.symbol ?? '';
                 const setor = empresa.setor ?? empresa.sector ?? '';
-                const descricao = empresa.descricao ?? empresa.description ?? '';
+                const logoURL = empresa.logoURL ?? empresa.logo_url ?? empresa.logo ?? empresa.logoUrl ?? empresa.imagem ?? '';
 
                 const actionCard = document.createElement('div');
                 actionCard.className = 'action-card';
                 actionCard.dataset.id = id;
+                actionCard.dataset.logo = logoURL;
                 actionCard.innerHTML = `
-                    <div class="action-info">
-                        <h2 class="empresa-nome">${escapeHtml(nome)} ${ticker ? `(${escapeHtml(ticker)})` : ''}</h2>
-                        <p class="empresa-setor">Setor: ${escapeHtml(setor)}</p>
-                        <p class="empresa-desc" style="opacity:.8;font-size:0.95rem;margin-top:.6rem">${escapeHtml(descricao)}</p>
+                    <div class="action-top" style="display:flex;gap:.9rem;align-items:center;">
+                       
+                        <div class="action-info">
+                            <h2 class="empresa-nome">${escapeHtml(nome)} ${ticker ? `(${escapeHtml(ticker)})` : ''}</h2>
+                            <p class="empresa-setor">Setor: ${escapeHtml(setor)}</p>
+                        </div>
                     </div>
                     <div class="buttons">
                         <img onclick="abrirEditorEmpresa(this, ${id})" src="Style/assets/pencilIcon.svg" alt="editar">
@@ -177,18 +181,22 @@
     }
 
     function abrirEditorEmpresa(btnEl, id) {
-        // cria modal de edição
         if (document.querySelector('.empresa-modal')) return;
 
-        // busca dados atuais do card (fallback caso queira abrir sem recarregar)
         const card = btnEl ? btnEl.closest('.action-card') : document.querySelector(`.action-card[data-id="${id}"]`);
         const nomeEl = card?.querySelector('.empresa-nome');
         const setorEl = card?.querySelector('.empresa-setor');
-     
+        const logoContainer = card?.querySelector('.empresa-logo');
 
         const nomeText = nomeEl ? nomeEl.innerText.replace(/\s*\(.*\)$/, '').trim() : '';
         const tickerMatch = nomeEl ? (nomeEl.innerText.match(/\(([^)]+)\)/) || [null, ''])[1] : '';
         const setorText = setorEl ? setorEl.innerText.replace(/^Setor:\s*/i, '').trim() : '';
+
+        let logoURL = card?.dataset?.logo ?? '';
+        if (!logoURL && logoContainer) {
+            const img = logoContainer.querySelector('img');
+            logoURL = img ? img.src : '';
+        }
 
         const overlay = document.createElement('div');
         overlay.className = 'empresa-modal';
@@ -205,6 +213,8 @@
                     <input id="modal-ticker" value="${escapeHtml(tickerMatch)}">
                     <label>Setor</label>
                     <input id="modal-setor" value="${escapeHtml(setorText)}">
+                    <label>URL do Logo</label>
+                    <input id="modal-logoURL" value="${escapeHtml(logoURL)}" placeholder="https://exemplo.com/logo.png">
                 </div>
                 <footer>
                     <button class="btn primary" id="modal-save">Salvar</button>
@@ -218,10 +228,7 @@
             overlay.remove();
             document.removeEventListener('keydown', onKey);
         };
-
-        const onKey = (e) => {
-            if (e.key === 'Escape') close();
-        };
+        const onKey = (e) => { if (e.key === 'Escape') close(); };
         document.addEventListener('keydown', onKey);
 
         overlay.querySelector('.empresa-modal-close').addEventListener('click', close);
@@ -232,8 +239,9 @@
             const novoNome = overlay.querySelector('#modal-nome').value.trim();
             const novoTicker = overlay.querySelector('#modal-ticker').value.trim();
             const novoSetor = overlay.querySelector('#modal-setor').value.trim();
+            const novoLogoURL = overlay.querySelector('#modal-logoURL').value.trim();
 
-            if (!novoNome) {
+            if (!novoNome || !novoTicker || !novoSetor) {
                 overlay.querySelector('#modal-nome').focus();
                 return;
             }
@@ -246,7 +254,8 @@
                         idEmpresa: id,
                         nomeEmpresa: novoNome,
                         ticker: novoTicker,
-                        setor: novoSetor
+                        setor: novoSetor,
+                        logoURL: novoLogoURL
                     })
                 });
                 if (!resp.ok) throw new Error('Falha ao editar: ' + resp.statusText);
@@ -282,7 +291,7 @@
 
     function escapeHtml(str) {
         if (!str) return '';
-        return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+        return String(str).replace(/[&<>"']/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s]));
     }
 
     function editarEmpresa(id) {
@@ -290,7 +299,7 @@
         fetch(`/empresas/editarEmpresa`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id: id, nome: 'Nome Editado', ticker: 'TCKR', setor: 'Setor Editado' })
+            body: JSON.stringify({ id: id, nome: 'Nome Editado', ticker: 'TCKR', setor: 'Setor Editado', logoURL: 'https://exemplo.com/logo_editado.png' })
         }).then(resp => {
             if (!resp.ok) throw new Error('Falha ao editar: ' + resp.statusText);
             return resp.json();
@@ -320,6 +329,8 @@
                     <input id="new-ticker" placeholder="EXEM">
                     <label>Setor</label>
                     <input id="new-setor" placeholder="Setor">
+                    <label>URL do Logo</label>
+                    <input id="new-logo" placeholder="https://exemplo.com/logo.png">
                 </div>
                 <footer>
                     <button class="btn primary" id="new-save">Salvar</button>
@@ -344,10 +355,11 @@
             const nome = overlay.querySelector('#new-nome').value.trim();
             const ticker = overlay.querySelector('#new-ticker').value.trim();
             const setor = overlay.querySelector('#new-setor').value.trim();
+            const logoURL = overlay.querySelector('#new-logo').value.trim();
 
-            if (!nome || !ticker || !setor ) {
-            
-                [ '#new-nome', '#new-ticker', '#new-setor' ].forEach(sel => {
+            if (!nome || !ticker || !setor || !logoURL) {
+
+                ['#new-nome', '#new-ticker', '#new-setor', '#new-logo'].forEach(sel => {
                     const el = overlay.querySelector(sel);
                     if (el && !el.value.trim()) {
                         el.style.borderColor = '#dc2626';
@@ -364,7 +376,8 @@
                     body: JSON.stringify({
                         nomeEmpresa: nome,
                         ticker: ticker,
-                        setor: setor
+                        setor: setor,
+                        logoURL: logoURL
                     })
                 });
                 if (!resp.ok) throw new Error('Falha ao cadastrar: ' + resp.statusText);
