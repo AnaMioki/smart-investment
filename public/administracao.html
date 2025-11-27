@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="Style/assets/smartLogoVetor.ico">
+    <link rel="stylesheet" href="Style//css/admCSS.css">
+    <title>Administração Smart Smart Investment</title>
+</head>
+
+<body>
+    <div id="mainContainer">
+         <div id="header">
+            <img id="logo" src="Style/assets/smartLogoVetor.svg" alt="logoSmartInvestment">
+            <div class="navbar">
+                <a href="dashboard.html" class="selected">Dashboard</a>
+                <a href="setores.html">Setores</a>
+                <a href="acoes.html">Ações</a>
+                <a href="comparacoes.html">Comparações</a>
+                <a href="perfil.html">Perfil</a>
+            </div>
+
+            <div class="notification-container">
+                <span class="notification-badge">3</span>
+                <img id="notificacaoIcon" src="Style/assets/sinoNotificacao.svg" alt="">
+                <div class="notificacao-dropdown">
+                    <div class="notificacao-item">
+                        <div class="notificacao-content">
+                            <div class="notificacao-title">Atualização de Preço</div>
+                            <div class="notificacao-text">AAPL atingiu sua meta de preço de R$180,00</div>
+                            <div class="notificacao-time">Há 5 minutos</div>
+                        </div>
+                    </div>
+                    <div class="notificacao-item">
+                        <div class="notificacao-content">
+                            <div class="notificacao-title">Nova Recomendação</div>
+                            <div class="notificacao-text">Nova análise disponível para MSFT</div>
+                            <div class="notificacao-time">Há 30 minutos</div>
+                        </div>
+                    </div>
+                    <div class="notificacao-item">
+                        <div class="notificacao-content">
+                            <div class="notificacao-title">Alerta de Mercado</div>
+                            <div class="notificacao-text">Índice de volatilidade aumentou significativamente</div>
+                            <div class="notificacao-time">Há 1 hora</div>
+                        </div>
+                    </div>
+                     <a href="notificacoes.html">Ver todas as notificações</a>
+                </div>
+            </div>
+            <img id="perfilIcon" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" style="cursor: pointer;"
+                onclick="sair()" alt="">
+
+            <div class="hamburger">
+                <div class="bar1"></div>
+                <div class="bar2"></div>
+                <div class="bar3"></div>
+            </div>
+            <nav class="mobile-menu">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="setores.html">Setores</a>
+                <a href="acoes.html">Ações</a>
+                <a href="comparacoes.html">Comparações</a>
+                <a href="perfil.html">Perfil</a>
+            </nav>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
