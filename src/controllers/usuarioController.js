@@ -25,7 +25,8 @@ function autenticar(req, res) {
                     res.json({
                     idUsuario: usuario.idUsuario,      
                     nome: usuario.nome,
-                    email: usuario.email
+                    email: usuario.email,
+                    perfil: usuario.perfil
                 });
                    
                 } else if (resultadoAutenticar.length == 0) {

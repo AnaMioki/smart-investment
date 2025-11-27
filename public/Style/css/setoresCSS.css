@@ -869,6 +869,18 @@ img#perfilIcon {
     font-weight: 500;
 }
 
+.dentro-popup{
+    display: flex;
+    align-items: center;
+    gap: 2vh;
+    justify-content: space-around;
+}
+
+.dentro-popup img{
+    height: 3vh;
+    width: 3vh;
+}
+
 @media (max-width: 600px) {
     .popup-conteudo {
         width: 95%;
