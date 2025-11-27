@@ -11,8 +11,9 @@ function cadastrarEmpresa(dados) {
     const nome = esc(dados.nomeEmpresa);
     const setor = esc(dados.setor);
     const ticker = esc(dados.ticker ?? '');
+    const logoURL = esc(dados.logoURL ?? '');
 
-    var instrucaoSql = `INSERT INTO empresa (nome, setor, ticker) VALUES ('${nome}', '${setor}', '${ticker}');`;
+    var instrucaoSql = `INSERT INTO empresa (nome, setor, ticker, logo) VALUES ('${nome}', '${setor}', '${ticker}', '${logoURL}');`;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }
@@ -26,12 +27,14 @@ function editarEmpresa(dados) {
     const nome = esc(dados.nomeEmpresa);
     const setor = esc(dados.setor);
     const ticker = esc(dados.ticker);
+    const logoURL = esc(dados.logoURL);
 
     const instrucaoSql = `
         UPDATE empresa
         SET nome = '${nome}',
             setor = '${setor}',
-            ticker = '${ticker}'
+            ticker = '${ticker}',
+            logo = '${logoURL}'
         WHERE idEmpresa = ${id};
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
