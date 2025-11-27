@@ -22,17 +22,18 @@
                 <a href="#contato">Contato</a>
             </div>
             <button id="btnComecar" onclick="loginRedirect()">Começar Agora</button>
-                <button class="menu-mobile-icon" id="menuMobileBtn" aria-label="Abrir menu" style="display:none">&#9776;</button>
-                <div class="menu-mobile" id="menuMobile" style="display:none;">
-                    <a href="#container">Início</a>
-                    <a href="#Sobre">Sobre</a>
-                    <a href="#pqSmart">Por que Smart</a>
-                    <a href="#solucao">Solução</a>
-                    <a href="#contato">Contato</a>
-                    <a href="#segmentos">Segmentos</a>
-                    <a href="#funcionamento">Funcionamento</a>
-                    <a href="#footer">Rodapé</a>
-                </div>
+            <button class="menu-mobile-icon" id="menuMobileBtn" aria-label="Abrir menu"
+                style="display:none">&#9776;</button>
+            <div class="menu-mobile" id="menuMobile" style="display:none;">
+                <a href="#container">Início</a>
+                <a href="#Sobre">Sobre</a>
+                <a href="#pqSmart">Por que Smart</a>
+                <a href="#solucao">Solução</a>
+                <a href="#contato">Contato</a>
+                <a href="#segmentos">Segmentos</a>
+                <a href="#funcionamento">Funcionamento</a>
+                <a href="#footer">Rodapé</a>
+            </div>
         </div>
 
         <div id="inicio">
@@ -119,12 +120,12 @@
 
             </div>
 
-            
+
         </div>
-        
+
         <div id="historia">
 
-        
+
             <p id="tituloHistoria">
                 Nossa História
             </p>
@@ -377,8 +378,8 @@
                     </div>
 
                 </div>
-
                 <div id="formularioContato">
+
                     <h1>Fale Conosco</h1>
 
                     <div class="inputsLinha">
@@ -392,6 +393,8 @@
                         </div>
                     </div>
 
+
+
                     <div class="inputsLinha">
                         <div class="grupoInput">
                             <label for="telefone">Telefone</label>
@@ -400,7 +403,10 @@
                         <div class="grupoInput">
                             <label for="assunto">Assunto</label>
                             <select id="assunto">
-                                <option value="">Selecione um Assunto</option>
+                                <option value="Erro" selected>Erro na plataforma</option>
+                                <option value="Duvida">Duvida sobre a plataforma</option>
+                                <option value="Contato">Contato com a equipe da smart</option>
+                                <option value="Outros">Outros assuntos</option>
                             </select>
                         </div>
                     </div>
@@ -410,41 +416,134 @@
                         <textarea id="mensagem" name="mensagem"></textarea>
                     </div>
 
-                    <button id="btnEnviarMensagem">Enviar Mensagem</button>
-                </div>
+                    <button id="btnEnviarMensagem" onclick="enviarChamado()">Enviar Mensagem</button>
 
+                </div>
+                <div id="msg" class="container-txt">
+                    <div class="caixa-de-texto-container" id="caixaTexto">
+                        <p id="texto-caixa">Alterações realizadas com sucesso</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="footer">
+                <span>© 2025 Smart Investment. Todos os direitos reservados.</span>
             </div>
         </div>
-
-        <div id="footer">
-            <span>© 2025 Smart Investment. Todos os direitos reservados.</span>
-        </div>
-    </div>
 </body>
 
 </html>
 
 <script>
 
-loginRedirect = () => {
-    window.location.href = 'login.html';
-}
+    loginRedirect = () => {
+        window.location.href = 'login.html';
+    }
 
-const menuBtn = document.getElementById('menuMobileBtn');
-const menuMobile = document.getElementById('menuMobile');
+    const menuBtn = document.getElementById('menuMobileBtn');
+    const menuMobile = document.getElementById('menuMobile');
 
-if(menuBtn && menuMobile) {
-    menuBtn.addEventListener('click', () => {
-        menuMobile.classList.toggle('open');
-        menuMobile.style.display = menuMobile.classList.contains('open') ? 'block' : 'none';
-    });
-
-    menuMobile.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => {
-            menuMobile.classList.remove('open');
-            menuMobile.style.display = 'none';
+    if (menuBtn && menuMobile) {
+        menuBtn.addEventListener('click', () => {
+            menuMobile.classList.toggle('open');
+            menuMobile.style.display = menuMobile.classList.contains('open') ? 'block' : 'none';
         });
-    });
-}
 
+        menuMobile.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                menuMobile.classList.remove('open');
+                menuMobile.style.display = 'none';
+            });
+        });
+    }
+
+</script>
+
+
+
+<script>
+
+    function enviarChamado() {
+
+
+
+        var nome = document.getElementById("nome").value;
+        var email = document.getElementById("email").value;
+        var telefone = document.getElementById("telefone").value;
+        var assunto = document.getElementById("assunto").value;
+        var mensagem = document.getElementById("mensagem").value;
+
+        if (!nome || !email || !telefone || !assunto || !mensagem) {
+            mensagemErro("Preencha todos os campos!");
+            return;
+        }
+
+        var regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!regexEmail.test(email)) {
+            mensagemErro("Digite um email válido!");
+            return;
+        }
+
+        var regexTelefone = /^[0-9]{8,15}$/;
+        if (!regexTelefone.test(telefone)) {
+            mensagemErro("Digite um telefone válido (somente números)!");
+            return;
+        }
+        chamarSlack();
+
+
+    }
+
+    function chamarSlack() {
+
+        var nome = document.getElementById("nome").value;
+        var email = document.getElementById("email").value;
+        var telefone = document.getElementById("telefone").value;
+        var assunto = document.getElementById("assunto").value;
+        var mensagem = document.getElementById("mensagem").value;
+
+        dadosCadastro = {
+            text: `
+        --- NOVO CHAMADO --- \n\n
+
+        Nome do usuário: ${nome} \n 
+        Email para contato: ${email}\n
+        Telefone para contato: ${telefone}\n\n
+        Motivo do contato: ${assunto}\n\n
+        Mensagem principal do contato: \n
+        ${mensagem} \n\n 
+
+        --------------------
+        `
+        }
+
+        fetch("/postarSlack", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(dadosCadastro),
+        }).then(async (res) => {
+            const resposta = await res.json();
+
+            if (res.ok) {
+                mensagemErro("Chamado enviado com sucesso!");
+            } else {
+                mensagemErro(resposta.erro || "Erro ao enviar");
+            }
+        })
+
+    }
+
+
+    function mensagemErro(mensagem) {
+        const msg = document.getElementById("msg");
+        msg.classList.add("ativa");
+        const atributoMensagem = document.getElementById("texto-caixa");
+        atributoMensagem.innerHTML = `${mensagem}`;
+        setTimeout(() => {
+            msg.classList.remove("ativa")
+        }, 1500);
+    }
 </script>
