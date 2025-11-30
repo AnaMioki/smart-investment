@@ -35,7 +35,6 @@
             <h1>Bem-vindo à Administração Smart Investment</h1>
             <p>Utilize o menu acima para navegar entre as seções de administração.</p>
 
-            <!-- botão verde para adicionar empresa -->
             <div style="margin: 1.2rem 0;">
                 <button id="btnAdicionarEmpresa" class="btn primary add-empresa-btn"
                     onclick="abrirCadastroEmpresa()">Adicionar empresa</button>
@@ -67,11 +66,13 @@
         carregarEmpresas();
     };
 
-    if (sessionStorage.getItem('ID_USUARIO') === null) {
+   if (sessionStorage.getItem('ID_USUARIO') === null) {
         showLoginCard(4);
     }
 
     function showLoginCard(seconds) {
+        document.body.classList.add('blurred');
+
         const overlay = document.createElement('div');
         overlay.className = 'login-overlay';
         overlay.innerHTML = `
@@ -109,14 +110,10 @@
         }, 100);
 
         btnNow.addEventListener('click', () => {
+            document.body.classList.remove('blurred');
             window.location.href = 'login.html';
         });
 
-        overlay.addEventListener('click', (e) => {
-            if (e.target === overlay) {
-                overlay.remove();
-            }
-        });
     }
 
     function sair() {
