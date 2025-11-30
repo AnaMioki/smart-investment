@@ -26,31 +26,9 @@
                 </div>
 
                 <div class="notification-container">
-                    <span class="notification-badge">3</span>
+                    <span class="notification-badge"></span>
                     <img id="notificacaoIcon" src="Style/assets/sinoNotificacao.svg" alt="">
                     <div class="notificacao-dropdown">
-                        <div class="notificacao-item">
-                            <div class="notificacao-content">
-                                <div class="notificacao-title">Atualização de Preço</div>
-                                <div class="notificacao-text">AAPL atingiu sua meta de preço de R$180,00</div>
-                                <div class="notificacao-time">Há 5 minutos</div>
-                            </div>
-                        </div>
-                        <div class="notificacao-item">
-                            <div class="notificacao-content">
-                                <div class="notificacao-title">Nova Recomendação</div>
-                                <div class="notificacao-text">Nova análise disponível para MSFT</div>
-                                <div class="notificacao-time">Há 30 minutos</div>
-                            </div>
-                        </div>
-                        <div class="notificacao-item">
-                            <div class="notificacao-content">
-                                <div class="notificacao-title">Alerta de Mercado</div>
-                                <div class="notificacao-text">Índice de volatilidade aumentou significativamente</div>
-                                <div class="notificacao-time">Há 1 hora</div>
-                            </div>
-                        </div>
-                        <a href="notificacoes.html">Ver todas as notificações</a>
                     </div>
                 </div>
                 <img id="perfilIcon" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" style="cursor: pointer;"
@@ -172,253 +150,94 @@
 <script src="Style/js/fazerHamburguer.js"></script>
 
 <script>
-    if (sessionStorage.getItem('ID_USUARIO') === null) {
-        showLoginCard(4);
-    }
+    document.addEventListener("DOMContentLoaded", carregarNotificacoes);
 
-    function showLoginCard(seconds) {
-        document.body.classList.add('blurred');
+    async function carregarNotificacoes() {
+        const idUsuario = sessionStorage.ID_USUARIO;
 
-        const overlay = document.createElement('div');
-        overlay.className = 'login-overlay';
-        overlay.innerHTML = `
-                <div class="login-card">
-                    <h3>É necessário fazer login</h3>
-                    <p>Você precisa entrar para acessar esta página. Redirecionando em <span id="login-timer">${seconds}</span>s</p>
-                    <div class="progress"><div class="progress-bar"></div></div>
-                    <div class="login-actions">
-                        <button id="btnLoginNow">Ir para login</button>
-                    </div>
-                </div>
-            `;
-        document.body.appendChild(overlay);
-
-        const bar = overlay.querySelector('.progress-bar');
-        const timerEl = overlay.querySelector('#login-timer');
-        const btnNow = overlay.querySelector('#btnLoginNow');
-
-        let remaining = seconds;
-        timerEl.textContent = remaining;
-
-        const totalMs = seconds * 1000;
-        const start = Date.now();
-
-        const interval = setInterval(() => {
-            const elapsed = Date.now() - start;
-            const pct = Math.min(100, (elapsed / totalMs) * 100);
-            bar.style.width = pct + '%';
-            const secLeft = Math.ceil((totalMs - elapsed) / 1000);
-            timerEl.textContent = secLeft > 0 ? secLeft : 0;
-            if (pct >= 100) {
-                clearInterval(interval);
-                window.location.href = 'login.html';
-            }
-        }, 100);
-
-        btnNow.addEventListener('click', () => {
-            document.body.classList.remove('blurred');
-            window.location.href = 'login.html';
-        });
-
-    }
-
-    const escritaEmail = document.getElementById('escritaEmail');
-    const usuario = document.getElementById('usuario');
-    const perfilRisco = document.getElementById('perfilRisco');
-    const pencilIcon = document.getElementById('pencilIcon');
-    const alertaAlteracao = document.getElementById('alertaAlteracao');
-
-    function escapeHtml(str) {
-        return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
-    }
-
-    function editarDadosPerfil() {
-        const nomeAtual = usuario.innerText.trim();
-        const emailAtual = escritaEmail.innerText.trim();
-        usuario.dataset.orig = nomeAtual;
-        escritaEmail.dataset.orig = emailAtual;
-        usuario.classList.add('editing');
-        escritaEmail.classList.add('editing');
-        usuario.innerHTML = `<span class="view-text">${escapeHtml(nomeAtual)}</span><input id="inputNome" class="edit-input" value="${escapeHtml(nomeAtual)}">`;
-        escritaEmail.innerHTML = `<span class="view-text">${escapeHtml(emailAtual)}</span><input id="inputEmail" class="edit-input" value="${escapeHtml(emailAtual)}">`;
-        document.querySelector('.actions-user-buttons').style.display = 'flex';
-        pencilIcon.style.opacity = '1';
-        setTimeout(() => document.getElementById('inputNome').focus(), 50);
-    }
-
-    function cancelarEdicaoDados() {
-        const buttons = document.querySelector('.actions-user-buttons');
-        buttons.style.display = 'none';
-        pencilIcon.style.opacity = '0.6';
-        const nomeOrig = usuario.dataset.orig || sessionStorage.NOME_USUARIO || '';
-        const emailOrig = escritaEmail.dataset.orig || sessionStorage.EMAIL_USUARIO || '';
-        usuario.classList.remove('editing');
-        escritaEmail.classList.remove('editing');
-        usuario.innerText = nomeOrig;
-        escritaEmail.innerText = emailOrig;
-        delete usuario.dataset.orig;
-        delete escritaEmail.dataset.orig;
-    }
-
-    function validarEmail(email) {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    }
-
-    function showAlerta(mensagem, duracao = 3000, bg = '#016630') {
-        const alerta = document.getElementById('alertaAlteracao');
-        alerta.innerHTML = `
-            <div class="alerta-conteudo">
-                <span class="alerta-texto">${mensagem}</span>
-                <div class="alerta-progress"><div class="alerta-progress-bar"></div></div>
-            </div>
-        `;
-        alerta.style.display = 'flex';
-        alerta.style.backgroundColor = bg;
-        alerta.style.opacity = '1';
-        const barra = alerta.querySelector('.alerta-progress-bar');
-        barra.style.transition = `width ${duracao}ms linear`;
-        barra.style.width = '100%';
-        requestAnimationFrame(() => barra.style.width = '0%');
-        setTimeout(() => {
-            alerta.style.opacity = '0';
-            setTimeout(() => {
-                alerta.style.display = 'none';
-                alerta.innerHTML = '';
-            }, 300);
-        }, duracao);
-    }
-
-    function salvarEdicaoDados() {
-        const inputNome = document.getElementById('inputNome');
-        const inputEmail = document.getElementById('inputEmail');
-        if (!inputNome || !inputEmail) return;
-        const novoNome = inputNome.value.trim();
-        const novoEmail = inputEmail.value.trim();
-        if (!novoNome) return;
-        if (!validarEmail(novoEmail)) {
-            inputEmail.classList.add('invalid');
-            setTimeout(() => inputEmail.classList.remove('invalid'), 1600);
+        if (!idUsuario) {
+            console.warn("ID_USUARIO não encontrado no sessionStorage.");
             return;
         }
-        const buttons = document.querySelector('.actions-user-buttons');
-        if (buttons) buttons.style.display = 'none';
-        if (pencilIcon) pencilIcon.style.opacity = '0.6';
-        usuario.classList.remove('editing');
-        escritaEmail.classList.remove('editing');
-        usuario.innerText = novoNome;
-        escritaEmail.innerText = novoEmail;
-        sessionStorage.NOME_USUARIO = novoNome;
-        sessionStorage.EMAIL_USUARIO = novoEmail;
-        showAlerta('Dados alterados com sucesso!', 3000, '#016630');
-        fetch('/usuarios/atualizarDados', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+
+        fetch("/notificacoes/receberNotificacoes", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
             body: JSON.stringify({
-                idUsuario: sessionStorage.ID_USUARIO,
-                novoNome: novoNome,
-                novoEmail: novoEmail
+                idServer: idUsuario,
             })
-        }).then(response => {
-            if (!response.ok) throw new Error('Erro ao atualizar dados no servidor.');
-            return response.json();
-        }).catch(error => {
-            console.error('Erro:', error);
-        });
+        })
+            .then(res => {
+                if (!res.ok) throw new Error("Erro ao buscar notificações");
+                return res.json();
+            })
+            .then(notificacoes => {
+                atualizarDropdown(notificacoes);
+            })
+            .catch(err => console.error(err));
     }
 
-    salvarEdicao = () => {
-        const buttons = document.querySelector('.actions-buttons');
-        if (buttons) buttons.style.display = 'none';
-        if (pencilIcon) pencilIcon.style.opacity = '0.6';
-        showAlerta('Perfil alterado com sucesso!', 3000, '#016630');
-        const selectedOption = document.querySelector('.perfilOpcao.selected');
-        if (selectedOption) {
-            const novoPerfil = selectedOption.id;
-            const perfilCapitalizado = novoPerfil.charAt(0).toUpperCase() + novoPerfil.slice(1);
-            const perfilEl = document.getElementById('perfilRisco');
-            if (perfilEl) perfilEl.innerText = perfilCapitalizado;
-            aplicarCorPerfil(novoPerfil);
-            sessionStorage.PERFIL_USUARIO = perfilCapitalizado;
-            fetch('/usuarios/atualizarPerfil', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    idUsuario: sessionStorage.ID_USUARIO,
-                    novoPerfil: sessionStorage.PERFIL_USUARIO
-                })
-            }).then(response => {
-                if (!response.ok) throw new Error('Erro ao atualizar perfil no servidor.');
-                return response.json();
-            }).catch(error => {
-                console.error('Erro:', error);
-            });
-        }
-    }
+    function atualizarDropdown(notificacoes) {
+        var contador = 0;
 
-    async function carregarDados() {
-        if (!sessionStorage.ID_USUARIO) {
-            showLoginCard(6);
-            return;
-        }
+        const container = document.querySelector(".notificacao-dropdown");
+        const badge = document.querySelector(".notification-badge");
 
-        let perfilFromServer = null;
-        try {
-            const resp = await fetch('/usuarios/buscarUsuarios', { method: 'GET', headers: { 'Content-Type': 'application/json' } });
-            if (resp.ok) {
-                const usuarios = await resp.json();
-                const usuarioObj = usuarios.find(u => String(u.idUsuario) === String(sessionStorage.ID_USUARIO));
-                if (usuarioObj) {
-                    escritaEmail.innerText = usuarioObj.email || sessionStorage.EMAIL_USUARIO || '';
-                    usuario.innerText = usuarioObj.nome || sessionStorage.NOME_USUARIO || '';
-                    perfilFromServer = usuarioObj.perfil || '';
-                }
+        // Limpa o container (evita duplicar)
+        container.innerHTML = "";
+        var qtd_not = 0;
+
+        notificacoes.forEach(not => {
+            if (not.lido == 0) {
+                qtd_not++;
             }
-        } catch (e) { }
-
-        if (!perfilFromServer) {
-            perfilFromServer = sessionStorage.PERFIL_USUARIO || '';
-        }
-
-        if (perfilFromServer) {
-            sessionStorage.PERFIL_USUARIO = perfilFromServer;
-            aplicarPerfilSelecionado(perfilFromServer);
-            aplicarCorPerfil(perfilFromServer);
-        } else {
-            perfilRisco.innerText = '';
-            aplicarCorPerfil('');
-        }
-    }
-
-    function aplicarPerfilSelecionado(perfilValor) {
-        const perfilId = perfilValor.toString().toLowerCase();
-        perfilRisco.innerText = perfilValor.charAt(0).toUpperCase() + perfilValor.slice(1);
-        document.querySelectorAll('.perfilOpcao').forEach(option => {
-            const isSelected = option.id === perfilId;
-            option.classList.toggle('selected', isSelected);
-            const check = option.querySelector('.check');
-            if (check) check.classList.toggle('active', isSelected);
         });
-        aplicarCorPerfil(perfilValor);
+
+        // Atualiza badge (mostra no máx. 9+)
+        badge.textContent = qtd_not > 9 ? "9+" : qtd_not;
+
+        notificacoes.forEach(not => {
+            if (contador < 3) {
+                const item = document.createElement("div");
+                item.classList.add("notificacao-item");
+
+                item.innerHTML = `
+                        <div class="notificacao-content">
+                            <div class="notificacao-title">${not.tipo}</div>
+                            <div class="notificacao-text">${not.mensagem}</div>
+                            <div class="notificacao-time">${formatarTempo(not.dtNotificacao)}</div>
+                        </div>
+                    `;
+
+                container.appendChild(item);
+                console.log(not.tipo)
+            }
+            contador++;
+        });
+
+        // Link para ver todas
+        const link = document.createElement("a");
+        link.href = "notificacoes.html";
+        link.textContent = "Ver todas as notificações";
+        container.appendChild(link);
     }
 
-    function aplicarCorPerfil(perfilValor) {
-        const p = (perfilValor || '').toString().toLowerCase();
-        const el = document.getElementById('perfilRisco');
-        if (!el) return;
-        el.style.display = 'inline-block';
-        if (p === 'conservador') {
-            el.style.color = '#016630';
-            el.style.backgroundColor = '#e6f4ea';
-        } else if (p === 'moderado') {
-            el.style.color = '#b95f00';
-            el.style.backgroundColor = '#fff4e6';
-        } else if (p === 'arrojado') {
-            el.style.color = '#c0262e';
-            el.style.backgroundColor = '#fdecea';
-        } else {
-            el.style.color = '#333';
+    function formatarTempo(dataBanco) {
+        const data = new Date(dataBanco);
+        const agora = new Date();
 
-        }
+        const diffMs = agora - data;
+        const diffMin = Math.floor(diffMs / 60000);
+        const diffHoras = Math.floor(diffMin / 60);
+
+        if (diffMin < 1) return "Agora mesmo";
+        if (diffMin < 60) return `Há ${diffMin} minutos`;
+        if (diffHoras < 24) return `Há ${diffHoras} hora${diffHoras > 1 ? "s" : ""}`;
+
+        const diffDias = Math.floor(diffHoras / 24);
+        return `Há ${diffDias} dia${diffDias > 1 ? "s" : ""}`;
     }
 
     cancelarEdicao = () => {
@@ -466,7 +285,10 @@
         if (selectedOption) {
             const novoPerfil = selectedOption.id;
             document.getElementById('perfilRisco').innerText = novoPerfil.charAt(0).toUpperCase() + novoPerfil.slice(1);
-            aplicarCorPerfil(novoPerfil);
+
+            var email = sessionStorage.EMAIL_USUARIO;
+            alterarPerfil(novoPerfil, email)
+
             sessionStorage.PERFIL_USUARIO = novoPerfil.charAt(0).toUpperCase() + novoPerfil.slice(1);
             fetch('/usuarios/atualizarPerfil', {
                 method: 'POST',
@@ -507,6 +329,32 @@
         window.location.href = "./login.html";
     }
 
+    function carregarDados() {
+        var email = sessionStorage.EMAIL_USUARIO;
+        var nome = sessionStorage.NOME_USUARIO;
+        var perfil = sessionStorage.PERFIL_USUARIO;
+
+        if (perfil == "Conservador") {
+            const elem = document.getElementById("conservador");
+            elem.classList.add("selected");
+        }
+
+        if (perfil == "Moderado") {
+            const elem = document.getElementById("moderado");
+            elem.classList.add("selected");
+        }
+
+        if (perfil == "Arrojado") {
+            const elem = document.getElementById("arrojado");
+            elem.classList.add("selected");
+        }
+
+        console.log(perfil)
+        escritaEmail.innerHTML = email;
+        usuario.innerHTML = nome;
+        perfilRisco.innerHTML = perfil;
+    }
+
     carregarDados();
 
     document.querySelector('#notificacaoIcon').addEventListener('click', function (e) {
@@ -514,6 +362,50 @@
         const dropdown = document.querySelector('.notificacao-dropdown');
         dropdown.classList.toggle('active');
     });
+
+    document.addEventListener('click', function (e) {
+        const dropdown = document.querySelector('.notificacao-dropdown');
+        if (!e.target.closest('.notificacao-container')) {
+            dropdown.classList.remove('active');
+        }
+    });
+
+    function alterarPerfil(novoPerfil, email) {
+        fetch("/usuarios/alterar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                emailServer: email,
+                perfilServer: novoPerfil
+            })
+        }).then(function (resposta) {
+            console.log("ESTOU NO THEN DO entrar()!")
+
+            if (resposta.ok) {
+                console.log(resposta);
+
+
+                resposta.json().then(json => {
+                    console.log("PERFIL_USUARIO salvo no sessionStorage:", sessionStorage.ID_USUARIO);
+                    setTimeout(function () { }, 1000); // apenas para exibir o loading
+                });
+            } else {
+                resposta.text().then(msg => alert(msg));
+                console.log("Houve um erro ao tentar realizar a atualização do perfil de investidor!");
+                alert("Houve um erro ao tentar realizar a atualização do perfil de investidor!")
+                // resposta.text().then(texto => {
+                //     console.error(texto);
+                // });
+            }
+
+        }).catch(function (erro) {
+            console.log(erro);
+        })
+
+        return false;
+    }
 
     document.addEventListener('click', function (e) {
         const dropdown = document.querySelector('.notificacao-dropdown');
