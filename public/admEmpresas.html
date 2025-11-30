@@ -68,7 +68,7 @@
     };
 
     if (sessionStorage.getItem('ID_USUARIO') === null) {
-        showLoginCard(6);
+        showLoginCard(4);
     }
 
     function showLoginCard(seconds) {
@@ -109,22 +109,18 @@
         }, 100);
 
         btnNow.addEventListener('click', () => {
-            clearInterval(interval);
             window.location.href = 'login.html';
         });
 
         overlay.addEventListener('click', (e) => {
             if (e.target === overlay) {
-                clearInterval(interval);
                 overlay.remove();
             }
         });
     }
 
     function sair() {
-        sessionStorage.removeItem('ID_USUARIO');
-        sessionStorage.removeItem('NOME_USUARIO');
-        sessionStorage.removeItem('TIPO_USUARIO');
+        sessionStorage.clear();
         window.location.href = 'index.html';
     }
 
