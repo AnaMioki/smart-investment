@@ -110,6 +110,26 @@
         });
 
     }
+
+    function excluirUsuario(idUsuario) {
+            fetch(`/usuarios/excluirUsuario/${idUsuario}`, {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Usuário excluído com sucesso!');
+                        listarUsuarios();
+                    } else {
+                        alert('Erro ao excluir usuário.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    alert('Erro ao excluir usuário.');
+                });
+        }
+
         function sair() {
             sessionStorage.removeItem('ID_USUARIO');
             sessionStorage.removeItem('NOME_USUARIO');
