@@ -57,9 +57,16 @@
                         <img id="imgPerfil" src="Style/assets/pefilIconAzul.svg" alt="">
                         <div class="info">
                             <p id="usuario"></p>
-                            <p id="email"><img src="Style/assets/emailIcon.svg" alt=""><span id="escritaEmail"></span>
+                            <p id="email"><span id="escritaEmail"></span>
                             </p>
+                            <img class="btnEditar" onclick="editarDadosPerfil()" src="Style/assets/pencilIcon.svg"
+                                alt="">
+                            <div class="actions-user-buttons" style="display: none;">
+                                <button class="btn-cancel" onclick="cancelarEdicaoDados()">Cancelar</button>
+                                <button class="btn-save" onclick="salvarEdicaoDados()">Salvar Alterações</button>
+                            </div>
                         </div>
+
                     </div>
 
                     <span id="perfilRisco"></span>
@@ -77,28 +84,11 @@
                     </div>
 
                     <div class="perfilInvestidor">
-                        <div class="perfilOpcao" id="conservador">
+                        <div class="perfilOpcao selected" id="conservador">
                             <div class="perfilHeader">
                                 <span class="check"></span>
                                 <div class="perfilTitulo">Conservador</div>
                                 <span class="perfilTag conservador">conservador</span>
-                            </div>
-                            <div class="perfilDesc">
-                                Para investidores que estão começando e buscam aprender sobre o mercado
-                            </div>
-                            <ul class="perfilFeatures">
-                                <li>Ações de empresas consolidadas e conhecidas</li>
-                                <li>Setores com menor volatilidade</li>
-                                <li>Foco em aprendizado e estabilidade</li>
-                                <li>Recomendações mais conservadoras</li>
-                            </ul>
-                        </div>
-
-                        <div class="perfilOpcao" id="moderado">
-                            <div class="perfilHeader">
-                                <span class="check"></span>
-                                <div class="perfilTitulo">Moderado</div>
-                                <span class="perfilTag iniciante">moderado</span>
                             </div>
                             <div class="perfilDesc">
                                 Para investidores que priorizam segurança e retornos consistentes
@@ -108,6 +98,23 @@
                                 <li>Empresas com fundamentos sólidos</li>
                                 <li>Volatilidade moderada</li>
                                 <li>Equilíbrio entre risco e retorno</li>
+                            </ul>
+                        </div>
+
+                        <div class="perfilOpcao" id="moderado">
+                            <div class="perfilHeader">
+                                <span class="check"></span>
+                                <div class="perfilTitulo">Moderado</div>
+                                <span class="perfilTag moderado">moderado</span>
+                            </div>
+                            <div class="perfilDesc">
+                                Para investidores que estão começando e buscam aprender sobre o mercado
+                            </div>
+                            <ul class="perfilFeatures">
+                                <li>Ações de empresas consolidadas e conhecidas</li>
+                                <li>Setores com menor volatilidade</li>
+                                <li>Foco em aprendizado e estabilidade</li>
+                                <li>Recomendações mais conservadoras</li>
                             </ul>
                         </div>
 
@@ -245,18 +252,21 @@
             checks.forEach(check => check.classList.remove('active'));
         });
 
-        const perfilRisco = document.getElementById('perfilRisco').innerText.toLowerCase();
+        const perfilRiscoTexto = document.getElementById('perfilRisco').innerText.toLowerCase();
         const perfilMap = {
-            'moderado': 'moderado',
             'conservador': 'conservador',
+            'moderado': 'moderado',
             'arrojado': 'arrojado'
         };
 
-        const selectedPerfil = perfilMap[perfilRisco];
+        const selectedPerfil = perfilMap[perfilRiscoTexto];
         if (selectedPerfil) {
             const selectedOption = document.getElementById(selectedPerfil);
             selectedOption.classList.add('selected');
             selectedOption.querySelector('.check').classList.add('active');
+            aplicarCorPerfil(selectedPerfil);
+        } else {
+            aplicarCorPerfil('');
         }
     }
 
@@ -280,6 +290,19 @@
             alterarPerfil(novoPerfil, email)
 
             sessionStorage.PERFIL_USUARIO = novoPerfil.charAt(0).toUpperCase() + novoPerfil.slice(1);
+            fetch('/usuarios/atualizarPerfil', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    idUsuario: sessionStorage.ID_USUARIO,
+                    novoPerfil: sessionStorage.PERFIL_USUARIO
+                })
+            }).then(response => {
+                if (!response.ok) throw new Error('Erro ao atualizar perfil no servidor.');
+                return response.json();
+            }).catch(error => {
+                console.error('Erro:', error);
+            });
         }
     }
 
@@ -384,4 +407,10 @@
         return false;
     }
 
+    document.addEventListener('click', function (e) {
+        const dropdown = document.querySelector('.notificacao-dropdown');
+        if (!e.target.closest('.notification-container')) {
+            dropdown.classList.remove('active');
+        }
+    });
 </script>
