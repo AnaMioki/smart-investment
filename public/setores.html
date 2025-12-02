@@ -23,31 +23,9 @@
             </div>
 
             <div class="notification-container">
-                <span class="notification-badge">3</span>
+                <span class="notification-badge"></span>
                 <img id="notificacaoIcon" src="Style/assets/sinoNotificacao.svg" alt="">
                 <div class="notificacao-dropdown">
-                    <div class="notificacao-item">
-                        <div class="notificacao-content">
-                            <div class="notificacao-title">Atualização de Preço</div>
-                            <div class="notificacao-text">AAPL atingiu sua meta de preço de R$180,00</div>
-                            <div class="notificacao-time">Há 5 minutos</div>
-                        </div>
-                    </div>
-                    <div class="notificacao-item">
-                        <div class="notificacao-content">
-                            <div class="notificacao-title">Nova Recomendação</div>
-                            <div class="notificacao-text">Nova análise disponível para MSFT</div>
-                            <div class="notificacao-time">Há 30 minutos</div>
-                        </div>
-                    </div>
-                    <div class="notificacao-item">
-                        <div class="notificacao-content">
-                            <div class="notificacao-title">Alerta de Mercado</div>
-                            <div class="notificacao-text">Índice de volatilidade aumentou significativamente</div>
-                            <div class="notificacao-time">Há 1 hora</div>
-                        </div>
-                    </div>
-                    <a href="notificacoes.html">Ver todas as notificações</a>
                 </div>
             </div>
             <img id="perfilIcon" onclick="sair()" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" alt="">
@@ -140,13 +118,14 @@
                         <h1>Todos os Setores</h1>
                         <label for="searchSetor">
                             <img src="Style/assets/lupaSetores.svg" onclick="carregarDados(searchSetor.value)">
-                            <input type="search" id="searchSetor" placeholder="Buscar setor..." onchange="carregarDados(this.value  )">
+                            <input type="search" id="searchSetor" placeholder="Buscar setor..."
+                                onchange="carregarDados(this.value  )">
                         </label>
                     </div>
 
                     <div id="lista">
 
-                            <img src="Style/assets/Loading_icon.gif" alt="" >
+                        <img src="Style/assets/Loading_icon.gif" alt="">
 
 
                     </div>
@@ -158,11 +137,159 @@
     </div>
 </body>
 
+<div class="popup-conteudo">
+    <div class="popup-header">
+        <h2>${info.nome}</h2>
+        <span class="fechar-popup">&times;</span>
+    </div>
+    <div class="popup-info">
+        <div class="info-principal">
+            <div class="preco-atual">
+                <h3>$${info.preco}</h3>
+                <span
+                    class="${info.variacao.includes('+') ? 'variacao-positiva' : 'variacao-negativa'}">${info.variacao}</span>
+                <img src="Style/assets/alvo.svg" width="35px" height="35px" alt="">
+            </div>
+        </div>
+        <div class="info-grid">
+            <div class="info-item">
+                <span class="info-label">Ticker</span>
+                <span class="info-valor">${info.ticker}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Preço médio</span>
+                <span class="info-valor">${info.volume}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Maior preço</span>
+                <span class="info-valor">${info.marketCap}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Menor preço</span>
+                <span class="info-valor">${info.pe}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Volume</span>
+                <span class="info-valor">${info.dividendYield}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Setor</span>
+                <span class="info-valor">${info.setor}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
 </html>
 
 <script>
+    document.addEventListener("DOMContentLoaded", carregarNotificacoes);
 
-     function sair() {
+    async function carregarNotificacoes() {
+        const idUsuario = sessionStorage.ID_USUARIO;
+
+        if (!idUsuario) {
+            console.warn("ID_USUARIO não encontrado no sessionStorage.");
+            return;
+        }
+
+        fetch("/notificacoes/receberNotificacoes", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                idServer: idUsuario,
+            })
+        })
+            .then(async res => {
+                if (!res.ok) throw new Error("Erro ao buscar notificações");
+                // Ler como texto e só parsear JSON se houver conteúdo
+                const text = await res.text();
+                if (!text) return [];
+                try {
+                    return JSON.parse(text);
+                } catch (e) {
+                    console.warn('Resposta de notificações não é JSON válido:', e);
+                    return [];
+                }
+            })
+            .then(notificacoes => {
+                atualizarDropdown(notificacoes || []);
+            })
+            .catch(err => console.error(err));
+    }
+
+    function atualizarDropdown(notificacoes) {
+        var contador = 0;
+
+        const container = document.querySelector(".notificacao-dropdown");
+        const badge = document.querySelector(".notification-badge");
+
+        // Limpa o container (evita duplicar)
+        container.innerHTML = "";
+        var qtd_not = 0;
+
+        notificacoes.forEach(not => {
+            if (not.lido == 0) {
+                qtd_not++;
+            }
+        });
+
+        // Atualiza badge (mostra no máx. 9+). Se não houver notificações, oculta o badge.
+        if (!badge) {
+            // elemento não encontrado — nada a fazer
+        } else if (qtd_not <= 0) {
+            badge.style.display = 'none';
+            badge.textContent = '';
+        } else {
+            badge.style.display = 'flex';
+            badge.textContent = qtd_not > 9 ? '9+' : String(qtd_not);
+        }
+
+        notificacoes.forEach(not => {
+            if (contador < 3) {
+                const item = document.createElement("div");
+                item.classList.add("notificacao-item");
+
+                item.innerHTML = `
+                        <div class="notificacao-content">
+                            <div class="notificacao-title">${not.tipo}</div>
+                            <div class="notificacao-text">${not.mensagem}</div>
+                            <div class="notificacao-time">${formatarTempo(not.dtNotificacao)}</div>
+                        </div>
+                    `;
+
+                container.appendChild(item);
+                console.log(not.tipo)
+            }
+            contador++;
+        });
+
+        // Link para ver todas
+        const link = document.createElement("a");
+        link.href = "notificacoes.html";
+        link.textContent = "Ver todas as notificações";
+        container.appendChild(link);
+    }
+    
+    function formatarTempo(dataBanco) {
+        const data = new Date(dataBanco);
+        const agora = new Date();
+
+        const diffMs = agora - data;
+        const diffMin = Math.floor(diffMs / 60000);
+        const diffHoras = Math.floor(diffMin / 60);
+
+        if (diffMin < 1) return "Agora mesmo";
+        if (diffMin < 60) return `Há ${diffMin} minutos`;
+        if (diffHoras < 24) return `Há ${diffHoras} hora${diffHoras > 1 ? "s" : ""}`;
+
+        const diffDias = Math.floor(diffHoras / 24);
+        return `Há ${diffDias} dia${diffDias > 1 ? "s" : ""}`;
+    }
+
+    function sair() {
         sessionStorage.clear();
         window.location.href = "./login.html";
     }
@@ -170,16 +297,16 @@
     async function carregarDados(valor) {
 
         var response;
-        
-        if(valor == ''){
+
+        if (valor == '') {
             response = await fetch('/setores/receberSetores/');
-        }else{
-             response = await fetch(`/setores/receberSetoresParam/${valor}`);
+        } else {
+            response = await fetch(`/setores/receberSetoresParam/${valor}`);
         }
-        
+
         const setores = await response.json();
 
-        lista.innerHTML = '';   
+        lista.innerHTML = '';
         var cont = 0;
 
         for (let setor of setores) {
@@ -337,7 +464,7 @@
 
 <script>
 
-      if (sessionStorage.getItem('ID_USUARIO') === null) {
+    if (sessionStorage.getItem('ID_USUARIO') === null) {
         showLoginCard(4);
     }
 
@@ -394,10 +521,10 @@
 
         const response = await fetch(`/setores/buscarAcoesSetor/${setor}`);
         const dados = await response.json();
- 
-        var periodo = selectPeriodo.value;  
-        
-       
+
+        var periodo = selectPeriodo.value;
+
+
         console.log(dados);
 
         nome_lista.innerHTML = '';
@@ -413,7 +540,7 @@
         }
     }
 
-    
+
 
     const ctx = document.getElementById('graficoBarra');
     new Chart(ctx, {
@@ -475,7 +602,7 @@
 
 
 
-    
+
     async function abrirInfoAcao(elemento, ticker, anos) {
 
         console.log(elemento, ticker)
@@ -489,9 +616,9 @@
 
         var mensagem = "";
 
-        if(anos == 1){
+        if (anos == 1) {
             mensagem = "Periodo: 1 ano."
-        }else{
+        } else {
             mensagem = `Periodo: ${anos} anos.`;
         };
 
