@@ -131,11 +131,11 @@ img#perfilIcon {
 
 .notification-badge {
     position: absolute;
-    top: -0.5vh;
+    top: -0.3vh;
     right: -0.5vh;
     background-color: #016630;
     color: white;
-    font-size: 1.9vh;
+    font-size: 2vh;
     font-weight: bold;
     min-width: 2vh;
     height: 2.5vh;
@@ -144,6 +144,7 @@ img#perfilIcon {
     align-items: center;
     justify-content: center;
     padding: 0.8vh;
+    padding-bottom: 0.9vh;
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
 }
 

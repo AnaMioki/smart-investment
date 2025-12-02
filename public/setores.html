@@ -118,7 +118,8 @@
                         <h1>Todos os Setores</h1>
                         <label for="searchSetor">
                             <img src="Style/assets/lupaSetores.svg" onclick="carregarDados(searchSetor.value)">
-                            <input type="search" id="searchSetor" placeholder="Buscar setor..." onchange="carregarDados(this.value  )">
+                            <input type="search" id="searchSetor" placeholder="Buscar setor..."
+                                onchange="carregarDados(this.value  )">
                         </label>
                     </div>
 
@@ -201,12 +202,20 @@
                 idServer: idUsuario,
             })
         })
-            .then(res => {
+            .then(async res => {
                 if (!res.ok) throw new Error("Erro ao buscar notificações");
-                return res.json();
+                // Ler como texto e só parsear JSON se houver conteúdo
+                const text = await res.text();
+                if (!text) return [];
+                try {
+                    return JSON.parse(text);
+                } catch (e) {
+                    console.warn('Resposta de notificações não é JSON válido:', e);
+                    return [];
+                }
             })
             .then(notificacoes => {
-                atualizarDropdown(notificacoes);
+                atualizarDropdown(notificacoes || []);
             })
             .catch(err => console.error(err));
     }
@@ -227,8 +236,16 @@
             }
         });
 
-        // Atualiza badge (mostra no máx. 9+)
-        badge.textContent = qtd_not > 9 ? "9+" : qtd_not;
+        // Atualiza badge (mostra no máx. 9+). Se não houver notificações, oculta o badge.
+        if (!badge) {
+            // elemento não encontrado — nada a fazer
+        } else if (qtd_not <= 0) {
+            badge.style.display = 'none';
+            badge.textContent = '';
+        } else {
+            badge.style.display = 'flex';
+            badge.textContent = qtd_not > 9 ? '9+' : String(qtd_not);
+        }
 
         notificacoes.forEach(not => {
             if (contador < 3) {
@@ -255,7 +272,7 @@
         link.textContent = "Ver todas as notificações";
         container.appendChild(link);
     }
-
+    
     function formatarTempo(dataBanco) {
         const data = new Date(dataBanco);
         const agora = new Date();
@@ -272,7 +289,7 @@
         return `Há ${diffDias} dia${diffDias > 1 ? "s" : ""}`;
     }
 
-     function sair() {
+    function sair() {
         sessionStorage.clear();
         window.location.href = "./login.html";
     }
@@ -280,13 +297,13 @@
     async function carregarDados(valor) {
 
         var response;
-        
-        if(valor == ''){
+
+        if (valor == '') {
             response = await fetch('/setores/receberSetores/');
-        }else{
-             response = await fetch(`/setores/receberSetoresParam/${valor}`);
+        } else {
+            response = await fetch(`/setores/receberSetoresParam/${valor}`);
         }
-        
+
         const setores = await response.json();
 
         lista.innerHTML = '';
@@ -447,7 +464,7 @@
 
 <script>
 
-      if (sessionStorage.getItem('ID_USUARIO') === null) {
+    if (sessionStorage.getItem('ID_USUARIO') === null) {
         showLoginCard(4);
     }
 
@@ -504,10 +521,10 @@
 
         const response = await fetch(`/setores/buscarAcoesSetor/${setor}`);
         const dados = await response.json();
- 
-        var periodo = selectPeriodo.value;  
-        
-       
+
+        var periodo = selectPeriodo.value;
+
+
         console.log(dados);
 
         nome_lista.innerHTML = '';
@@ -523,7 +540,7 @@
         }
     }
 
-    
+
 
     const ctx = document.getElementById('graficoBarra');
     new Chart(ctx, {
@@ -585,7 +602,7 @@
 
 
 
-    
+
     async function abrirInfoAcao(elemento, ticker, anos) {
 
         console.log(elemento, ticker)
@@ -599,9 +616,9 @@
 
         var mensagem = "";
 
-        if(anos == 1){
+        if (anos == 1) {
             mensagem = "Periodo: 1 ano."
-        }else{
+        } else {
             mensagem = `Periodo: ${anos} anos.`;
         };
 
