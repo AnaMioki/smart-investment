@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="Style/assets/smartLogoVetor.ico">
+    <link rel="stylesheet" href="Style//css/admCSS.css">
+    <title>Administração Smart Investment - Usuários</title>
+</head>
+
+<body>
+    <div id="mainContainer">
+        <div id="header">
+            <img id="logo" src="Style/assets/smartLogoVetor.svg" alt="logoSmartInvestment">
+            <div class="navbar">
+                <a href="index.html">Início</a>
+                <a href="admEmpresas.html">Empresas</a>
+                <a class="selected" href="admUsuarios.html">Usuários</a>
+            </div>
+            <img id="perfilIcon" class="perfilBoneco" src="Style/assets/logoutBTN.svg" style="cursor: pointer;"
+                onclick="sair()" alt="">
+        </div>
+
+
+        <div class="hamburger">
+            <div class="bar1"></div>
+            <div class="bar2"></div>
+            <div class="bar3"></div>
+        </div>
+        <nav class="mobile-menu">
+            <a href="admAcoes.html">Ações</a>
+            <a href="admUsuarios.html">Usuários</a>
+        </nav>
+
+        <div id="mainContent">
+            <h1>Bem-vindo à Administração Smart Investment</h1>
+            <p>Utilize o menu acima para navegar entre as seções de administração.</p>
+
+            <div class="user-list">
+                <div class="user-card">
+                    <div class="user-info">
+                        <h2>Usuário 1</h2>
+                        <p>Email: usuario1@example.com</p>
+                    </div>
+                    <div class="buttons">
+                        <img src="Style/assets/pencilIcon.svg" alt="">
+                        <img src="Style/assets/trashIcon.svg" alt="">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="footer">
+            <p>&copy; 2025 Smart Investment. Todos os direitos reservados.</p>
+        </div>
+
+    </div>
+
+    <script src="Style/js/fazerHamburguer.js"></script>
+
+    <script>
+      if (sessionStorage.getItem('ID_USUARIO') === null) {
+        showLoginCard(4);
+    }
+
+    function showLoginCard(seconds) {
+        document.body.classList.add('blurred');
+
+        const overlay = document.createElement('div');
+        overlay.className = 'login-overlay';
+        overlay.innerHTML = `
+                <div class="login-card">
+                    <h3>É necessário fazer login</h3>
+                    <p>Você precisa entrar para acessar esta página. Redirecionando em <span id="login-timer">${seconds}</span>s</p>
+                    <div class="progress"><div class="progress-bar"></div></div>
+                    <div class="login-actions">
+                        <button id="btnLoginNow">Ir para login</button>
+                    </div>
+                </div>
+            `;
+        document.body.appendChild(overlay);
+
+        const bar = overlay.querySelector('.progress-bar');
+        const timerEl = overlay.querySelector('#login-timer');
+        const btnNow = overlay.querySelector('#btnLoginNow');
+
+        let remaining = seconds;
+        timerEl.textContent = remaining;
+
+        const totalMs = seconds * 1000;
+        const start = Date.now();
+
+        const interval = setInterval(() => {
+            const elapsed = Date.now() - start;
+            const pct = Math.min(100, (elapsed / totalMs) * 100);
+            bar.style.width = pct + '%';
+            const secLeft = Math.ceil((totalMs - elapsed) / 1000);
+            timerEl.textContent = secLeft > 0 ? secLeft : 0;
+            if (pct >= 100) {
+                clearInterval(interval);
+                window.location.href = 'login.html';
+            }
+        }, 100);
+
+        btnNow.addEventListener('click', () => {
+            document.body.classList.remove('blurred');
+            window.location.href = 'login.html';
+        });
+
+    }
+
+    function excluirUsuario(idUsuario) {
+            fetch(`/usuarios/excluirUsuario/${idUsuario}`, {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Usuário excluído com sucesso!');
+                        listarUsuarios();
+                    } else {
+                        alert('Erro ao excluir usuário.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    alert('Erro ao excluir usuário.');
+                });
+        }
+
+        function sair() {
+            sessionStorage.removeItem('ID_USUARIO');
+            sessionStorage.removeItem('NOME_USUARIO');
+            sessionStorage.removeItem('TIPO_USUARIO');
+            window.location.href = 'index.html';
+        }
+
+        window.onload = listarUsuarios;
+
+        async function listarUsuarios() {
+            const response = await fetch(`/usuarios/buscarUsuarios`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" }
+            });
+            const info = await response.json();
+
+            let userListContainer = document.querySelector('.user-list');
+            userListContainer.innerHTML = '';
+
+            info.forEach(user => {
+                userListContainer.innerHTML += ` <div class="user-card">
+                        <div class="user-info">
+                            <h2>${user.nome}</h2>
+                            <p>Email: ${user.email}</p>
+                        </div>
+                        <div class="buttons">
+                            <img src="Style/assets/trashIcon.svg" alt="" onclick="excluirUsuario(${user.idUsuario})">
+                        </div>
+                    </div>`;
+            });
+        }
+    </script>
+</body>
+</html>

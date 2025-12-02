@@ -1,375 +1,409 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cadastro</title>
-    <link rel="stylesheet" href="Style/css/cadastroCSS.css">
-    <link rel="icon" type="image/x-icon" href="Style/assets/smartLogoVetor.ico">
-</head>
+    <link rel="stylesheet" href="Style/css/cadastroCSS.css" />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="Style/assets/smartLogoVetor.ico"
+    />
+  </head>
 
-<body>
-
+  <body>
     <main>
-        <div id="mainContainer">
-            <a id="btnIndex" onclick="backIndex()"><img src="Style/assets/arrow_back.svg" alt=""> Retornar à página
-                inicial</a>
-            <!-- <img id="btnIndex" src="Style/assets/home.svg" onclick="backIndex()" alt=""> -->
-            <div id="cadastroContainer">
-                <h1>Bem-vindo!</h1>
-                <p>Faça seu cadastro abaixo, para acessar nossa plataforma.</p>
-                <div id="cadastroBox">
-                    <div id="cadastroForm">
-                        <h1>Cadastro</h1>
-
-                        <div class="grupoInput">
-                            <input type="email" id="email" required placeholder=" ">
-                            <label for="email">Email</label>
-                        </div>
-
-                        <div class="grupoInput">
-                            <input type="password" id="senha" required placeholder=" ">
-                            <label for="senha">Senha</label>
-                            <img class="olho" onclick="exibirSenha()" src="Style/assets/inivisivel.svg">
-                        </div>
-
-                        <div class="grupoInput">
-                            <input type="text" id="nomeCompleto" required placeholder=" ">
-                            <label for="nomeCompleto">Nome Completo</label>
-                        </div>
-
-                        <div class="grupoInput">
-                            <input type="date" id="dtNascimento" required placeholder=" ">
-                            <label for="dtNascimento">Data de Nascimento</label>
-                        </div>
-
-
-                        <button onclick="exibirForm()" id="btnLogar">Cadastrar</button>
-
-                        <a id="redLogin" href="login.html">Já possui conta? Faça seu login aqui</a>
-                    </div>
-                </div>
-            </div>
-
-            <div>
-                <img id="logo" src="Style/assets/smartLogoVetor.svg" alt="">
-            </div>
-
+      <div id="msg" class="container-txt">
+        <div class="caixa-de-texto-container" id="caixaTexto">
+          <p id="texto-caixa">Alterações realizadas com sucesso</p>
         </div>
-        <div id="formularioCadastro">
-            <h1>Preencha as seguintes informações para finalizar seu cadastro</h1>
-            <img id="btnFechar" onclick="fecharForm()" src="Style/assets/xis.svg" alt="">
+      </div>    
 
-            <!-- Antigo -->
-            <!-- <div id="divEsquerdaForm">
-                <div id="selectRisco">
-                    <h4>Qual o nível de risco tolerado?</h4>
-                    <select id="slcRisco" onchange="atualizarCorRisco()">
-                        <option value="">Selecione uma opção abaixo</option>
-                        <option value="baixo">Baixo</option>
-                        <option value="moderado">Moderado</option>
-                        <option value="alto">Alto</option>
-                    </select>
-                </div>
-            </div> -->
+      <div id="mainContainer">
+        <a id="btnIndex" onclick="backIndex()"
+          ><img src="Style/assets/arrow_back.svg" alt="" /> Retornar à página
+          inicial</a
+        >
 
-            <!-- Novo -->
-            <!-- QUESTIONÁRIO DE PERFIL -->
-            <div id="questionario">
-                <div class="pergunta ativa">
-                    <p>1. Há quanto tempo você investe?</p>
-                    <label><input type="radio" name="tempo" value="baixo"> Nunca investi</label><br>
-                    <label><input type="radio" name="tempo" value="baixo"> Menos de 1 ano</label><br>
-                    <label><input type="radio" name="tempo" value="moderado"> 1 a 3 anos</label><br>
-                    <label><input type="radio" name="tempo" value="alto"> Mais de 3 anos</label><br>
-                    <button onclick="proximaPergunta()">Próxima</button>
-                </div>
+        <div id="cadastroContainer">
+          <h1>Bem-vindo!</h1>
+          <p>Faça seu cadastro abaixo, para acessar nossa plataforma.</p>
+          <div id="cadastroBox">
+            <div id="cadastroForm">
+              <h1>Cadastro</h1>
 
-                <div class="pergunta">
-                    <p>2. Qual é seu principal objetivo ao investir?</p>
-                    <label><input type="radio" name="objetivo" value="baixo"> Segurança</label><br>
-                    <label><input type="radio" name="objetivo" value="moderado"> Renda extra</label><br>
-                    <label><input type="radio" name="objetivo" value="moderado"> Aposentadoria</label><br>
-                    <label><input type="radio" name="objetivo" value="alto"> Alta rentabilidade</label><br>
-                    <button onclick="proximaPergunta()">Próxima</button>
-                </div>
+              <div class="grupoInput">
+                <input type="email" id="email" required placeholder=" " />
+                <label for="email">Email</label>
+              </div>
 
-                <div class="pergunta">
-                    <p>3. Como reagiria a uma queda de 10% nos seus investimentos?</p>
-                    <label><input type="radio" name="reacao" value="baixo"> Venderia tudo</label><br>
-                    <label><input type="radio" name="reacao" value="moderado"> Manteria</label><br>
-                    <label><input type="radio" name="reacao" value="alto"> Compraria mais</label><br>
-                    <button onclick="proximaPergunta()">Próxima</button>
-                </div>
+              <div class="grupoInput">
+                <input type="password" id="senha" required placeholder=" " />
+                <label for="senha">Senha</label>
+                <img
+                  class="olho"
+                  onclick="exibirSenha()"
+                  src="Style/assets/inivisivel.svg"
+                />
+              </div>
 
-                <div class="pergunta">
-                    <p>4. Você prefere...</p>
-                    <label><input type="radio" name="preferencia" value="baixo"> Ganhos pequenos e
-                        constantes</label><br>
-                    <label><input type="radio" name="preferencia" value="moderado"> Ganhos médio e com risco
-                        moderado</label><br>
-                    <label><input type="radio" name="preferencia" value="alto"> Altos Ganhos mesmo com risco e chance de
-                        perda</label><br>
-                    <button onclick="finalizarQuestionario()">Finalizar</button>
-                </div>
+              <div class="grupoInput">
+                <input type="text" id="nomeCompleto" required placeholder=" " />
+                <label for="nomeCompleto">Nome Completo</label>
+              </div>
+
+              <div class="grupoInput">
+                <input type="date" id="dtNascimento" required placeholder=" " />
+                <label for="dtNascimento">Data de Nascimento</label>
+              </div>
+
+              <button onclick="exibirForm()" id="btnLogar">Cadastrar</button>
+
+              <a id="redLogin" href="login.html"
+                >Já possui conta? Faça seu login aqui</a
+              >
             </div>
-
-            <div class="botoesForm">
-                <button id="btnFinalizar" onclick="cadastrarUsuario()">Finalizar Cadastro</button>
-            </div>
+          </div>
         </div>
 
+        <div>
+          <img id="logo" src="Style/assets/smartLogoVetor.svg" alt="" />
+        </div>
+      </div>
+      <div id="formularioCadastro">
+        <h1>Preencha as seguintes informações para finalizar seu cadastro</h1>
+        <img
+          id="btnFechar"
+          onclick="fecharForm()"
+          src="Style/assets/xis.svg"
+          alt=""
+        />
+        <div id="questionario">
+          <div class="pergunta ativa">
+            <p>1. Há quanto tempo você investe?</p>
+            <label
+              ><input type="radio" name="tempo" value="baixo" /> Nunca
+              investi</label
+            ><br />
+            <label
+              ><input type="radio" name="tempo" value="baixo" /> Menos de 1
+              ano</label
+            ><br />
+            <label
+              ><input type="radio" name="tempo" value="moderado" /> 1 a 3
+              anos</label
+            ><br />
+            <label
+              ><input type="radio" name="tempo" value="alto" /> Mais de 3
+              anos</label
+            ><br />
+            <button onclick="proximaPergunta()">Próxima</button>
+          </div>
 
-        <button id="btnFinalizar" onclick="cadastrarUsuario()">Finalizar Cadastro</button>
+          <div class="pergunta">
+            <p>2. Qual é seu principal objetivo ao investir?</p>
+            <label
+              ><input type="radio" name="objetivo" value="baixo" />
+              Segurança</label
+            ><br />
+            <label
+              ><input type="radio" name="objetivo" value="moderado" /> Renda
+              extra</label
+            ><br />
+            <label
+              ><input type="radio" name="objetivo" value="moderado" />
+              Aposentadoria</label
+            ><br />
+            <label
+              ><input type="radio" name="objetivo" value="alto" /> Alta
+              rentabilidade</label
+            ><br />
+            <button onclick="proximaPergunta()">Próxima</button>
+          </div>
 
+          <div class="pergunta">
+            <p>3. Como reagiria a uma queda de 10% nos seus investimentos?</p>
+            <label
+              ><input type="radio" name="reacao" value="baixo" /> Venderia
+              tudo</label
+            ><br />
+            <label
+              ><input type="radio" name="reacao" value="moderado" />
+              Manteria</label
+            ><br />
+            <label
+              ><input type="radio" name="reacao" value="alto" /> Compraria
+              mais</label
+            ><br />
+            <button onclick="proximaPergunta()">Próxima</button>
+          </div>
 
+          <div class="pergunta">
+            <p>4. Você prefere...</p>
+            <label
+              ><input type="radio" name="preferencia" value="baixo" /> Ganhos
+              pequenos e constantes</label
+            ><br />
+            <label
+              ><input type="radio" name="preferencia" value="moderado" /> Ganhos
+              médio e com risco moderado</label
+            ><br />
+            <label
+              ><input type="radio" name="preferencia" value="alto" /> Altos
+              Ganhos mesmo com risco e chance de perda</label
+            ><br />
+            <button onclick="finalizarQuestionario()">Finalizar</button>
+          </div>
+        </div>
+
+        <div class="botoesForm">
+          <button id="btnFinalizar" onclick="cadastrarUsuario()">
+            Finalizar Cadastro
+          </button>
+        </div>
+      </div>
+
+      <button id="btnFinalizar" onclick="cadastrarUsuario()">
+        Finalizar Cadastro
+      </button>
     </main>
-
-
-</body>
-<!-- Novo -->
-
+  </body>
+  <!-- Novo -->
 </html>
 
 <script>
-    let baixo = 0;
-    let moderado = 0;
-    let alto = 0;
-    let questionario = 0;
-    let indicePergunta = 0;
+  let baixo = 0;
+  let moderado = 0;
+  let alto = 0;
+  let questionario = 0;
+  let indicePergunta = 0;
 
-    function proximaPergunta() {
-        const perguntas = document.querySelectorAll('#questionario .pergunta');
-        const atual = perguntas[indicePergunta];
-        const selecionado = atual.querySelector('input[type="radio"]:checked');
-        const respostaSelecionada = atual.querySelector('input[type="radio"]:checked').value;
-        if (!selecionado) {
-            alert('Selecione uma resposta antes de continuar.');
-            return;
-        }
-
-        if (respostaSelecionada == "baixo") {
-            baixo++;
-        } else if (respostaSelecionada == "moderado") {
-            moderado++;
-        } else {
-            alto++;
-        }
-
-        atual.classList.remove('ativa');
-        indicePergunta++;
-        if (indicePergunta < perguntas.length) {
-            perguntas[indicePergunta].classList.add('ativa');
-        }
+  function proximaPergunta() {
+    const perguntas = document.querySelectorAll("#questionario .pergunta");
+    const atual = perguntas[indicePergunta];
+    const selecionado = atual.querySelector('input[type="radio"]:checked');
+    const respostaSelecionada = atual.querySelector(
+      'input[type="radio"]:checked'
+    ).value;
+    if (!selecionado) {
+      alert("Selecione uma resposta antes de continuar.");
+      return;
     }
 
-    function finalizarQuestionario() {
-        const perguntas = document.querySelectorAll('#questionario .pergunta');
-        const ultima = perguntas[indicePergunta];
-        const selecionado = ultima.querySelector('input[type="radio"]:checked');
-        const respostaSelecionada = ultima.querySelector('input[type="radio"]:checked').value;
-
-        if (!selecionado) {
-            alert('Selecione uma resposta antes de finalizar.');
-            return;
-        }
-
-        if (respostaSelecionada == "baixo") {
-            baixo++;
-        } else if (respostaSelecionada == "moderado") {
-            moderado++;
-        } else {
-            alto++;
-        }
-
-        questionario = 1;
-        alert('Questionário concluído! Agora finalize seu cadastro.');
+    if (respostaSelecionada == "baixo") {
+      baixo++;
+    } else if (respostaSelecionada == "moderado") {
+      moderado++;
+    } else {
+      alto++;
     }
 
-    function atualizarCorRisco() {
-        const riscoUsuario = document.getElementById('slcRisco').value;
-        const select = document.getElementById('slcRisco');
+    atual.classList.remove("ativa");
+    indicePergunta++;
+    if (indicePergunta < perguntas.length) {
+      perguntas[indicePergunta].classList.add("ativa");
+    }
+  }
 
-        select.className = '';
+  function finalizarQuestionario() {
+    const perguntas = document.querySelectorAll("#questionario .pergunta");
+    const ultima = perguntas[indicePergunta];
+    const selecionado = ultima.querySelector('input[type="radio"]:checked');
+    const respostaSelecionada = ultima.querySelector(
+      'input[type="radio"]:checked'
+    ).value;
 
-        if (riscoUsuario === 'baixo') {
-            select.style.backgroundColor = 'green';
-            select.style.color = 'white';
-            select.style.fontWeight = '400';
-        } else if (riscoUsuario === 'moderado') {
-            select.style.backgroundColor = 'yellow';
-            select.style.color = '#333';
-            select.style.fontWeight = '600';
-        } else if (riscoUsuario === 'alto') {
-            select.style.backgroundColor = 'red';
-            select.style.color = 'white';
-            select.style.fontWeight = '900';
-        } else {
-            select.style.backgroundColor = '#f8f9fa';
-            select.style.color = '#333';
-        }
+    if (!selecionado) {
+      alert("Selecione uma resposta antes de finalizar.");
+      return;
     }
 
-    // fecharForm
-    // window.fecharForm = () => {
-    //     const form = document.getElementById('formularioCadastro');
-    //     form.style.display = 'none';
-    //     const background = document.getElementById('mainContainer');
-    //     background.style.filter = 'none';
-    // };
-    function fecharForm() {
-        const form = document.getElementById('formularioCadastro');
-        form.style.display = 'none';
-        const background = document.getElementById('mainContainer');
-        background.style.filter = 'none';
-        
-        // Novo
-        const perguntas = document.querySelectorAll('#questionario .pergunta');
-        const atual = perguntas[indicePergunta];
-        atual.classList.remove('ativa');
-        baixo = 0;
-        moderado = 0;
-        alto = 0;
-        questionario = 0;
-        indicePergunta = 0;
-        perguntas[indicePergunta].classList.add('ativa');
+    if (respostaSelecionada == "baixo") {
+      baixo++;
+    } else if (respostaSelecionada == "moderado") {
+      moderado++;
+    } else {
+      alto++;
     }
 
-    exibirSenha = () => {
-        const senhaInput = document.getElementById('senha');
-        const olhoIcon = document.querySelector('.olho');
+    questionario = 1;
+    alert("Questionário concluído! Agora finalize seu cadastro.");
+  }
 
-        if (senhaInput.type === 'password') {
-            senhaInput.type = 'text';
-            olhoIcon.src = 'Style/assets/visivel.svg';
-        } else {
-            senhaInput.type = 'password';
-            olhoIcon.src = 'Style/assets/inivisivel.svg';
-        }
+  function atualizarCorRisco() {
+    const riscoUsuario = document.getElementById("slcRisco").value;
+    const select = document.getElementById("slcRisco");
+
+    select.className = "";
+
+    if (riscoUsuario === "baixo") {
+      select.style.backgroundColor = "green";
+      select.style.color = "white";
+      select.style.fontWeight = "400";
+    } else if (riscoUsuario === "moderado") {
+      select.style.backgroundColor = "yellow";
+      select.style.color = "#333";
+      select.style.fontWeight = "600";
+    } else if (riscoUsuario === "alto") {
+      select.style.backgroundColor = "red";
+      select.style.color = "white";
+      select.style.fontWeight = "900";
+    } else {
+      select.style.backgroundColor = "#f8f9fa";
+      select.style.color = "#333";
+    }
+  }
+
+  function fecharForm() {
+    const form = document.getElementById("formularioCadastro");
+    form.style.display = "none";
+    const background = document.getElementById("mainContainer");
+    background.style.filter = "none";
+
+    // Novo
+    const perguntas = document.querySelectorAll("#questionario .pergunta");
+    const atual = perguntas[indicePergunta];
+    atual.classList.remove("ativa");
+    baixo = 0;
+    moderado = 0;
+    alto = 0;
+    questionario = 0;
+    indicePergunta = 0;
+    perguntas[indicePergunta].classList.add("ativa");
+  }
+
+  exibirSenha = () => {
+    const senhaInput = document.getElementById("senha");
+    const olhoIcon = document.querySelector(".olho");
+
+    if (senhaInput.type === "password") {
+      senhaInput.type = "text";
+      olhoIcon.src = "Style/assets/visivel.svg";
+    } else {
+      senhaInput.type = "password";
+      olhoIcon.src = "Style/assets/inivisivel.svg";
+    }
+  };
+
+  backIndex = () => {
+    window.location.href = "index.html";
+  };
+
+  exibirForm = () => {
+    //     const email = document.getElementById('email').value;
+    //     const senha = document.getElementById('senha').value;
+    const form = document.getElementById("formularioCadastro");
+    form.style.display = "flex";
+    const background = document.getElementById("mainContainer");
+    background.style.filter = "blur(5px)";
+  };
+
+  cadastrarUsuario = () => {
+    var nomeCompletoVar = document.getElementById("nomeCompleto").value;
+    var dtNascimentoVar = document.getElementById("dtNascimento").value;
+    // Nova estrutura de decisão para contemplar linha abaixo
+    //var perfilVar = document.getElementById("slcRisco").value;
+    var emailVar = document.getElementById("email").value;
+    var senhaVar = document.getElementById("senha").value;
+
+    // Novo
+    if (baixo > moderado && baixo > alto) {
+      var perfilVar = "baixo";
+    } else if (moderado > baixo && moderado > alto) {
+      var perfilVar = "moderado";
+    } else if (alto > baixo && alto > alto) {
+      var perfilVar = "alto";
+    } else {
+      var perfilVar = "moderado";
+    }
+
+    if (
+      !emailVar ||
+      !senhaVar ||
+      !nomeCompletoVar ||
+      !dtNascimentoVar ||
+      !perfilVar
+    ) {
+      mensagemErro("Preencha todos os campos!");
+      return;
+    }
+
+    if (!emailVar.includes("@")) {
+      mensagemErro("Email inválido!");
+      return;
+    }
+
+    if (senhaVar.length < 8) {
+      mensagemErro("A senha deve conter no mínimo 8 caracteres");
+      return;
+    }
+
+    if (!/[A-Z]/.test(senhaVar)) {
+      mensagemErro("A senha deve conter alguma letra maiúscula");
+      return;
+    }
+
+    if (!/[0-9]/.test(senhaVar)) {
+      mensagemErro("A senha deve conter algum número");
+      return;
+    }
+
+    const mapPerfil = {
+      alto: "Arrojado",
+      baixo: "Conservador",
+      moderado: "Moderado",
+    };
+    perfilVar = mapPerfil[perfilVar] ? mapPerfil[perfilVar].trim() : "";
+
+
+    const dadosCadastro = {
+      nomeCompleto: nomeCompletoVar,
+      dtNascimento: dtNascimentoVar,
+      email: emailVar,
+      senha: senhaVar,
+      perfil: perfilVar,
     };
 
+    console.log("Função cadastrarUsuario chamada!");
+    console.log(
+      nomeCompletoVar,
+      dtNascimentoVar,
+      perfilVar,
+      emailVar,
+      senhaVar
+    );
 
-
-    backIndex = () => {
-        window.location.href = 'index.html';
-    };
-
-
-
-    exibirForm = () => {
-        //     const email = document.getElementById('email').value;
-        //     const senha = document.getElementById('senha').value;
-        const form = document.getElementById('formularioCadastro');
-        form.style.display = 'flex';
-        const background = document.getElementById('mainContainer');
-        background.style.filter = 'blur(5px)';
-    };
-
-    cadastrarUsuario = () => {
-        var nomeCompletoVar = document.getElementById("nomeCompleto").value;
-        var dtNascimentoVar = document.getElementById("dtNascimento").value;
-        // Nova estrutura de decisão para contemplar linha abaixo
-        //var perfilVar = document.getElementById("slcRisco").value;
-        var emailVar = document.getElementById("email").value;
-        var senhaVar = document.getElementById("senha").value;
-
-        // Novo
-        if (baixo > moderado && baixo > alto) {
-            var perfilVar = "baixo";
-        } else if (moderado > baixo && moderado > alto) {
-            var perfilVar = "moderado";
-        } else if (alto > baixo && alto > alto) {
-            var perfilVar = "alto";
+    fetch("/usuarios/cadastrar", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dadosCadastro),
+    })
+      .then((res) => {
+        if (res.ok) {
+          mensagemErro("Cadastro realizado com sucesso!");
+          setTimeout(() => (window.location = "login.html"), 2000);
         } else {
-            var perfilVar = "moderado";
+          res.text().then((msg) => mensagemErro("Erro no cadastro, tente trocar os dados! "));
         }
-
-        if (!emailVar || !senhaVar || !nomeCompletoVar || !dtNascimentoVar || !perfilVar) {
-            alert('Preencha todos os campos!');
-            return;
-        }
-
-        if (!emailVar.includes('@')) {
-            alert('Email inválido!');
-            return;
-        }
-
-        if (senhaVar.length < 8) {
-            alert("A senha deve conter no mínimo 8 caracteres");
-            return;
-        }
-
-        if (!/[A-Z]/.test(senhaVar)) {
-            alert("A senha deve conter alguma letra maiúscula");
-            return;
-        }
-
-        if (!/[0-9]/.test(senhaVar)) {
-            alert("A senha deve conter algum número");
-            return;
-        }
+      })
+      .catch((error) => {
+        console.error("Erro:", error);
+        mensagemErro("Erro ao conectar com o servidor.");
+      });
 
 
-        // if (perfilVar === "alto") {
-        //     perfilVar = "Arrojado";
-        // } else if (perfilVar === "baixo") {
-        //     perfilVar = "Conservador";
-        // } else if (perfilVar === "moderado") {
-        //     perfilVar = "Moderado";
-        // }
-        const mapPerfil = {
-            "alto": "Arrojado",
-            "baixo": "Conservador",
-            "moderado": "Moderado"
-        };
-        perfilVar = mapPerfil[perfilVar] ? mapPerfil[perfilVar].trim() : "";
-        // const perfisValidos = ["Conservador", "Moderado", "Arrojado"];
-        // if (!perfisValidos.includes(perfil)) {
-        //     res.status(400).send("Perfil inválido! Escolha: Conservador, Moderado ou Arrojado");
-        //     return;
-        // }
+  };
 
-
-        const dadosCadastro = {
-            nomeCompleto: nomeCompletoVar,
-            dtNascimento: dtNascimentoVar,
-            email: emailVar,
-            senha: senhaVar,
-            perfil: perfilVar
-        };
-
-        console.log("Função cadastrarUsuario chamada!");
-        console.log(nomeCompletoVar, dtNascimentoVar, perfilVar, emailVar, senhaVar);
-
-        fetch("/usuarios/cadastrar", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(dadosCadastro)
-
-        })
-
-            .then(res => {
-                if (res.ok) {
-                    alert("Cadastro realizado com sucesso!");
-                    setTimeout(() => window.location = "login.html", 2000);
-                } else {
-                    res.text().then(msg => alert("Erro no cadastro: " + msg));
-                }
-            })
-            .catch(error => {
-                console.error('Erro:', error);
-                alert('Erro ao conectar com o servidor.');
-            });
-
-        // sessionStorage.setItem('EMAIL', email);
-        // sessionStorage.setItem('USUARIO_LOGADO', 'true');
-        // sessionStorage.setItem('DATA_LOGIN', new Date().toISOString());
-
-        // alert('Cadastro realizado com sucesso!');
-
-    }
-
+  function mensagemErro(mensagem){
+    const msg = document.getElementById("msg");
+    msg.classList.add("ativa");
+    const atributoMensagem = document.getElementById("texto-caixa");
+    atributoMensagem.innerHTML=`${mensagem}`;
+    setTimeout(() => {
+        msg.classList.remove("ativa")
+    }, 1500);
+}
 </script>

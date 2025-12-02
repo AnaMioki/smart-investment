@@ -22,9 +22,10 @@
             </div>
 
             <div class="notification-container">
-                <span class="notification-badge">3</span>
+                <span class="notification-badge"></span>
                 <img id="notificacaoIcon" src="Style/assets/sinoNotificacao.svg" alt="">
-              
+                <div class="notificacao-dropdown">
+                </div>
             </div>
             <img id="perfilIcon" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" alt="">
 
@@ -50,18 +51,286 @@
                         <h1>Notificações</h1>
                         <p>Acompanhe alertas e oportunidades do mercado</p>
                     </div>
-                    <h2>2 novas</h2>
+                    <h2 id="notNovas">0 novas</h2>
                 </div>
 
                 <div id="selectNotification">
                     <div>
-                        <p class="selected">Todas</p>
-                        <p>Não lidas</p>
-                        <p>Configurações</p>
+                        <p onclick="carregarTodas()" class="selected" id="btnTodas">Todas</p>
+                        <p onclick="carregarNaoLidas()" id="btnNaoLidas">Não lidas</p>
                     </div>
                 </div>
 
-                <div id="listNotificacoes">
+                <div id="listNotificacoes"></div>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script>
+    document.addEventListener("DOMContentLoaded", carregarNotificacoes);
+
+    function carregarNotificacoes() {
+        const idUsuario = sessionStorage.ID_USUARIO;
+
+        if (!idUsuario) {
+            console.warn("ID_USUARIO não encontrado no sessionStorage.");
+            return;
+        }
+
+        fetch("/notificacoes/receberNotificacoes", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                idServer: idUsuario,
+            })
+        })
+            .then(res => {
+                if (!res.ok) throw new Error("Erro ao buscar notificações");
+                return res.json();
+            })
+            .then(notificacoes => {
+                atualizarDropdown(notificacoes);
+            })
+            .catch(err => console.error(err));
+    }
+
+    function atualizarDropdown(notificacoes) {
+        var contador = 0;
+
+        const container = document.querySelector(".notificacao-dropdown");
+        const badge = document.querySelector(".notification-badge");
+
+        // Limpa o container (evita duplicar)
+        container.innerHTML = "";
+        var qtd_not = 0;
+
+        notificacoes.forEach(not => {
+            if (not.lido == 0) {
+                qtd_not++;
+            }
+        });
+
+        // Atualiza badge (mostra no máx. 9+)
+        badge.textContent = qtd_not > 9 ? "9+" : qtd_not;
+
+        notificacoes.forEach(not => {
+            if (contador < 3) {
+                const item = document.createElement("div");
+                item.classList.add("notificacao-item");
+
+                item.innerHTML = `
+                        <div class="notificacao-content">
+                            <div class="notificacao-title">${not.tipo}</div>
+                            <div class="notificacao-text">${not.mensagem}</div>
+                            <div class="notificacao-time">${formatarTempo(not.dtNotificacao)}</div>
+                        </div>
+                    `;
+
+                container.appendChild(item);
+                console.log(not.tipo)
+            }
+            contador++;
+        });
+
+        // Link para ver todas
+        const link = document.createElement("a");
+        link.href = "notificacoes.html";
+        link.textContent = "Ver todas as notificações";
+        container.appendChild(link);
+    }
+
+    function formatarTempo(dataBanco) {
+        const data = new Date(dataBanco);
+        const agora = new Date();
+
+        const diffMs = agora - data;
+        const diffMin = Math.floor(diffMs / 60000);
+        const diffHoras = Math.floor(diffMin / 60);
+
+        if (diffMin < 1) return "Agora mesmo";
+        if (diffMin < 60) return `Há ${diffMin} minutos`;
+        if (diffHoras < 24) return `Há ${diffHoras} hora${diffHoras > 1 ? "s" : ""}`;
+
+        const diffDias = Math.floor(diffHoras / 24);
+        return `Há ${diffDias} dia${diffDias > 1 ? "s" : ""}`;
+    }
+
+    document.querySelector('#notificacaoIcon').addEventListener('click', function (e) {
+        e.stopPropagation();
+        const dropdown = document.querySelector('.notificacao-dropdown');
+        dropdown.classList.toggle('active');
+    });
+
+    document.addEventListener('click', function (e) {
+        const dropdown = document.querySelector('.notificacao-dropdown');
+        if (!e.target.closest('.notificacao-container')) {
+            dropdown.classList.remove('active');
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+        carregarContador();
+        carregarTodas();
+    });
+
+    /* ===========================
+        CONTADOR "X novas"
+    =========================== */
+    function carregarContador() {
+        const idUsuario = sessionStorage.ID_USUARIO;
+
+        fetch("/notificacoes/receberNotCount", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ idServer: idUsuario })
+        })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById("notNovas").innerText = `${data.idUsuario} novas`;
+            })
+            .catch(err => console.error(err));
+    }
+
+    /* ===========================
+        BOTÃO → TODAS AS NOTIFICAÇÕES
+    =========================== */
+    function carregarTodas() {
+        ativarBotao("todas");
+
+        const idUsuario = sessionStorage.ID_USUARIO;
+
+        fetch("/notificacoes/receberNotificacoes", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ idServer: idUsuario })
+        })
+            .then(res => res.json())
+            .then(data => {
+                montarLista(data);
+            })
+            .catch(err => console.error(err));
+    }
+
+    /* ===========================
+        BOTÃO → NÃO LIDAS
+    =========================== */
+    function carregarNaoLidas() {
+        ativarBotao("naolidas");
+
+        const idUsuario = sessionStorage.ID_USUARIO;
+
+        fetch("/notificacoes/receberNotificacoesNaoLida", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ idServer: idUsuario })
+        })
+            .then(res => {
+                if (res.status === 204) {
+                    console.warn("Nenhuma notificação encontrada.");
+                    return []; // devolve array vazio
+                }
+                if (!res.ok) {
+                    throw new Error("Erro ao buscar notificações");
+                }
+                return res.json(); // só chama json quando há JSON
+            })
+            .then(notificacoes => {
+                montarLista(notificacoes);
+            })
+            .catch(err => console.error(err));
+    }
+
+    /* ===========================
+        ALTERA ESTILO DO BOTÃO
+    =========================== */
+    function ativarBotao(tipo) {
+        const btnTodas = document.getElementById("btnTodas");
+        const btnNao = document.getElementById("btnNaoLidas");
+
+        if (tipo === "todas") {
+            btnTodas.classList.add("selected");
+            btnNao.classList.remove("selected");
+        } else {
+            btnNao.classList.add("selected");
+            btnTodas.classList.remove("selected");
+        }
+    }
+
+    /* ===========================
+        MONTA TODA A LISTA DINAMICAMENTE
+    =========================== */
+    function montarLista(notificacoes) {
+        const container = document.getElementById("listNotificacoes");
+
+        container.innerHTML = `
+        <p><span>${notificacoes.length}</span> notificações no total</p>
+        <div class="setorLista"></div>
+    `;
+
+        const lista = container.querySelector(".setorLista");
+
+        notificacoes.forEach(n => {
+            const div = document.createElement("div");
+
+            const icon = n.tipo.toLowerCase() === "alerta"
+                ? "Style/assets/alertaNotificação.svg"
+                : "Style/assets/setaParaCimaNotificacao.svg";
+
+            div.innerHTML = `
+            <div>
+                <img src="${icon}" class="${n.tipo === "alerta" ? "alerta" : "informacao"}">
+                <div>
+                    <h1>${n.tipo}</h1>
+                    <p>${n.mensagem}</p>
+                    <h2>${formatarTempo(n.dtNotificacao)}</h2>
+                </div>
+            </div>
+            ${n.lido == 0 ? `<div class="newNotify"></div>` : ``}
+        `;
+
+            lista.appendChild(div);
+        });
+    }
+
+    /* ===========================
+        TEMPO RELATIVO
+    =========================== */
+    function formatarTempo(dataBanco) {
+        const data = new Date(dataBanco);
+        const agora = new Date();
+        const diff = agora - data;
+
+        const min = Math.floor(diff / 60000);
+        const hr = Math.floor(min / 60);
+        const dia = Math.floor(hr / 24);
+
+        if (min < 1) return "Agora mesmo";
+        if (min < 60) return `Há ${min} min`;
+        if (hr < 24) return `Há ${hr} hora${hr > 1 ? "s" : ""}`;
+        return dia === 1 ? "Ontem" : `Há ${dia} dias`;
+    }
+
+    window.addEventListener("unload", () => {
+        const idUsuario = sessionStorage.ID_USUARIO;
+
+        const data = JSON.stringify({ idServer: idUsuario });
+
+        navigator.sendBeacon(
+            "/notificacoes/atualizarNotificoesNaoLidas",
+            new Blob([data], { type: "application/json" })
+        );
+    });
+
+</script>
+
+<script src="Style/js/fazerHamburguer.js"></script>
+
+<!-- <div id="listNotificacoes">
                     <p><span>3</span> notificações no total</p>
 
                     <div class="setorLista">
@@ -106,13 +375,4 @@
 
 
                     </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</body>
-
-</html>
-<script> </script>
-<script src="Style/js/fazerHamburguer.js"></script>
+                </div> -->

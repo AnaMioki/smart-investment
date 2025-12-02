@@ -12,6 +12,7 @@ var cors = require("cors");
 var path = require("path");
 var PORTA_APP = process.env.APP_PORT;
 var HOST_APP = process.env.APP_HOST;
+var URL_SLACK_CHAMADO = process.env.URL_SLACK_CHAMADO;
 
 var app = express();
 
@@ -23,6 +24,8 @@ var indexRouter = require("./src/routes/index");
 var usuarioRouter = require("./src/routes/usuarios");
 var setorRouter = require("./src/routes/setores");
 var acoesRouter = require("./src/routes/acoes");
+
+var notificacaoRouter = require("./src/routes/notificacoes");
 // var avisosRouter = require("./src/routes/avisos");
 // var medidasRouter = require("./src/routes/medidas");
 // var aquariosRouter = require("./src/routes/aquarios");
@@ -39,6 +42,8 @@ app.use("/usuarios", usuarioRouter);
 app.use("/setores", setorRouter);
 app.use("/acoes", acoesRouter);
 // app.use("/acoes", require("./src/routes/acoes"));
+app.use("/notificacoes", notificacaoRouter);
+ main
 // app.use("/avisos", avisosRouter);
 // app.use("/medidas", medidasRouter);
 // app.use("/aquarios", aquariosRouter);

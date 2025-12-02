@@ -26,31 +26,9 @@
                 </div>
 
                 <div class="notification-container">
-                    <span class="notification-badge">3</span>
+                    <span class="notification-badge"></span>
                     <img id="notificacaoIcon" src="Style/assets/sinoNotificacao.svg" alt="">
-                      <div class="notificacao-dropdown">
-                        <div class="notificacao-item">
-                            <div class="notificacao-content">
-                                <div class="notificacao-title">Atualização de Preço</div>
-                                <div class="notificacao-text">AAPL atingiu sua meta de preço de R$180,00</div>
-                                <div class="notificacao-time">Há 5 minutos</div>
-                            </div>
-                        </div>
-                        <div class="notificacao-item">
-                            <div class="notificacao-content">
-                                <div class="notificacao-title">Nova Recomendação</div>
-                                <div class="notificacao-text">Nova análise disponível para MSFT</div>
-                                <div class="notificacao-time">Há 30 minutos</div>
-                            </div>
-                        </div>
-                        <div class="notificacao-item">
-                            <div class="notificacao-content">
-                                <div class="notificacao-title">Alerta de Mercado</div>
-                                <div class="notificacao-text">Índice de volatilidade aumentou significativamente</div>
-                                <div class="notificacao-time">Há 1 hora</div>
-                            </div>
-                        </div>
-                         <a href="notificacoes.html">Ver todas as notificações</a>
+                    <div class="notificacao-dropdown">
                     </div>
                 </div>
                 <img id="perfilIcon" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" style="cursor: pointer;"
@@ -79,9 +57,16 @@
                         <img id="imgPerfil" src="Style/assets/pefilIconAzul.svg" alt="">
                         <div class="info">
                             <p id="usuario"></p>
-                            <p id="email"><img src="Style/assets/emailIcon.svg" alt=""><span id="escritaEmail"></span>
+                            <p id="email"><span id="escritaEmail"></span>
                             </p>
+                            <img class="btnEditar" onclick="editarDadosPerfil()" src="Style/assets/pencilIcon.svg"
+                                alt="">
+                            <div class="actions-user-buttons" style="display: none;">
+                                <button class="btn-cancel" onclick="cancelarEdicaoDados()">Cancelar</button>
+                                <button class="btn-save" onclick="salvarEdicaoDados()">Salvar Alterações</button>
+                            </div>
                         </div>
+
                     </div>
 
                     <span id="perfilRisco"></span>
@@ -99,28 +84,11 @@
                     </div>
 
                     <div class="perfilInvestidor">
-                        <div class="perfilOpcao" id="conservador">
+                        <div class="perfilOpcao selected" id="conservador">
                             <div class="perfilHeader">
                                 <span class="check"></span>
                                 <div class="perfilTitulo">Conservador</div>
                                 <span class="perfilTag conservador">conservador</span>
-                            </div>
-                            <div class="perfilDesc">
-                                Para investidores que estão começando e buscam aprender sobre o mercado
-                            </div>
-                            <ul class="perfilFeatures">
-                                <li>Ações de empresas consolidadas e conhecidas</li>
-                                <li>Setores com menor volatilidade</li>
-                                <li>Foco em aprendizado e estabilidade</li>
-                                <li>Recomendações mais conservadoras</li>
-                            </ul>
-                        </div>
-
-                        <div class="perfilOpcao" id="moderado">
-                            <div class="perfilHeader">
-                                <span class="check"></span>
-                                <div class="perfilTitulo">Moderado</div>
-                                <span class="perfilTag iniciante">moderado</span>
                             </div>
                             <div class="perfilDesc">
                                 Para investidores que priorizam segurança e retornos consistentes
@@ -130,6 +98,23 @@
                                 <li>Empresas com fundamentos sólidos</li>
                                 <li>Volatilidade moderada</li>
                                 <li>Equilíbrio entre risco e retorno</li>
+                            </ul>
+                        </div>
+
+                        <div class="perfilOpcao" id="moderado">
+                            <div class="perfilHeader">
+                                <span class="check"></span>
+                                <div class="perfilTitulo">Moderado</div>
+                                <span class="perfilTag moderado">moderado</span>
+                            </div>
+                            <div class="perfilDesc">
+                                Para investidores que estão começando e buscam aprender sobre o mercado
+                            </div>
+                            <ul class="perfilFeatures">
+                                <li>Ações de empresas consolidadas e conhecidas</li>
+                                <li>Setores com menor volatilidade</li>
+                                <li>Foco em aprendizado e estabilidade</li>
+                                <li>Recomendações mais conservadoras</li>
                             </ul>
                         </div>
 
@@ -165,6 +150,96 @@
 <script src="Style/js/fazerHamburguer.js"></script>
 
 <script>
+    document.addEventListener("DOMContentLoaded", carregarNotificacoes);
+
+    async function carregarNotificacoes() {
+        const idUsuario = sessionStorage.ID_USUARIO;
+
+        if (!idUsuario) {
+            console.warn("ID_USUARIO não encontrado no sessionStorage.");
+            return;
+        }
+
+        fetch("/notificacoes/receberNotificacoes", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                idServer: idUsuario,
+            })
+        })
+            .then(res => {
+                if (!res.ok) throw new Error("Erro ao buscar notificações");
+                return res.json();
+            })
+            .then(notificacoes => {
+                atualizarDropdown(notificacoes);
+            })
+            .catch(err => console.error(err));
+    }
+
+    function atualizarDropdown(notificacoes) {
+        var contador = 0;
+
+        const container = document.querySelector(".notificacao-dropdown");
+        const badge = document.querySelector(".notification-badge");
+
+        // Limpa o container (evita duplicar)
+        container.innerHTML = "";
+        var qtd_not = 0;
+
+        notificacoes.forEach(not => {
+            if (not.lido == 0) {
+                qtd_not++;
+            }
+        });
+
+        // Atualiza badge (mostra no máx. 9+)
+        badge.textContent = qtd_not > 9 ? "9+" : qtd_not;
+
+        notificacoes.forEach(not => {
+            if (contador < 3) {
+                const item = document.createElement("div");
+                item.classList.add("notificacao-item");
+
+                item.innerHTML = `
+                        <div class="notificacao-content">
+                            <div class="notificacao-title">${not.tipo}</div>
+                            <div class="notificacao-text">${not.mensagem}</div>
+                            <div class="notificacao-time">${formatarTempo(not.dtNotificacao)}</div>
+                        </div>
+                    `;
+
+                container.appendChild(item);
+                console.log(not.tipo)
+            }
+            contador++;
+        });
+
+        // Link para ver todas
+        const link = document.createElement("a");
+        link.href = "notificacoes.html";
+        link.textContent = "Ver todas as notificações";
+        container.appendChild(link);
+    }
+
+    function formatarTempo(dataBanco) {
+        const data = new Date(dataBanco);
+        const agora = new Date();
+
+        const diffMs = agora - data;
+        const diffMin = Math.floor(diffMs / 60000);
+        const diffHoras = Math.floor(diffMin / 60);
+
+        if (diffMin < 1) return "Agora mesmo";
+        if (diffMin < 60) return `Há ${diffMin} minutos`;
+        if (diffHoras < 24) return `Há ${diffHoras} hora${diffHoras > 1 ? "s" : ""}`;
+
+        const diffDias = Math.floor(diffHoras / 24);
+        return `Há ${diffDias} dia${diffDias > 1 ? "s" : ""}`;
+    }
+
     cancelarEdicao = () => {
         const buttons = document.querySelector('.actions-buttons');
         buttons.style.display = 'none';
@@ -177,18 +252,21 @@
             checks.forEach(check => check.classList.remove('active'));
         });
 
-        const perfilRisco = document.getElementById('perfilRisco').innerText.toLowerCase();
+        const perfilRiscoTexto = document.getElementById('perfilRisco').innerText.toLowerCase();
         const perfilMap = {
-            'moderado': 'moderado',
             'conservador': 'conservador',
+            'moderado': 'moderado',
             'arrojado': 'arrojado'
         };
 
-        const selectedPerfil = perfilMap[perfilRisco];
+        const selectedPerfil = perfilMap[perfilRiscoTexto];
         if (selectedPerfil) {
             const selectedOption = document.getElementById(selectedPerfil);
             selectedOption.classList.add('selected');
             selectedOption.querySelector('.check').classList.add('active');
+            aplicarCorPerfil(selectedPerfil);
+        } else {
+            aplicarCorPerfil('');
         }
     }
 
@@ -207,11 +285,24 @@
         if (selectedOption) {
             const novoPerfil = selectedOption.id;
             document.getElementById('perfilRisco').innerText = novoPerfil.charAt(0).toUpperCase() + novoPerfil.slice(1);
-            
+
             var email = sessionStorage.EMAIL_USUARIO;
             alterarPerfil(novoPerfil, email)
 
             sessionStorage.PERFIL_USUARIO = novoPerfil.charAt(0).toUpperCase() + novoPerfil.slice(1);
+            fetch('/usuarios/atualizarPerfil', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    idUsuario: sessionStorage.ID_USUARIO,
+                    novoPerfil: sessionStorage.PERFIL_USUARIO
+                })
+            }).then(response => {
+                if (!response.ok) throw new Error('Erro ao atualizar perfil no servidor.');
+                return response.json();
+            }).catch(error => {
+                console.error('Erro:', error);
+            });
         }
     }
 
@@ -243,17 +334,17 @@
         var nome = sessionStorage.NOME_USUARIO;
         var perfil = sessionStorage.PERFIL_USUARIO;
 
-        if(perfil == "Conservador") {
+        if (perfil == "Conservador") {
             const elem = document.getElementById("conservador");
             elem.classList.add("selected");
         }
 
-        if(perfil == "Moderado") {
+        if (perfil == "Moderado") {
             const elem = document.getElementById("moderado");
             elem.classList.add("selected");
         }
 
-        if(perfil == "Arrojado") {
+        if (perfil == "Arrojado") {
             const elem = document.getElementById("arrojado");
             elem.classList.add("selected");
         }
@@ -266,19 +357,19 @@
 
     carregarDados();
 
-     document.querySelector('#notificacaoIcon').addEventListener('click', function(e) {
-            e.stopPropagation();
-            const dropdown = document.querySelector('.notificacao-dropdown');
-            dropdown.classList.toggle('active');
-        });
+    document.querySelector('#notificacaoIcon').addEventListener('click', function (e) {
+        e.stopPropagation();
+        const dropdown = document.querySelector('.notificacao-dropdown');
+        dropdown.classList.toggle('active');
+    });
 
-        document.addEventListener('click', function(e) {
-            const dropdown = document.querySelector('.notificacao-dropdown');
-            if (!e.target.closest('.notificacao-container')) {
-                dropdown.classList.remove('active');
-            }
-        });
-    
+    document.addEventListener('click', function (e) {
+        const dropdown = document.querySelector('.notificacao-dropdown');
+        if (!e.target.closest('.notificacao-container')) {
+            dropdown.classList.remove('active');
+        }
+    });
+
     function alterarPerfil(novoPerfil, email) {
         fetch("/usuarios/alterar", {
             method: "POST",
@@ -298,7 +389,7 @@
 
                 resposta.json().then(json => {
                     console.log("PERFIL_USUARIO salvo no sessionStorage:", sessionStorage.ID_USUARIO);
-                    setTimeout(function () {}, 1000); // apenas para exibir o loading
+                    setTimeout(function () { }, 1000); // apenas para exibir o loading
                 });
             } else {
                 resposta.text().then(msg => alert(msg));
@@ -316,4 +407,10 @@
         return false;
     }
 
+    document.addEventListener('click', function (e) {
+        const dropdown = document.querySelector('.notificacao-dropdown');
+        if (!e.target.closest('.notification-container')) {
+            dropdown.classList.remove('active');
+        }
+    });
 </script>

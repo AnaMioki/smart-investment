@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administração Smart Investment - Empresas</title>
+    <link rel="stylesheet" href="Style/css/admCSS.css">
+</head>
+
+<body>
+    <div id="mainContainer">
+        <div id="header">
+            <img id="logo" src="Style/assets/smartLogoVetor.svg" alt="logoSmartInvestment">
+            <div class="navbar">
+                <a href="index.html">Início</a>
+                <a class="selected" href="admEmpresas.html">Empresas</a>
+                <a href="admUsuarios.html">Usuários</a>
+            </div>
+            <img id="perfilIcon" class="perfilBoneco" src="Style/assets/logoutBTN.svg" style="cursor: pointer;"
+                onclick="sair()" alt="">
+        </div>
+
+        <div class="hamburger">
+            <div class="bar1"></div>
+            <div class="bar2"></div>
+            <div class="bar3"></div>
+        </div>
+        <nav class="mobile-menu">
+            <a href="admAcoes.html">Ações</a>
+            <a href="admUsuarios.html">Usuários</a>
+        </nav>
+
+        <div id="mainContent">
+            <h1>Bem-vindo à Administração Smart Investment</h1>
+            <p>Utilize o menu acima para navegar entre as seções de administração.</p>
+
+            <div style="margin: 1.2rem 0;">
+                <button id="btnAdicionarEmpresa" class="btn primary add-empresa-btn"
+                    onclick="abrirCadastroEmpresa()">Adicionar empresa</button>
+            </div>
+
+            <div class="action-list">
+                <div class="action-card">
+                    <div class="action-info">
+                        <h2>Ação 1</h2>
+                        <p>Descrição da Ação 1</p>
+                    </div>
+                    <div class="buttons">
+                        <img src="Style/assets/pencilIcon.svg" alt="">
+                        <img src="Style/assets/trashIcon.svg" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <p>&copy; 2025 Smart Investment. Todos os direitos reservados.</p>
+        </div>
+    </div>
+</body>
+
+</html>
+<script src="Style/js/fazerHamburguer.js"></script>
+<script>
+    window.onload = function () {
+        carregarEmpresas();
+    };
+
+   if (sessionStorage.getItem('ID_USUARIO') === null) {
+        showLoginCard(4);
+    }
+
+    function showLoginCard(seconds) {
+        document.body.classList.add('blurred');
+
+        const overlay = document.createElement('div');
+        overlay.className = 'login-overlay';
+        overlay.innerHTML = `
+                <div class="login-card">
+                    <h3>É necessário fazer login</h3>
+                    <p>Você precisa entrar para acessar esta página. Redirecionando em <span id="login-timer">${seconds}</span>s</p>
+                    <div class="progress"><div class="progress-bar"></div></div>
+                    <div class="login-actions">
+                        <button id="btnLoginNow">Ir para login</button>
+                    </div>
+                </div>
+            `;
+        document.body.appendChild(overlay);
+
+        const bar = overlay.querySelector('.progress-bar');
+        const timerEl = overlay.querySelector('#login-timer');
+        const btnNow = overlay.querySelector('#btnLoginNow');
+
+        let remaining = seconds;
+        timerEl.textContent = remaining;
+
+        const totalMs = seconds * 1000;
+        const start = Date.now();
+
+        const interval = setInterval(() => {
+            const elapsed = Date.now() - start;
+            const pct = Math.min(100, (elapsed / totalMs) * 100);
+            bar.style.width = pct + '%';
+            const secLeft = Math.ceil((totalMs - elapsed) / 1000);
+            timerEl.textContent = secLeft > 0 ? secLeft : 0;
+            if (pct >= 100) {
+                clearInterval(interval);
+                window.location.href = 'login.html';
+            }
+        }, 100);
+
+        btnNow.addEventListener('click', () => {
+            document.body.classList.remove('blurred');
+            window.location.href = 'login.html';
+        });
+
+    }
+
+    function sair() {
+        sessionStorage.clear();
+        window.location.href = 'index.html';
+    }
+
+    function carregarNomeUsuario() {
+        const nomeUsuario = sessionStorage.getItem('NOME_USUARIO');
+        if (nomeUsuario) {
+            console.log('Usuário logado:', nomeUsuario);
+        }
+    }
+    carregarNomeUsuario();
+
+    async function carregarEmpresas() {
+        try {
+            const response = await fetch('/empresas/listarEmpresas', {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            if (!response.ok) throw new Error('Erro ao carregar empresas: ' + response.statusText);
+
+            const empresas = await response.json();
+            const actionList = document.querySelector('.action-list');
+            actionList.innerHTML = '';
+
+            empresas.forEach(empresa => {
+                const id = empresa.idEmpresa ?? empresa.id ?? empresa.ID ?? empresa._id;
+                const nome = empresa.nomeEmpresa ?? empresa.nome ?? empresa.companyName ?? '';
+                const ticker = empresa.ticker ?? empresa.cod ?? empresa.symbol ?? '';
+                const setor = empresa.setor ?? empresa.sector ?? '';
+                const logoURL = empresa.logoURL ?? empresa.logo_url ?? empresa.logo ?? empresa.logoUrl ?? empresa.imagem ?? '';
+
+                const actionCard = document.createElement('div');
+                actionCard.className = 'action-card';
+                actionCard.dataset.id = id;
+                actionCard.dataset.logo = logoURL;
+                actionCard.innerHTML = `
+                    <div class="action-top" style="display:flex;gap:.9rem;align-items:center;">
+                       
+                        <div class="action-info">
+                            <h2 class="empresa-nome">${escapeHtml(nome)} ${ticker ? `(${escapeHtml(ticker)})` : ''}</h2>
+                            <p class="empresa-setor">Setor: ${escapeHtml(setor)}</p>
+                        </div>
+                    </div>
+                    <div class="buttons">
+                        <img onclick="abrirEditorEmpresa(this, ${id})" src="Style/assets/pencilIcon.svg" alt="editar">
+                        <img onclick="excluirEmpresa(${id})" src="Style/assets/trashIcon.svg" alt="excluir">
+                    </div>
+                `;
+                actionList.appendChild(actionCard);
+            });
+        } catch (error) {
+            console.error('Erro:', error);
+        }
+    }
+
+    function abrirEditorEmpresa(btnEl, id) {
+        if (document.querySelector('.empresa-modal')) return;
+
+        const card = btnEl ? btnEl.closest('.action-card') : document.querySelector(`.action-card[data-id="${id}"]`);
+        const nomeEl = card?.querySelector('.empresa-nome');
+        const setorEl = card?.querySelector('.empresa-setor');
+        const logoContainer = card?.querySelector('.empresa-logo');
+
+        const nomeText = nomeEl ? nomeEl.innerText.replace(/\s*\(.*\)$/, '').trim() : '';
+        const tickerMatch = nomeEl ? (nomeEl.innerText.match(/\(([^)]+)\)/) || [null, ''])[1] : '';
+        const setorText = setorEl ? setorEl.innerText.replace(/^Setor:\s*/i, '').trim() : '';
+
+        let logoURL = card?.dataset?.logo ?? '';
+        if (!logoURL && logoContainer) {
+            const img = logoContainer.querySelector('img');
+            logoURL = img ? img.src : '';
+        }
+
+        const overlay = document.createElement('div');
+        overlay.className = 'empresa-modal';
+        overlay.innerHTML = `
+            <div class="empresa-modal-box" role="dialog" aria-modal="true">
+                <header>
+                    <h3>Editar Empresa</h3>
+                    <button class="empresa-modal-close" aria-label="Fechar">&times;</button>
+                </header>
+                <div class="empresa-modal-body">
+                    <label>Nome</label>
+                    <input id="modal-nome" value="${escapeHtml(nomeText)}">
+                    <label>Ticker</label>
+                    <input id="modal-ticker" value="${escapeHtml(tickerMatch)}">
+                    <label>Setor</label>
+                    <input id="modal-setor" value="${escapeHtml(setorText)}">
+                    <label>URL do Logo</label>
+                    <input id="modal-logoURL" value="${escapeHtml(logoURL)}" placeholder="https://exemplo.com/logo.png">
+                </div>
+                <footer>
+                    <button class="btn primary" id="modal-save">Salvar</button>
+                    <button class="btn ghost" id="modal-cancel">Cancelar</button>
+                </footer>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+
+        const close = () => {
+            overlay.remove();
+            document.removeEventListener('keydown', onKey);
+        };
+        const onKey = (e) => { if (e.key === 'Escape') close(); };
+        document.addEventListener('keydown', onKey);
+
+        overlay.querySelector('.empresa-modal-close').addEventListener('click', close);
+        overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+        overlay.querySelector('#modal-cancel').addEventListener('click', close);
+
+        overlay.querySelector('#modal-save').addEventListener('click', async () => {
+            const novoNome = overlay.querySelector('#modal-nome').value.trim();
+            const novoTicker = overlay.querySelector('#modal-ticker').value.trim();
+            const novoSetor = overlay.querySelector('#modal-setor').value.trim();
+            const novoLogoURL = overlay.querySelector('#modal-logoURL').value.trim();
+
+            if (!novoNome || !novoTicker || !novoSetor) {
+                overlay.querySelector('#modal-nome').focus();
+                return;
+            }
+
+            try {
+                const resp = await fetch('/empresas/editarEmpresa', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        idEmpresa: id,
+                        nomeEmpresa: novoNome,
+                        ticker: novoTicker,
+                        setor: novoSetor,
+                        logoURL: novoLogoURL
+                    })
+                });
+                if (!resp.ok) throw new Error('Falha ao editar: ' + resp.statusText);
+                await resp.json();
+                close();
+                carregarEmpresas();
+            } catch (err) {
+                console.error('Erro ao editar empresa:', err);
+                alert('Erro ao salvar alteração.');
+            }
+        });
+
+        setTimeout(() => overlay.querySelector('#modal-nome')?.focus(), 50);
+    }
+
+    async function excluirEmpresa(id) {
+        if (!id && id !== 0) {
+            console.warn('ID inválido ao excluir empresa:', id);
+            return;
+        }
+
+        try {
+            const resp = await fetch(`/empresas/excluirEmpresa/${encodeURIComponent(id)}`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            if (!resp.ok) throw new Error('Falha ao excluir: ' + resp.statusText);
+            carregarEmpresas();
+        } catch (err) {
+            console.error('Erro ao excluir empresa:', err);
+        }
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/[&<>"']/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s]));
+    }
+
+    function editarEmpresa(id) {
+        console.log('Editar empresa com ID:', id);
+        fetch(`/empresas/editarEmpresa`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: id, nome: 'Nome Editado', ticker: 'TCKR', setor: 'Setor Editado', logoURL: 'https://exemplo.com/logo_editado.png' })
+        }).then(resp => {
+            if (!resp.ok) throw new Error('Falha ao editar: ' + resp.statusText);
+            return resp.json();
+        }).then(data => {
+            console.log('Empresa editada com sucesso:', data);
+            carregarEmpresas();
+        }).catch(err => {
+            console.error('Erro ao editar empresa:', err);
+        });
+    }
+
+    async function abrirCadastroEmpresa() {
+        if (document.querySelector('.empresa-modal')) return;
+
+        const overlay = document.createElement('div');
+        overlay.className = 'empresa-modal';
+        overlay.innerHTML = `
+            <div class="empresa-modal-box" role="dialog" aria-modal="true">
+                <header>
+                    <h3>Adicionar Empresa</h3>
+                    <button class="empresa-modal-close" aria-label="Fechar">&times;</button>
+                </header>
+                <div class="empresa-modal-body">
+                    <label>Nome</label>
+                    <input id="new-nome" placeholder="Nome da empresa">
+                    <label>Ticker</label>
+                    <input id="new-ticker" placeholder="EXEM">
+                    <label>Setor</label>
+                    <input id="new-setor" placeholder="Setor">
+                    <label>URL do Logo</label>
+                    <input id="new-logo" placeholder="https://exemplo.com/logo.png">
+                </div>
+                <footer>
+                    <button class="btn primary" id="new-save">Salvar</button>
+                    <button class="btn ghost" id="new-cancel">Cancelar</button>
+                </footer>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+
+        const close = () => {
+            overlay.remove();
+            document.removeEventListener('keydown', onKey);
+        };
+        const onKey = (e) => { if (e.key === 'Escape') close(); };
+        document.addEventListener('keydown', onKey);
+
+        overlay.querySelector('.empresa-modal-close').addEventListener('click', close);
+        overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+        overlay.querySelector('#new-cancel').addEventListener('click', close);
+
+        overlay.querySelector('#new-save').addEventListener('click', async () => {
+            const nome = overlay.querySelector('#new-nome').value.trim();
+            const ticker = overlay.querySelector('#new-ticker').value.trim();
+            const setor = overlay.querySelector('#new-setor').value.trim();
+            const logoURL = overlay.querySelector('#new-logo').value.trim();
+
+            if (!nome || !ticker || !setor || !logoURL) {
+
+                ['#new-nome', '#new-ticker', '#new-setor', '#new-logo'].forEach(sel => {
+                    const el = overlay.querySelector(sel);
+                    if (el && !el.value.trim()) {
+                        el.style.borderColor = '#dc2626';
+                        setTimeout(() => el.style.borderColor = '', 1600);
+                    }
+                });
+                return;
+            }
+
+            try {
+                const resp = await fetch('/empresas/cadastrarEmpresa', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        nomeEmpresa: nome,
+                        ticker: ticker,
+                        setor: setor,
+                        logoURL: logoURL
+                    })
+                });
+                if (!resp.ok) throw new Error('Falha ao cadastrar: ' + resp.statusText);
+                await resp.json();
+                close();
+                carregarEmpresas();
+            } catch (err) {
+                console.error('Erro ao cadastrar empresa:', err);
+                alert('Erro ao cadastrar empresa.');
+            }
+        });
+
+        setTimeout(() => overlay.querySelector('#new-nome')?.focus(), 50);
+    }
+</script>

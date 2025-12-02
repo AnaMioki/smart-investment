@@ -25,7 +25,8 @@ function autenticar(req, res) {
                     res.json({
                     idUsuario: usuario.idUsuario,      
                     nome: usuario.nome,
-                    email: usuario.email
+                    email: usuario.email,
+                    perfil: usuario.perfil
                 });
                    
                 } else if (resultadoAutenticar.length == 0) {
@@ -46,7 +47,6 @@ function autenticar(req, res) {
 
 
 function cadastrar(req, res) {
-    // Crie uma variável que vá recuperar os valores do arquivo cadastro.html
 
     var nomeCompleto = req.body.nomeCompleto;
     var dtNascimento = req.body.dtNascimento;
@@ -73,7 +73,6 @@ function cadastrar(req, res) {
     //     return;
     // }
 
-    // Passe os valores como parâmetro e vá para o arquivo usuarioModel.js
     usuarioModel.cadastrar(nomeCompleto, dtNascimento, email, senha, perfil)
         .then(resultado => res.json(resultado))
         .catch(erro => {
@@ -97,20 +96,65 @@ function cadastrar(req, res) {
 
 }
 
-function alterar(req, res) {
-    var email = req.body.emailServer;
-    var novoPerfil = req.body.perfilServer;
+function atualizarDados(req, res) {
+    var idUsuario = req.body.idUsuario;
+    var novoNome = req.body.novoNome;
+    var novoEmail = req.body.novoEmail;
+    usuarioModel.atualizarDados(idUsuario, novoNome, novoEmail)
+        .then(function (resultado) {
+            res.json(resultado);;
+        })
+        .catch(function (erro) {
+            console.log(erro);
+            console.log("\nHouve um erro ao atualizar os dados! Erro: ", erro.sqlMessage);
+            res.status(500).json({ erro: "Erro interno ao atualizar dados" });
+        });
+}   
 
-    usuarioModel.alterar(novoPerfil, email)
-        .then(resultado => res.json(resultado))
-        .catch(erro => {
-            console.log("Erro ao alterar perfil: ", erro.sqlMessage);
-            res.status(500).json(erro.sqlMessage);
+function buscarUsuarios(req, res) {
+    usuarioModel.buscarUsuarios()
+        .then(function (resultado) {
+            res.json(resultado);
+        })
+        .catch(function (erro) {
+            console.log(erro);
+            console.log("\nHouve um erro ao buscar usuários! Erro: ", erro.sqlMessage);
+            res.status(500).json({ erro: "Erro interno ao buscar usuários" });
+        });
+}
+
+function excluirUsuario(req, res) {
+    var idUsuario = req.params.idUsuario;
+    usuarioModel.excluirUsuario(idUsuario)
+        .then(function (resultado) {
+            res.json(resultado);;
+        })
+        .catch(function (erro) {
+            console.log(erro);
+            console.log("\nHouve um erro ao excluir o usuário! Erro: ", erro.sqlMessage);
+            res.status(500).json({ erro: "Erro interno ao excluir usuário" });
+        });
+}
+
+function atualizarPerfil(req, res) {
+    var idUsuario = req.body.idUsuario;
+    var novoPerfil = req.body.novoPerfil;
+    usuarioModel.atualizarPerfil(idUsuario, novoPerfil)
+        .then(function (resultado) {
+            res.json(resultado);;
+        })
+        .catch(function (erro) {
+            console.log(erro);
+            console.log("\nHouve um erro ao atualizar o perfil! Erro: ", erro.sqlMessage);
+            res.status(500).json({ erro: "Erro interno ao atualizar perfil" });
         });
 }
 
 module.exports = {
     autenticar,
     cadastrar,
-    alterar
+    buscarUsuarios,
+    excluirUsuario,
+    atualizarPerfil,
+    atualizarDados
 }

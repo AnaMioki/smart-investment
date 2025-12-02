@@ -23,6 +23,7 @@
             </div>
 
             <div class="notification-container">
+<<<<<<< HEAD
                 <span class="notification-badge">3</span>
                 <img id="notificacaoIcon" src="Style/assets/sinoNotificacao.svg" alt="">
                 <div class="notificacao-dropdown">
@@ -48,6 +49,11 @@
                         </div>
                     </div>
                     <a href="notificacoes.html">Ver todas as notificações</a>
+=======
+                <span class="notification-badge"></span>
+                <img id="notificacaoIcon" src="Style/assets/sinoNotificacao.svg" alt="">
+                <div class="notificacao-dropdown">
+>>>>>>> main
                 </div>
             </div>
             <img id="perfilIcon" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" alt="">
@@ -68,7 +74,10 @@
         </div>
         <div id="mainContent">
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> main
             <div id="mainAcoes">
                 <div id="selectAcoes">
                     <h1>Análise de Ações</h1>
@@ -105,7 +114,10 @@
                                         determinado período.</span>
                                 </span> Médio
                             </p>
+<<<<<<< HEAD
 
+=======
+>>>>>>> main
                             <h1 class="verde">+21.8%</h1>
                         </div>
                         <img src="Style/assets/setaPraCimaSetores.svg" class="fundoVerde">
@@ -117,7 +129,10 @@
                                     Volatilidade <span class="tip">Mostra o quanto o preço oscila ao longo do
                                         tempo.</span>
                                 </span> Média</p>
+<<<<<<< HEAD
 
+=======
+>>>>>>> main
                             <h1 class="laranja">26.7%</h1>
                         </div>
                         <img src="Style/assets/metricaSetores.svg" class="fundoLaranja">
@@ -129,7 +144,10 @@
                                     P/E <span class="tip">(Price to Earnings) é o índice preço/lucro, que mostra quantas
                                         vezes o lucro anual de uma empresa está sendo pago pelo preço da ação</span>
                                 </span> Médio</p>
+<<<<<<< HEAD
 
+=======
+>>>>>>> main
                             <h1 class="roxo">35.2</h1>
                         </div>
                         <img src="Style/assets/sifrao.svg" class="fundoRoxo">
@@ -155,14 +173,15 @@
                     <!-- alterando aqui!  -->
                     <div id="listaAcoes">
                         <div class="descricao">
+
                             <!-- <div class="tipo">
                                 <img src="Style/assets/imagemVazia.webp">
+
 
                                 <h1>Ação</h1>
                                 <h1>Setor</h1>
                                 <h1>Preço</h1>
                                 <h1><span class="tooltip left-edge">
-
                                         Retorno
                                         <span class="tip">É o lucro ou prejuízo percentual do investimento em
                                             determinado período.</span>
@@ -264,7 +283,7 @@
                                 <h1 class="verde">+15.2%</h1>
                             </div>
                             <div class="especificacao">
-                                    <h1 class="disaparecido">Sharpe:</h1>
+                                <h1 class="disaparecido">Sharpe:</h1>
                                 <h1>0.89</h1>
                                 <h1 class="disaparecido">Beta:</h1>
                                 <h1>1.18</h1>
@@ -286,7 +305,7 @@
                                 <h1 class="verde">+12.8%</h1>
                             </div>
                             <div class="especificacao">
-                                   <h1 class="disaparecido">Sharpe:</h1>
+                                <h1 class="disaparecido">Sharpe:</h1>
                                 <h1>0.89</h1>
                                 <h1 class="disaparecido">Beta:</h1>
                                 <h1>1.18</h1>
@@ -308,7 +327,7 @@
                                 <h1 class="verde">+11.5%</h1>
                             </div>
                             <div class="especificacao">
-                                 <h1 class="disaparecido">Sharpe:</h1>
+                                <h1 class="disaparecido">Sharpe:</h1>
                                 <h1>0.89</h1>
                                 <h1 class="disaparecido">Beta:</h1>
                                 <h1>1.18</h1>
@@ -329,7 +348,7 @@
                                 <h1 class="verde">9.3%</h1>
                             </div>
                             <div class="especificacao">
-                                   <h1 class="disaparecido">Sharpe:</h1>
+                                <h1 class="disaparecido">Sharpe:</h1>
                                 <h1>0.89</h1>
                                 <h1 class="disaparecido">Beta:</h1>
                                 <h1>1.18</h1>
@@ -349,7 +368,10 @@
 
         </div>
     </div>
+<<<<<<< HEAD
 
+=======
+>>>>>>> main
 
 
 
@@ -358,6 +380,96 @@
 </html>
 
 <script>
+    document.addEventListener("DOMContentLoaded", carregarNotificacoes);
+
+    async function carregarNotificacoes() {
+        const idUsuario = sessionStorage.ID_USUARIO;
+
+        if (!idUsuario) {
+            console.warn("ID_USUARIO não encontrado no sessionStorage.");
+            return;
+        }
+
+        fetch("/notificacoes/receberNotificacoes", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                idServer: idUsuario,
+            })
+        })
+            .then(res => {
+                if (!res.ok) throw new Error("Erro ao buscar notificações");
+                return res.json();
+            })
+            .then(notificacoes => {
+                atualizarDropdown(notificacoes);
+            })
+            .catch(err => console.error(err));
+    }
+
+    function atualizarDropdown(notificacoes) {
+        var contador = 0;
+
+        const container = document.querySelector(".notificacao-dropdown");
+        const badge = document.querySelector(".notification-badge");
+
+        // Limpa o container (evita duplicar)
+        container.innerHTML = "";
+        var qtd_not = 0;
+
+        notificacoes.forEach(not => {
+            if (not.lido == 0) {
+                qtd_not++;
+            }
+        });
+
+        // Atualiza badge (mostra no máx. 9+)
+        badge.textContent = qtd_not > 9 ? "9+" : qtd_not;
+
+        notificacoes.forEach(not => {
+            if (contador < 3) {
+                const item = document.createElement("div");
+                item.classList.add("notificacao-item");
+
+                item.innerHTML = `
+                        <div class="notificacao-content">
+                            <div class="notificacao-title">${not.tipo}</div>
+                            <div class="notificacao-text">${not.mensagem}</div>
+                            <div class="notificacao-time">${formatarTempo(not.dtNotificacao)}</div>
+                        </div>
+                    `;
+
+                container.appendChild(item);
+                console.log(not.tipo)
+            }
+            contador++;
+        });
+
+        // Link para ver todas
+        const link = document.createElement("a");
+        link.href = "notificacoes.html";
+        link.textContent = "Ver todas as notificações";
+        container.appendChild(link);
+    }
+
+    function formatarTempo(dataBanco) {
+        const data = new Date(dataBanco);
+        const agora = new Date();
+
+        const diffMs = agora - data;
+        const diffMin = Math.floor(diffMs / 60000);
+        const diffHoras = Math.floor(diffMin / 60);
+
+        if (diffMin < 1) return "Agora mesmo";
+        if (diffMin < 60) return `Há ${diffMin} minutos`;
+        if (diffHoras < 24) return `Há ${diffHoras} hora${diffHoras > 1 ? "s" : ""}`;
+
+        const diffDias = Math.floor(diffHoras / 24);
+        return `Há ${diffDias} dia${diffDias > 1 ? "s" : ""}`;
+    }
+    
     function criarGraficoEvolucaoPrecos() {
         const ctx = document.getElementById('graphLinha').getContext('2d');
 
@@ -375,6 +487,7 @@
                     borderColor: 'rgba(75, 192, 192, 1)',
                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
 
+            main
                 }]
             },
             options: {
@@ -597,6 +710,7 @@
     //         console.error("Erro ao desfavoritar:", erro);
     //     }
     // }
+
 
 </script>
 
