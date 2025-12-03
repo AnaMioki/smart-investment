@@ -57,11 +57,11 @@
                             <option>Industrial</option>
                             <option>Outros</option>
                         </select>
-                        <select name="seletorTipo" id="selectTipo">
+                        <!-- <select name="seletorTipo" id="selectTipo">
                             <option value="retorno" selected>Por retorno</option>
                             <option value="volatibilidade">Por volatilidade</option>
                             <option value="valor">Por valor</option>
-                        </select>
+                        </select> -->
                     </div>
                 </div>
 
@@ -129,7 +129,7 @@
 
                     <div id="listaAcoes">
                         <div class="descricao">
-                            <div class="tipo">
+                             <div class="tipo">
                                 <img src="Style/assets/imagemVazia.webp">
                                 <h1>Ação</h1>
                                 <h1>Setor</h1>
@@ -140,6 +140,7 @@
                                             determinado período.</span>
                                     </span></h1>
                             </div>
+                            
                             <div class="especificacao">
                                 <h1><span class="tooltip left-edge">
                                         Sharpe
@@ -154,67 +155,53 @@
                             </div>
                         </div>
 
-
-                        <div>
-                            <div class="tipo">
-                                <img src="Style/assets/estrelaCheia.svg">
-                                <div>
-                                    <h1>Apple Inc</h1>
-                                    <p>AAPL</p>
+                         <!-- modelo da acao -->
+                        <div id="card-modelo" class="card" style="display: none;">
+                            <div>
+                                <div class="tipo">
+                                    <img class="icon-favorito" src="Style/assets/estrelaCheia.svg">
+                                    <div>
+                                        <h1 class="acao-nome"></h1>
+                                        <p class="acao-ticker"></p>
+                                    </div>
+                                    <h1 class="setor"></h1>
+                                    <h1 class="preco"></h1>
+                                    <h1 class="retorno verde"></h1>
                                 </div>
-                                <h1 class="setor">Tecnologia</h1>
-                                <h1>$178.45</h1>
-                                <h1 class="verde">+22.5%</h1>
-                            </div>
-                            <div class="especificacao">
-                                <h1 class="disaparecido">Sharpe:</h1>
-                                <h1>0.89</h1>
-                                <h1 class="disaparecido">Beta:</h1>
-                                <h1>1.18</h1>
-                                <h1 class="disaparecido">Volume: </h1>
-                                <h1>125M</h1>
+
+                                <div class="especificacao">
+                                    <h1 class="disaparecido">Sharpe:</h1>
+                                    <h1 class="sharpe"></h1>
+                                    <h1 class="disaparecido">Beta:</h1>
+                                    <h1 class="beta"></h1>
+                                    <h1 class="disaparecido">Volume:</h1>
+                                    <h1 class="volume"></h1>
+                                </div>
                             </div>
                         </div>
 
-                        <div>
-                            <div class="tipo">
-                                <img src="Style/assets/estrelaCheia.svg">
-                                <div>
-                                    <h1>Microsoft</h1>
-                                    <p>MSFT</p>
+                         <!-- deixando uma ação mockada comentada para registro -->
+                         <!-- <div id="card-modelo" class="card" style="display: none;">
+                            <div>
+                                <div class="tipo">
+                                    <img class="icon-favorito" src="Style/assets/estrelaCheia.svg">
+                                    <div>
+                                        <h1 class="acao-nome"></h1>
+                                        <p class="acao-ticker"></p>
+                                    </div>
+                                    <h1 class="setor"></h1>
+                                    <h1 class="preco"></h1>
+                                    <h1 class="retorno verde"></h1>
                                 </div>
-                                <h1 class="setor">Tecnologia</h1>
-                                <h1>$374.45</h1>
-                                <h1 class="verde">19.8%</h1>
-                            </div>
-                            <div class="especificacao">
-                                <h1 class="disaparecido">Sharpe:</h1>
-                                <h1>0.89</h1>
-                                <h1 class="disaparecido">Beta:</h1>
-                                <h1>1.18</h1>
-                                <h1 class="disaparecido">Volume: </h1>
-                                <h1>125M</h1>
-                            </div>
-                        </div>
 
-                        <div>
-                            <div class="tipo">
-                                <img src="Style/assets/estrelaCheia.svg">
-                                <div>
-                                    <h1>Johnson & Johnson</h1>
-                                    <p>JNJ</p>
+                                <div class="especificacao">
+                                    <h1 class="disaparecido">Sharpe:</h1>
+                                    <h1 class="sharpe"></h1>
+                                    <h1 class="disaparecido">Beta:</h1>
+                                    <h1 class="beta"></h1>
+                                    <h1 class="disaparecido">Volume:</h1>
+                                    <h1 class="volume"></h1>
                                 </div>
-                                <h1 class="setor">Saúde</h1>
-                                <h1>$156.32</h1>
-                                <h1 class="verde">+15.2%</h1>
-                            </div>
-                            <div class="especificacao">
-                                <h1 class="disaparecido">Sharpe:</h1>
-                                <h1>0.89</h1>
-                                <h1 class="disaparecido">Beta:</h1>
-                                <h1>1.18</h1>
-                                <h1 class="disaparecido">Volume: </h1>
-                                <h1>125M</h1>
                             </div>
                         </div>
 
@@ -239,49 +226,7 @@
                                 <h1>125M</h1>
                             </div>
                         </div>
-
-
-                        <div>
-                            <div class="tipo">
-                                <img src="Style/assets/estrelaVazia.svg">
-                                <div>
-                                    <h1>Exxon Mobil</h1>
-                                    <p>XOM</p>
-                                </div>
-                                <h1 class="setor">Energia</h1>
-                                <h1>$105.23</h1>
-                                <h1 class="verde">+11.5%</h1>
-                            </div>
-                            <div class="especificacao">
-                                <h1 class="disaparecido">Sharpe:</h1>
-                                <h1>0.89</h1>
-                                <h1 class="disaparecido">Beta:</h1>
-                                <h1>1.18</h1>
-                                <h1 class="disaparecido">Volume: </h1>
-                                <h1>125M</h1>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="tipo">
-                                <img src="Style/assets/estrelaVazia.svg">
-                                <div>
-                                    <h1>Procter & Gamble</h1>
-                                    <p>PG</p>
-                                </div>
-                                <h1 class="setor">Consumo</h1>
-                                <h1>$105.23</h1>
-                                <h1 class="verde">9.3%</h1>
-                            </div>
-                            <div class="especificacao">
-                                <h1 class="disaparecido">Sharpe:</h1>
-                                <h1>0.89</h1>
-                                <h1 class="disaparecido">Beta:</h1>
-                                <h1>1.18</h1>
-                                <h1 class="disaparecido">Volume: </h1>
-                                <h1>125M</h1>
-                            </div>
-                        </div>
+ -->
 
 
                     </div>
