@@ -66,15 +66,12 @@
         carregarEmpresas();
     };
 
-   if (sessionStorage.getItem('ID_USUARIO') === null) {
-        showLoginCard(4);
-    }
 
-    if(sessionStorage.PERFIL_USUARIO != "Administrador"){
+    if(sessionStorage.PERFIL_USUARIO != "Administrador" || sessionStorage.getItem('ID_USUARIO') === null){
         window.location.href = 'login.html';
         sessionStorage.clear;
     }
-    
+
     function showLoginCard(seconds) {
         document.body.classList.add('blurred');
 

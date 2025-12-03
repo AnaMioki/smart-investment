@@ -61,11 +61,7 @@
     <script src="Style/js/fazerHamburguer.js"></script>
 
     <script>
-      if (sessionStorage.getItem('ID_USUARIO') === null) {
-        showLoginCard(4);
-    }
-
-    if(sessionStorage.PERFIL_USUARIO != "Administrador"){
+     if(sessionStorage.PERFIL_USUARIO != "Administrador" || sessionStorage.getItem('ID_USUARIO') === null){
         window.location.href = 'login.html';
         sessionStorage.clear;
     }
