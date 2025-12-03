@@ -124,6 +124,10 @@
                     sessionStorage.PERFIL_USUARIO = json.perfil;
                     sessionStorage.ID_USUARIO = json.idUsuario;
                     
+                    if(json.perfil == "Administrador"){
+                        window.location = "./admUsuarios.html";
+                    }
+
                     console.log("ID_USUARIO salvo no sessionStorage:", sessionStorage.ID_USUARIO);
                     setTimeout(function () {
                         window.location = "./perfil.html";
