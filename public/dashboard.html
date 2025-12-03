@@ -10,7 +10,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
-<body>
+<body onload="atualizarDashboard()">
   <div id="mainContainer">
     <div id="header">
       <img id="logo" src="Style/assets/smartLogoVetor.svg" alt="logoSmartInvestment">
@@ -47,214 +47,44 @@
     </div>
 
     <div id="mainContent">
-
-      <div id="contentPrincipal">
-        <div id="topoDash">
-          <h1>Ranking de Setores</h1>
-          <select id="selectDash">
-            <option value="3m">3 meses</option>
-            <option value="5m">5 meses</option>
-            <option value="9m">9 meses</option>
-            <option value="1" selected>1 ano</option>
-            <option value="2">2 anos</option>
-            <option value="3">3 anos</option>
-          </select>
-        </div>
-
-        <div id="listSetores">
-          <div id="lista">
-            <div>
-              <div class="numero">
-
-                <h2>1</h2>
-                <div>
-                  <h1>Tecnologia</h1>
-                  <p>68 ações <br> disponíveis</p>
-                </div>
-              </div>
-
-              <div class="infos">
-                <div>
-                  <h1>Retorno</h1>
-                  <p class="corVerde">+18.5%</p>
+            <div id="contentPrincipal">
+                <div id="topoDash">
+                    <h1>Ranking de Setores</h1>
+                    <!-- Values alterados para representar QUANTIDADE DE ANOS ATRÁS -->
+                    <select id="selectDash" onchange="atualizarDashboard()">
+                        <option value="1">1 ano (Atual)</option>
+                        <option value="2" selected>2 anos (Média)</option>
+                        <option value="3">3 anos (Média)</option>
+                        <option value="4">4 anos (Média)</option>
+                        <option value="5">5 anos (Média)</option>
+                    </select>
                 </div>
 
-                <div>
-                  <h1>Sharpe</h1>
-                  <p>0.76</p>
+                <div id="listSetores">
+                    <!-- A Lista será preenchida via JS -->
+                    <div id="lista">
+                        <!-- Conteúdo injetado dinamicamente aqui -->
+                    </div>
                 </div>
 
-                <div>
-                  <h1>Beta</h1>
-                  <p>1.15</p>
+                <div id="graphDash">
+                    <div>
+                        <h1>Top 5 Retorno Médio por Setor</h1>
+                        <canvas id="rankSetor"></canvas>
+                    </div>
+
+                    <div>
+                        <h1>Volatilidade x Retorno (Dispersão)</h1>
+                         <!-- Mudei para Scatter ou Bar pois Linha temporal precisa de outra query -->
+                        <canvas id="graphSecundario"></canvas>
+                    </div>
                 </div>
 
-                <div>
-                  <h1>Volatilidade</h1>
-                  <p class="corLaranja">24.3%</p>
+                <div id="graphGrande">
+                    <h1>Volatilidade vs Retorno (Visão Geral)</h1>
+                    <canvas id="volatilidadeVolume"></canvas>
                 </div>
-
-                <div>
-                  <h1>Max Drawdown</h1>
-                  <p class="corVermelha">-15.2%</p>
-                </div>
-
-                <h1 class="azul">Alta</h1>
-              </div>
-
             </div>
-
-            <div>
-              <div class="numero">
-
-                <h2>2</h2>
-                <div>
-                  <h1>Saúde</h1>
-                  <p>54 ações <br> disponíveis</p>
-                </div>
-              </div>
-
-              <div class="infos">
-                <div>
-                  <h1>Retorno</h1>
-                  <p class="corVerde">+15.2%</p>
-                </div>
-
-                <div>
-                  <h1>Sharpe</h1>
-                  <p>0.81</p>
-                </div>
-
-                <div>
-                  <h1>Beta</h1>
-                  <p>0.92</p>
-                </div>
-
-                <div>
-                  <h1>Volatilidade</h1>
-                  <p class="corLaranja">18.7%</p>
-                </div>
-
-                <div>
-                  <h1>Max Drawdown</h1>
-                  <p class="corVermelha">-11.8%</p>
-                </div>
-
-                <h1 class="azul">Alta</h1>
-              </div>
-
-            </div>
-
-
-            <div>
-              <div class="numero">
-
-                <h2>3</h2>
-                <div>
-                  <h1>Financeiro</h1>
-                  <p>72 ações <br> disponíveis</p>
-                </div>
-              </div>
-
-              <div class="infos">
-                <div>
-                  <h1>Retorno</h1>
-                  <p class="corVerde">+12.8%</p>
-                </div>
-
-                <div>
-                  <h1>Sharpe</h1>
-                  <p>0.58</p>
-                </div>
-
-                <div>
-                  <h1>Beta</h1>
-                  <p>1.08</p>
-                </div>
-
-                <div>
-                  <h1>Volatilidade</h1>
-                  <p class="corLaranja">22.1%</p>
-                </div>
-
-                <div>
-                  <h1>Max Drawdown</h1>
-                  <p class="corVermelha">-18.5%</p>
-                </div>
-
-                <h1 class="verde">Muito Alta</h1>
-              </div>
-
-            </div>
-
-
-            <div>
-              <div class="numero">
-
-                <h2>4</h2>
-                <div>
-                  <h1>Energia</h1>
-                  <p>38 ações <br> disponíveis</p>
-                </div>
-              </div>
-
-              <div class="infos">
-                <div>
-                  <h1>Retorno</h1>
-                  <p class="corVerde">+11.5%</p>
-                </div>
-
-                <div>
-                  <h1>Sharpe</h1>
-                  <p>0.41</p>
-                </div>
-
-                <div>
-                  <h1>Beta</h1>
-                  <p>1.32</p>
-                </div>
-
-                <div>
-                  <h1>Volatilidade</h1>
-                  <p class="corLaranja">28.4%</p>
-                </div>
-
-                <div>
-                  <h1>Max Drawdown</h1>
-                  <p class="corVermelha">-22.3%</p>
-                </div>
-
-                <h1 class="amarelo">Média</h1>
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
-        <div id="graphDash">
-
-          <div>
-            <h1>Top 5 Retorno Médio por Setor</h1>
-            <canvas id="rankSetor">
-            </canvas>
-          </div>
-
-          <div>
-            <h1>Evolução do Retorno Acumulado</h1>
-            <canvas id="graphLinha"></canvas>
-          </div>
-        </div>
-
-        <div id="graphGrande">
-          <h1>Volatilidade x Volume Negociado por Setor</h1>
-          <canvas id="volatilidadeVolume"></canvas>
-        </div>
-
-      </div>
-
-    </div>
 
     <div id="sobreposicaoLista">
       <div>
@@ -379,9 +209,9 @@
         window.location.href = "./login.html";
     }
     
-      if (sessionStorage.getItem('ID_USUARIO') === null) {
-        showLoginCard(4);
-    }
+  //    if (sessionStorage.getItem('ID_USUARIO') === null) {
+  //      showLoginCard(4);
+  //  }
 
     function showLoginCard(seconds) {
         document.body.classList.add('blurred');
@@ -429,6 +259,211 @@
 
     }
 
+  //                    COMEÇANDO MINHA PARTE 
+
+// Variáveis globais para guardar as instâncias dos gráficos e poder destruí-las antes de atualizar
+    let chartRankSetor = null;
+    let chartSecundario = null;
+    let chartVolatilidade = null;
+
+    function atualizarDashboard() {
+        const periodoSelecionado = document.getElementById('selectDash').value;
+
+        fetch("/dashboard/receberDashboard", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                periodoServer: periodoSelecionado
+            })
+        }).then(function (resposta) {
+            if (resposta.ok) {
+                if (resposta.status == 204) {
+                    var feed = document.getElementById("lista");
+                    feed.innerHTML = "<h3>Nenhum dado encontrado para esses anos.</h3>";
+                    throw "Nenhum resultado encontrado!!";
+                }
+
+                resposta.json().then(function (respostaJSON) {
+                    console.log("Dados recebidos: ", JSON.stringify(respostaJSON));
+                    
+                    renderizarLista(respostaJSON);
+                    renderizarGraficos(respostaJSON);
+                });
+            } else {
+                throw ("Houve um erro na API!");
+            }
+        }).catch(function (resposta) {
+            console.error(resposta);
+        });
+    }
+
+    function renderizarLista(dados) {
+        const listaDiv = document.getElementById('lista');
+        listaDiv.innerHTML = ""; // Limpa a lista atual
+
+        // Percorre os dados recebidos e cria os cards HTML
+        // Vamos mostrar o TOP 4 na lista como no seu exemplo original
+        for (let i = 0; i < 5 /*dados.length*/; i++) {
+            let setor = dados[i];
+            
+            // Lógica simples de classificação (você pode aprimorar)
+            let classificacaoTexto = "Baixa";
+            let classificacaoCor = "corVermelha"; // CSS class
+            
+            if (setor.rentabilidade_periodo > 15) {
+                classificacaoTexto = "Muito Alta";
+                classificacaoCor = "verde"; // CSS class baseada no seu HTML antigo
+            } else if (setor.rentabilidade_periodo > 10) {
+                classificacaoTexto = "Alta";
+                classificacaoCor = "azul";
+            } else if (setor.rentabilidade_periodo > 5) {
+                classificacaoTexto = "Média";
+                classificacaoCor = "amarelo";
+            }
+
+            // HTML Template String
+            listaDiv.innerHTML += `
+            <div>
+                <div class="numero">
+                    <h2>${i + 1}</h2>
+                    <div>
+                        <h1>${setor.setor}</h1>
+                        <p>Dados consolidados</p>
+                    </div>
+                </div>
+
+                <div class="infos">
+                    <div>
+                        <h1>Retorno</h1>
+                        <p class="corVerde">${setor.rentabilidade_periodo}%</p>
+                    </div>
+
+                    <div>
+                        <h1>DRE (Médio)</h1>
+                        <p>${setor.DRE}</p>
+                    </div>
+
+                    <div>
+                        <h1>EBITDA (Médio)</h1>
+                        <p>${setor.EBITDA}</p>
+                    </div>
+
+                    <div>
+                        <h1>Volatilidade</h1>
+                        <p class="corLaranja">${setor.volatilidade_periodo}%</p>
+                    </div>
+
+                    <h1 class="${classificacaoCor}">${classificacaoTexto}</h1>
+                </div>
+            </div>
+            `;
+        }
+    }
+
+    function renderizarGraficos(dados) {
+        // Preparando Arrays para o ChartJS
+        const labelsSetor = dados.map(item => item.setor);
+        const dataRetorno = dados.map(item => item.rentabilidade_periodo);
+        const dataVolatilidade = dados.map(item => item.volatilidade_periodo);
+
+        // --- Gráfico 1: Top Retorno por Setor ---
+        const ctxRank = document.getElementById('rankSetor');
+        if (chartRankSetor) chartRankSetor.destroy(); // Destroi anterior para não bugar
+
+        chartRankSetor = new Chart(ctxRank, {
+            type: 'bar',
+            data: {
+                labels: labelsSetor.slice(0, 5), // Pega apenas os top 5
+                datasets: [{
+                    label: 'Retorno Médio (%)',
+                    data: dataRetorno.slice(0, 5),
+                    backgroundColor: ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+
+        // --- Gráfico 2: Volatilidade vs Retorno (Scatter Plot simulado com barras por enquanto) ---
+        // Nota: O gráfico de linha temporal original precisaria de uma query diferente (dados por mês).
+        // Aqui vou plotar Volatilidade comparada com retorno para aproveitar os dados que temos.
+        const ctxSec = document.getElementById('graphSecundario');
+        if (chartSecundario) chartSecundario.destroy();
+
+        chartSecundario = new Chart(ctxSec, {
+            type: 'bar',
+            data: {
+                labels: labelsSetor.slice(0, 5),
+                datasets: [
+                    {
+                        label: 'Retorno (%)',
+                        data: dataRetorno.slice(0, 5),
+                        backgroundColor: '#10B981',
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'Volatilidade (%)',
+                        data: dataVolatilidade.slice(0, 5),
+                        backgroundColor: '#EF4444',
+                        borderRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+            }
+        });
+
+        // --- Gráfico 3: Volatilidade Horizontal ---
+        const ctxVol = document.getElementById('volatilidadeVolume');
+        if (chartVolatilidade) chartVolatilidade.destroy();
+
+        chartVolatilidade = new Chart(ctxVol, {
+            type: 'bar',
+            data: {
+                labels: labelsSetor,
+                datasets: [{
+                    label: 'Volatilidade do Período (%)',
+                    data: dataVolatilidade,
+                    backgroundColor: '#b388eb',
+                    borderRadius: 6,
+                    barThickness: 20,
+                }]
+            },
+            options: {
+                indexAxis: 'y', // Horizontal
+                responsive: true,
+            }
+        });
+    }
+
+    function sair() {
+        sessionStorage.clear();
+        window.location.href = "./login.html";
+    }
+    
+    // Dropdown Logic
+    document.querySelector('#notificacaoIcon').addEventListener('click', function(e) {
+        e.stopPropagation();
+        const dropdown = document.querySelector('.notificacao-dropdown');
+        dropdown.classList.toggle('active');
+    });
+
+    document.addEventListener('click', function(e) {
+        const dropdown = document.querySelector('.notificacao-dropdown');
+        if (!e.target.closest('.notificacao-container')) {
+            dropdown.classList.remove('active');
+        }
+    });
+
+
+    /*
   function chamarGraficos() {
     const ctx = document.getElementById('rankSetor');
 
@@ -631,6 +666,6 @@
     if (!e.target.closest('.notificacao-container')) {
       dropdown.classList.remove('active');
     }
-  });
+  });*/
 </script>
 <script src="Style/js/fazerHamburguer.js"></script>
