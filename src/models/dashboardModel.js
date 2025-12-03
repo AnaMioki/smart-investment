@@ -1,4 +1,34 @@
-var database = require("../database/config")
+var database = require("../database/config");
+
+function receberDashboard(anos) {
+    // Tratamento para transformar o array [2023, 2024] em string "2023, 2024"
+    const anosString = anos.join(',');
+
+    var instrucaoSql = `
+        SELECT 
+            setor,
+            -- A mágica da média ponderada correta:
+            TRUNCATE(SUM(soma_retorno) / SUM(qtd_empresas), 2) as rentabilidade_periodo,
+            TRUNCATE(SUM(soma_volatilidade) / SUM(qtd_empresas), 2) as volatilidade_periodo,
+            TRUNCATE(SUM(soma_dre) / SUM(qtd_empresas), 2) as DRE,
+            TRUNCATE(SUM(soma_ebitda) / SUM(qtd_empresas), 2) as EBITDA
+        FROM dashboard_setorial_base
+        WHERE ano_referencia IN (${anosString})
+        GROUP BY setor
+        ORDER BY rentabilidade_periodo DESC;
+    `;
+
+    console.log("Executando a instrução do SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
+module.exports = {
+    receberDashboard
+};
+
+
+
+/*var database = require("../database/config")
 function receberDashboard() {
     var instrucaoSql = `SELECT 
     e.setor AS setor,
@@ -16,4 +46,4 @@ ORDER BY preco_medio_ponderado DESC;`;
 
 module.exports = {
     receberDashboard
-};
+};*/
