@@ -27,7 +27,7 @@ body {
     justify-content: space-between;
     background-color: #ffffff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
+    position: relative;
 }
 
 ;
@@ -583,4 +583,33 @@ Caso queira modificar uma div que tenha algo
     .login-card { padding: 16px; }
     .login-actions { flex-direction: column; gap: 8px; }
     #btnLoginNow { width: 100%; }
+}
+
+
+/* Dropdown do perfil */
+.opcoes-dropdown {
+    display: none;
+    position: absolute;
+    top: 9.5vh; /* logo abaixo do header */
+    right: 2.5vh;
+    min-width: 180px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    z-index: 1200;
+    padding: 6px 6px;
+}
+.opcoes-dropdown.active {
+    display: block;
+}
+.opcoes-dropdown a {
+    display: block;
+    padding: 10px 12px;
+    color: #004225;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 6px;
+}
+.opcoes-dropdown a:hover {
+    background: #f3f7f5;
 }

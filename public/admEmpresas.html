@@ -17,8 +17,12 @@
                 <a class="selected" href="admEmpresas.html">Empresas</a>
                 <a href="admUsuarios.html">Usuários</a>
             </div>
-            <img id="perfilIcon" class="perfilBoneco" src="Style/assets/logoutBTN.svg" style="cursor: pointer;"
-                onclick="sair()" alt="">
+                  <img id="perfilIcon" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" alt="Perfil" role="button"
+                    tabindex="0" aria-haspopup="true" aria-expanded="false">
+                <div class="opcoes-dropdown" role="menu" aria-hidden="true">
+                    <a role="menuitem" href="perfil.html">Perfil</a>
+                    <a role="menuitem" href="#" onclick="deslogar(); return false;">Sair</a>
+                </div>
         </div>
 
         <div class="hamburger">
@@ -67,10 +71,10 @@
     };
 
 
-    if(sessionStorage.PERFIL_USUARIO != "Administrador" || sessionStorage.getItem('ID_USUARIO') === null){
-        window.location.href = 'login.html';
-        sessionStorage.clear;
-    }
+    // if(sessionStorage.PERFIL_USUARIO != "Administrador" || sessionStorage.getItem('ID_USUARIO') === null){
+    //     window.location.href = 'login.html';
+    //     sessionStorage.clear;
+    // }
 
     function showLoginCard(seconds) {
         document.body.classList.add('blurred');
@@ -387,4 +391,38 @@
 
         setTimeout(() => overlay.querySelector('#new-nome')?.focus(), 50);
     }
+
+    
+         (function () {
+        const perfil = document.querySelector('#perfilIcon');
+        const opcoes = document.querySelector('.opcoes-dropdown');
+
+        if (!perfil || !opcoes) return;
+
+        function abrirFecharPerfil() {
+            const ativo = opcoes.classList.toggle('active');
+            opcoes.setAttribute('aria-hidden', (!ativo).toString());
+            perfil.setAttribute('aria-expanded', ativo.toString());
+        }
+
+        perfil.addEventListener('click', function (ev) {
+            ev.stopPropagation();
+            abrirFecharPerfil();
+        });
+
+        perfil.addEventListener('keydown', function (ev) {
+            if (ev.key === 'Enter' || ev.key === ' ') {
+                ev.preventDefault();
+                abrirFecharPerfil();
+            }
+        });
+
+        document.addEventListener('click', function (ev) {
+            if (!ev.target.closest('#perfilIcon') && !ev.target.closest('.opcoes-dropdown')) {
+                opcoes.classList.remove('active');
+                opcoes.setAttribute('aria-hidden', 'true');
+                perfil.setAttribute('aria-expanded', 'false');
+            }
+        });
+    })();
 </script>

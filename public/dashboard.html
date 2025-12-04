@@ -28,8 +28,12 @@
         <div class="notificacao-dropdown">
         </div>
       </div>
-      <img id="perfilIcon" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" style="cursor: pointer;"
-        onclick="sair()" alt="">
+      <img id="perfilIcon" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" alt="Perfil" role="button"
+        tabindex="0" aria-haspopup="true" aria-expanded="false">
+      <div class="opcoes-dropdown" role="menu" aria-hidden="true">
+        <a role="menuitem" href="perfil.html">Perfil</a>
+        <a role="menuitem" href="#" onclick="deslogar(); return false;">Sair</a>
+      </div>
 
       <div class="hamburger">
         <div class="bar1"></div>
@@ -47,58 +51,58 @@
     </div>
 
     <div id="mainContent">
-            <div id="contentPrincipal">
-                <div id="topoDash">
-                    <h1>Ranking de Setores</h1>
-                    <!-- Values alterados para representar QUANTIDADE DE ANOS ATRÁS -->
-                    <select id="selectDash" onchange="atualizarDashboard()">
-                        <option value="1">1 ano (Atual)</option>
-                        <option value="2" selected>2 anos (Média)</option>
-                        <option value="3">3 anos (Média)</option>
-                        <option value="4">4 anos (Média)</option>
-                        <option value="5">5 anos (Média)</option>
-                    </select>
-                </div>
+      <div id="contentPrincipal">
+        <div id="topoDash">
+          <h1>Ranking de Setores</h1>
+          <!-- Values alterados para representar QUANTIDADE DE ANOS ATRÁS -->
+          <select id="selectDash" onchange="atualizarDashboard()">
+            <option value="1">1 ano (Atual)</option>
+            <option value="2" selected>2 anos (Média)</option>
+            <option value="3">3 anos (Média)</option>
+            <option value="4">4 anos (Média)</option>
+            <option value="5">5 anos (Média)</option>
+          </select>
+        </div>
 
-                <div id="listSetores">
-                    <!-- A Lista será preenchida via JS -->
-                    <div id="lista">
-                        <!-- Conteúdo injetado dinamicamente aqui -->
-                    </div>
-                </div>
+        <div id="listSetores">
+          <!-- A Lista será preenchida via JS -->
+          <div id="lista">
+            <!-- Conteúdo injetado dinamicamente aqui -->
+          </div>
+        </div>
 
-                <div id="graphDash">
-                    <div>
-                        <h1>Top 5 Retorno Médio por Setor</h1>
-                        <canvas id="rankSetor"></canvas>
-                    </div>
+        <div id="graphDash">
+          <div>
+            <h1>Top 5 Retorno Médio por Setor</h1>
+            <canvas id="rankSetor"></canvas>
+          </div>
 
-                    <div>
-                        <h1>Volatilidade x Retorno (Dispersão)</h1>
-                         <!-- Mudei para Scatter ou Bar pois Linha temporal precisa de outra query -->
-                        <canvas id="graphSecundario"></canvas>
-                    </div>
-                </div>
+          <div>
+            <h1>Volatilidade x Retorno (Dispersão)</h1>
+            <!-- Mudei para Scatter ou Bar pois Linha temporal precisa de outra query -->
+            <canvas id="graphSecundario"></canvas>
+          </div>
+        </div>
 
-                <div id="graphGrande">
-                    <h1>Volatilidade vs Retorno (Visão Geral)</h1>
-                    <canvas id="volatilidadeVolume"></canvas>
-                </div>
-            </div>
-
-    <div id="sobreposicaoLista">
-      <div>
-
+        <div id="graphGrande">
+          <h1>Volatilidade vs Retorno (Visão Geral)</h1>
+          <canvas id="volatilidadeVolume"></canvas>
+        </div>
       </div>
-    </div>
 
-  </div>
+      <div id="sobreposicaoLista">
+        <div>
+
+        </div>
+      </div>
+
+    </div>
 </body>
 
 </html>
 
 <script>
- document.addEventListener("DOMContentLoaded", carregarNotificacoes);
+  document.addEventListener("DOMContentLoaded", carregarNotificacoes);
 
   async function carregarNotificacoes() {
     const idUsuario = sessionStorage.ID_USUARIO;
@@ -108,31 +112,31 @@
       return;
     }
 
-        fetch("/notificacoes/receberNotificacoes", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                idServer: idUsuario,
-            })
-        })
-            .then(async res => {
-                if (!res.ok) throw new Error("Erro ao buscar notificações");
-                // Ler como texto e só parsear JSON se houver conteúdo
-                const text = await res.text();
-                if (!text) return [];
-                try {
-                    return JSON.parse(text);
-                } catch (e) {
-                    console.warn('Resposta de notificações não é JSON válido:', e);
-                    return [];
-                }
-            })
-            .then(notificacoes => {
-                atualizarDropdown(notificacoes || []);
-            })
-            .catch(err => console.error(err));
+    fetch("/notificacoes/receberNotificacoes", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        idServer: idUsuario,
+      })
+    })
+      .then(async res => {
+        if (!res.ok) throw new Error("Erro ao buscar notificações");
+        // Ler como texto e só parsear JSON se houver conteúdo
+        const text = await res.text();
+        if (!text) return [];
+        try {
+          return JSON.parse(text);
+        } catch (e) {
+          console.warn('Resposta de notificações não é JSON válido:', e);
+          return [];
+        }
+      })
+      .then(notificacoes => {
+        atualizarDropdown(notificacoes || []);
+      })
+      .catch(err => console.error(err));
   }
 
   function atualizarDropdown(notificacoes) {
@@ -151,16 +155,16 @@
       }
     });
 
-        // Atualiza badge (mostra no máx. 9+). Se não houver notificações, oculta o badge.
-        if (!badge) {
-            // elemento não encontrado — nada a fazer
-        } else if (qtd_not <= 0) {
-            badge.style.display = 'none';
-            badge.textContent = '';
-        } else {
-            badge.style.display = 'flex';
-            badge.textContent = qtd_not > 9 ? '9+' : String(qtd_not);
-        }
+    // Atualiza badge (mostra no máx. 9+). Se não houver notificações, oculta o badge.
+    if (!badge) {
+      // elemento não encontrado — nada a fazer
+    } else if (qtd_not <= 0) {
+      badge.style.display = 'none';
+      badge.textContent = '';
+    } else {
+      badge.style.display = 'flex';
+      badge.textContent = qtd_not > 9 ? '9+' : String(qtd_not);
+    }
 
     notificacoes.forEach(not => {
       if (contador < 3) {
@@ -204,21 +208,21 @@
     return `Há ${diffDias} dia${diffDias > 1 ? "s" : ""}`;
   }
 
-     function sair() {
-        sessionStorage.clear();
-        window.location.href = "./login.html";
-    }
-    
+  function sair() {
+    sessionStorage.clear();
+    window.location.href = "./login.html";
+  }
+
   //    if (sessionStorage.getItem('ID_USUARIO') === null) {
   //      showLoginCard(4);
   //  }
 
-    function showLoginCard(seconds) {
-        document.body.classList.add('blurred');
+  function showLoginCard(seconds) {
+    document.body.classList.add('blurred');
 
-        const overlay = document.createElement('div');
-        overlay.className = 'login-overlay';
-        overlay.innerHTML = `
+    const overlay = document.createElement('div');
+    overlay.className = 'login-overlay';
+    overlay.innerHTML = `
                 <div class="login-card">
                     <h3>É necessário fazer login</h3>
                     <p>Você precisa entrar para acessar esta página. Redirecionando em <span id="login-timer">${seconds}</span>s</p>
@@ -228,103 +232,103 @@
                     </div>
                 </div>
             `;
-        document.body.appendChild(overlay);
+    document.body.appendChild(overlay);
 
-        const bar = overlay.querySelector('.progress-bar');
-        const timerEl = overlay.querySelector('#login-timer');
-        const btnNow = overlay.querySelector('#btnLoginNow');
+    const bar = overlay.querySelector('.progress-bar');
+    const timerEl = overlay.querySelector('#login-timer');
+    const btnNow = overlay.querySelector('#btnLoginNow');
 
-        let remaining = seconds;
-        timerEl.textContent = remaining;
+    let remaining = seconds;
+    timerEl.textContent = remaining;
 
-        const totalMs = seconds * 1000;
-        const start = Date.now();
+    const totalMs = seconds * 1000;
+    const start = Date.now();
 
-        const interval = setInterval(() => {
-            const elapsed = Date.now() - start;
-            const pct = Math.min(100, (elapsed / totalMs) * 100);
-            bar.style.width = pct + '%';
-            const secLeft = Math.ceil((totalMs - elapsed) / 1000);
-            timerEl.textContent = secLeft > 0 ? secLeft : 0;
-            if (pct >= 100) {
-                clearInterval(interval);
-                window.location.href = 'login.html';
-            }
-        }, 100);
+    const interval = setInterval(() => {
+      const elapsed = Date.now() - start;
+      const pct = Math.min(100, (elapsed / totalMs) * 100);
+      bar.style.width = pct + '%';
+      const secLeft = Math.ceil((totalMs - elapsed) / 1000);
+      timerEl.textContent = secLeft > 0 ? secLeft : 0;
+      if (pct >= 100) {
+        clearInterval(interval);
+        window.location.href = 'login.html';
+      }
+    }, 100);
 
-        btnNow.addEventListener('click', () => {
-            document.body.classList.remove('blurred');
-            window.location.href = 'login.html';
-        });
+    btnNow.addEventListener('click', () => {
+      document.body.classList.remove('blurred');
+      window.location.href = 'login.html';
+    });
 
-    }
+  }
 
   //                    COMEÇANDO MINHA PARTE 
 
-// Variáveis globais para guardar as instâncias dos gráficos e poder destruí-las antes de atualizar
-    let chartRankSetor = null;
-    let chartSecundario = null;
-    let chartVolatilidade = null;
+  // Variáveis globais para guardar as instâncias dos gráficos e poder destruí-las antes de atualizar
+  let chartRankSetor = null;
+  let chartSecundario = null;
+  let chartVolatilidade = null;
 
-    function atualizarDashboard() {
-        const periodoSelecionado = document.getElementById('selectDash').value;
+  function atualizarDashboard() {
+    const periodoSelecionado = document.getElementById('selectDash').value;
 
-        fetch("/dashboard/receberDashboard", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                periodoServer: periodoSelecionado
-            })
-        }).then(function (resposta) {
-            if (resposta.ok) {
-                if (resposta.status == 204) {
-                    var feed = document.getElementById("lista");
-                    feed.innerHTML = "<h3>Nenhum dado encontrado para esses anos.</h3>";
-                    throw "Nenhum resultado encontrado!!";
-                }
+    fetch("/dashboard/receberDashboard", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        periodoServer: periodoSelecionado
+      })
+    }).then(function (resposta) {
+      if (resposta.ok) {
+        if (resposta.status == 204) {
+          var feed = document.getElementById("lista");
+          feed.innerHTML = "<h3>Nenhum dado encontrado para esses anos.</h3>";
+          throw "Nenhum resultado encontrado!!";
+        }
 
-                resposta.json().then(function (respostaJSON) {
-                    console.log("Dados recebidos: ", JSON.stringify(respostaJSON));
-                    
-                    renderizarLista(respostaJSON);
-                    renderizarGraficos(respostaJSON);
-                });
-            } else {
-                throw ("Houve um erro na API!");
-            }
-        }).catch(function (resposta) {
-            console.error(resposta);
+        resposta.json().then(function (respostaJSON) {
+          console.log("Dados recebidos: ", JSON.stringify(respostaJSON));
+
+          renderizarLista(respostaJSON);
+          renderizarGraficos(respostaJSON);
         });
-    }
+      } else {
+        throw ("Houve um erro na API!");
+      }
+    }).catch(function (resposta) {
+      console.error(resposta);
+    });
+  }
 
-    function renderizarLista(dados) {
-        const listaDiv = document.getElementById('lista');
-        listaDiv.innerHTML = ""; // Limpa a lista atual
+  function renderizarLista(dados) {
+    const listaDiv = document.getElementById('lista');
+    listaDiv.innerHTML = ""; // Limpa a lista atual
 
-        // Percorre os dados recebidos e cria os cards HTML
-        // Vamos mostrar o TOP 4 na lista como no seu exemplo original
-        for (let i = 0; i < 5 /*dados.length*/; i++) {
-            let setor = dados[i];
-            
-            // Lógica simples de classificação (você pode aprimorar)
-            let classificacaoTexto = "Baixa";
-            let classificacaoCor = "corVermelha"; // CSS class
-            
-            if (setor.rentabilidade_periodo > 15) {
-                classificacaoTexto = "Muito Alta";
-                classificacaoCor = "verde"; // CSS class baseada no seu HTML antigo
-            } else if (setor.rentabilidade_periodo > 10) {
-                classificacaoTexto = "Alta";
-                classificacaoCor = "azul";
-            } else if (setor.rentabilidade_periodo > 5) {
-                classificacaoTexto = "Média";
-                classificacaoCor = "amarelo";
-            }
+    // Percorre os dados recebidos e cria os cards HTML
+    // Vamos mostrar o TOP 4 na lista como no seu exemplo original
+    for (let i = 0; i < 5 /*dados.length*/; i++) {
+      let setor = dados[i];
 
-            // HTML Template String
-            listaDiv.innerHTML += `
+      // Lógica simples de classificação (você pode aprimorar)
+      let classificacaoTexto = "Baixa";
+      let classificacaoCor = "corVermelha"; // CSS class
+
+      if (setor.rentabilidade_periodo > 15) {
+        classificacaoTexto = "Muito Alta";
+        classificacaoCor = "verde"; // CSS class baseada no seu HTML antigo
+      } else if (setor.rentabilidade_periodo > 10) {
+        classificacaoTexto = "Alta";
+        classificacaoCor = "azul";
+      } else if (setor.rentabilidade_periodo > 5) {
+        classificacaoTexto = "Média";
+        classificacaoCor = "amarelo";
+      }
+
+      // HTML Template String
+      listaDiv.innerHTML += `
             <div>
                 <div class="numero">
                     <h2>${i + 1}</h2>
@@ -359,302 +363,96 @@
                 </div>
             </div>
             `;
-        }
     }
+  }
 
-    function renderizarGraficos(dados) {
-        // Preparando Arrays para o ChartJS
-        const labelsSetor = dados.map(item => item.setor);
-        const dataRetorno = dados.map(item => item.rentabilidade_periodo);
-        const dataVolatilidade = dados.map(item => item.volatilidade_periodo);
+  function renderizarGraficos(dados) {
+    // Preparando Arrays para o ChartJS
+    const labelsSetor = dados.map(item => item.setor);
+    const dataRetorno = dados.map(item => item.rentabilidade_periodo);
+    const dataVolatilidade = dados.map(item => item.volatilidade_periodo);
 
-        // --- Gráfico 1: Top Retorno por Setor ---
-        const ctxRank = document.getElementById('rankSetor');
-        if (chartRankSetor) chartRankSetor.destroy(); // Destroi anterior para não bugar
+    // --- Gráfico 1: Top Retorno por Setor ---
+    const ctxRank = document.getElementById('rankSetor');
+    if (chartRankSetor) chartRankSetor.destroy(); // Destroi anterior para não bugar
 
-        chartRankSetor = new Chart(ctxRank, {
-            type: 'bar',
-            data: {
-                labels: labelsSetor.slice(0, 5), // Pega apenas os top 5
-                datasets: [{
-                    label: 'Retorno Médio (%)',
-                    data: dataRetorno.slice(0, 5),
-                    backgroundColor: ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'],
-                    borderRadius: 6
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: { legend: { display: false } },
-                scales: { y: { beginAtZero: true } }
-            }
-        });
-
-        // --- Gráfico 2: Volatilidade vs Retorno (Scatter Plot simulado com barras por enquanto) ---
-        // Nota: O gráfico de linha temporal original precisaria de uma query diferente (dados por mês).
-        // Aqui vou plotar Volatilidade comparada com retorno para aproveitar os dados que temos.
-        const ctxSec = document.getElementById('graphSecundario');
-        if (chartSecundario) chartSecundario.destroy();
-
-        chartSecundario = new Chart(ctxSec, {
-            type: 'bar',
-            data: {
-                labels: labelsSetor.slice(0, 5),
-                datasets: [
-                    {
-                        label: 'Retorno (%)',
-                        data: dataRetorno.slice(0, 5),
-                        backgroundColor: '#10B981',
-                        borderRadius: 4
-                    },
-                    {
-                        label: 'Volatilidade (%)',
-                        data: dataVolatilidade.slice(0, 5),
-                        backgroundColor: '#EF4444',
-                        borderRadius: 4
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-            }
-        });
-
-        // --- Gráfico 3: Volatilidade Horizontal ---
-        const ctxVol = document.getElementById('volatilidadeVolume');
-        if (chartVolatilidade) chartVolatilidade.destroy();
-
-        chartVolatilidade = new Chart(ctxVol, {
-            type: 'bar',
-            data: {
-                labels: labelsSetor,
-                datasets: [{
-                    label: 'Volatilidade do Período (%)',
-                    data: dataVolatilidade,
-                    backgroundColor: '#b388eb',
-                    borderRadius: 6,
-                    barThickness: 20,
-                }]
-            },
-            options: {
-                indexAxis: 'y', // Horizontal
-                responsive: true,
-            }
-        });
-    }
-
-    function sair() {
-        sessionStorage.clear();
-        window.location.href = "./login.html";
-    }
-    
-    // Dropdown Logic
-    document.querySelector('#notificacaoIcon').addEventListener('click', function(e) {
-        e.stopPropagation();
-        const dropdown = document.querySelector('.notificacao-dropdown');
-        dropdown.classList.toggle('active');
-    });
-
-    document.addEventListener('click', function(e) {
-        const dropdown = document.querySelector('.notificacao-dropdown');
-        if (!e.target.closest('.notificacao-container')) {
-            dropdown.classList.remove('active');
-        }
-    });
-
-
-    /*
-  function chamarGraficos() {
-    const ctx = document.getElementById('rankSetor');
-
-    const ctx1 = document.getElementById('graphLinha');
-
-
-    const ctx2 = document.getElementById('volatilidadeVolume');
-
-    new Chart(ctx2, {
+    chartRankSetor = new Chart(ctxRank, {
       type: 'bar',
       data: {
-        labels: ['Tecnologia', 'Saúde', 'Financeiro', 'Energia', 'Consumo', 'Industrial'],
-        datasets: [
-          {
-            label: 'Volatilidade (%)',
-            data: [30, 25, 28, 22, 20, 24], // valores fictícios (em %)
-            backgroundColor: '#b388eb', // roxo
-            borderRadius: 6,
-            barThickness: 15,
-          },
-          {
-            label: 'Volume (M)',
-            data: [450, 400, 500, 300, 350, 320], // valores fictícios (em milhões)
-            backgroundColor: '#4285f4', // azul
-            borderRadius: 6,
-            barThickness: 15,
-          }
-        ]
-      },
-      options: {
-        indexAxis: 'y', // barras horizontais
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'bottom',
-            labels: {
-              boxWidth: 20,
-              color: '#333'
-            }
-          },
-
-        },
-        scales: {
-          x: {
-            beginAtZero: true,
-            grid: {
-              color: '#eee'
-            },
-            title: {
-              display: false
-            }
-          },
-          y: {
-            grid: {
-              display: false
-            },
-            ticks: {
-              color: '#333'
-            }
-          }
-        }
-      }
-    });
-
-
-
-    new Chart(ctx1, {
-      type: 'line',
-      data: {
-        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-        datasets: [
-          {
-            label: 'Energia',
-            data: [2, 3, 4, 5, 7, 9, 9.5, 10, 11, 11.5, 11.7, 12],
-            borderColor: '#EF4444',
-            backgroundColor: '#EF4444',
-            tension: 0.3,
-            fill: false,
-            pointRadius: 4,
-            pointBackgroundColor: '#fff',
-            pointBorderColor: '#EF4444',
-            pointBorderWidth: 2
-          },
-          {
-            label: 'Financeiro',
-            data: [3, 4, 5, 6, 8, 10, 11, 12, 12.5, 13, 13.2, 13.4],
-            borderColor: '#F59E0B',
-            backgroundColor: '#F59E0B',
-            tension: 0.3,
-            fill: false,
-            pointRadius: 4,
-            pointBackgroundColor: '#fff',
-            pointBorderColor: '#F59E0B',
-            pointBorderWidth: 2
-          },
-          {
-            label: 'Saúde',
-            data: [4, 5, 6, 8, 10, 12, 13, 14, 14.5, 15, 15.2, 15.3],
-            borderColor: '#10B981',
-            backgroundColor: '#10B981',
-            tension: 0.3,
-            fill: false,
-            pointRadius: 4,
-            pointBackgroundColor: '#fff',
-            pointBorderColor: '#10B981',
-            pointBorderWidth: 2
-          },
-          {
-            label: 'Tecnologia',
-            data: [5, 7, 6, 9, 12, 15, 14, 16, 17, 18, 18.5, 19],
-            borderColor: '#3B82F6',
-            backgroundColor: '#3B82F6',
-            tension: 0.3,
-            fill: false,
-            pointRadius: 4,
-            pointBackgroundColor: '#fff',
-            pointBorderColor: '#3B82F6',
-            pointBorderWidth: 2
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'bottom'
-          }
-        },
-        scales: {
-          y: {
-            beginAtZero: true,
-            suggestedMax: 20,
-            title: {
-              display: false
-            }
-          },
-          x: {
-            grid: {
-              display: true
-            }
-          }
-        }
-      }
-    });
-
-
-    new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['Tecnologia', 'Saúde', 'Financeiro', 'Energia', 'Industrial'],
+        labels: labelsSetor.slice(0, 5), // Pega apenas os top 5
         datasets: [{
           label: 'Retorno Médio (%)',
-          data: [20, 15, 13, 11, 9],
-          backgroundColor: [
-            '#3B82F6', // azul
-            '#10B981', // verde
-            '#F59E0B', // laranja
-            '#EF4444', // vermelho
-            '#8B5CF6'  // roxo
-          ],
+          data: dataRetorno.slice(0, 5),
+          backgroundColor: ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'],
           borderRadius: 6
         }]
       },
       options: {
         responsive: true,
-        plugins: {
-          legend: {
-            display: false
-          }
-        },
-        scales: {
-          y: {
-            beginAtZero: true,
-            ticks: {
-              stepSize: 5
-            },
-            title: {
-              display: true,
-              text: '% de Retorno'
-            }
-          }
-        }
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true } }
       }
     });
 
+    // --- Gráfico 2: Volatilidade vs Retorno (Scatter Plot simulado com barras por enquanto) ---
+    // Nota: O gráfico de linha temporal original precisaria de uma query diferente (dados por mês).
+    // Aqui vou plotar Volatilidade comparada com retorno para aproveitar os dados que temos.
+    const ctxSec = document.getElementById('graphSecundario');
+    if (chartSecundario) chartSecundario.destroy();
+
+    chartSecundario = new Chart(ctxSec, {
+      type: 'bar',
+      data: {
+        labels: labelsSetor.slice(0, 5),
+        datasets: [
+          {
+            label: 'Retorno (%)',
+            data: dataRetorno.slice(0, 5),
+            backgroundColor: '#10B981',
+            borderRadius: 4
+          },
+          {
+            label: 'Volatilidade (%)',
+            data: dataVolatilidade.slice(0, 5),
+            backgroundColor: '#EF4444',
+            borderRadius: 4
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+      }
+    });
+
+    // --- Gráfico 3: Volatilidade Horizontal ---
+    const ctxVol = document.getElementById('volatilidadeVolume');
+    if (chartVolatilidade) chartVolatilidade.destroy();
+
+    chartVolatilidade = new Chart(ctxVol, {
+      type: 'bar',
+      data: {
+        labels: labelsSetor,
+        datasets: [{
+          label: 'Volatilidade do Período (%)',
+          data: dataVolatilidade,
+          backgroundColor: '#b388eb',
+          borderRadius: 6,
+          barThickness: 20,
+        }]
+      },
+      options: {
+        indexAxis: 'y', // Horizontal
+        responsive: true,
+      }
+    });
   }
 
+  function sair() {
+    sessionStorage.clear();
+    window.location.href = "./login.html";
+  }
 
-
-  chamarGraficos();
-
+  // Dropdown Logic
   document.querySelector('#notificacaoIcon').addEventListener('click', function (e) {
     e.stopPropagation();
     const dropdown = document.querySelector('.notificacao-dropdown');
@@ -666,6 +464,246 @@
     if (!e.target.closest('.notificacao-container')) {
       dropdown.classList.remove('active');
     }
-  });*/
+  });
+
+
+  (function () {
+    const perfil = document.querySelector('#perfilIcon');
+    const opcoes = document.querySelector('.opcoes-dropdown');
+
+    if (!perfil || !opcoes) return;
+
+    function abrirFecharPerfil() {
+      const ativo = opcoes.classList.toggle('active');
+      opcoes.setAttribute('aria-hidden', (!ativo).toString());
+      perfil.setAttribute('aria-expanded', ativo.toString());
+    }
+
+    perfil.addEventListener('click', function (ev) {
+      ev.stopPropagation();
+      abrirFecharPerfil();
+    });
+
+    perfil.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Enter' || ev.key === ' ') {
+        ev.preventDefault();
+        abrirFecharPerfil();
+      }
+    });
+
+    document.addEventListener('click', function (ev) {
+      if (!ev.target.closest('#perfilIcon') && !ev.target.closest('.opcoes-dropdown')) {
+        opcoes.classList.remove('active');
+        opcoes.setAttribute('aria-hidden', 'true');
+        perfil.setAttribute('aria-expanded', 'false');
+      }
+    });
+  })();
+
+
+  /*
+function chamarGraficos() {
+  const ctx = document.getElementById('rankSetor');
+
+  const ctx1 = document.getElementById('graphLinha');
+
+
+  const ctx2 = document.getElementById('volatilidadeVolume');
+
+  new Chart(ctx2, {
+    type: 'bar',
+    data: {
+      labels: ['Tecnologia', 'Saúde', 'Financeiro', 'Energia', 'Consumo', 'Industrial'],
+      datasets: [
+        {
+          label: 'Volatilidade (%)',
+          data: [30, 25, 28, 22, 20, 24], // valores fictícios (em %)
+          backgroundColor: '#b388eb', // roxo
+          borderRadius: 6,
+          barThickness: 15,
+        },
+        {
+          label: 'Volume (M)',
+          data: [450, 400, 500, 300, 350, 320], // valores fictícios (em milhões)
+          backgroundColor: '#4285f4', // azul
+          borderRadius: 6,
+          barThickness: 15,
+        }
+      ]
+    },
+    options: {
+      indexAxis: 'y', // barras horizontais
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            boxWidth: 20,
+            color: '#333'
+          }
+        },
+
+      },
+      scales: {
+        x: {
+          beginAtZero: true,
+          grid: {
+            color: '#eee'
+          },
+          title: {
+            display: false
+          }
+        },
+        y: {
+          grid: {
+            display: false
+          },
+          ticks: {
+            color: '#333'
+          }
+        }
+      }
+    }
+  });
+
+
+
+  new Chart(ctx1, {
+    type: 'line',
+    data: {
+      labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+      datasets: [
+        {
+          label: 'Energia',
+          data: [2, 3, 4, 5, 7, 9, 9.5, 10, 11, 11.5, 11.7, 12],
+          borderColor: '#EF4444',
+          backgroundColor: '#EF4444',
+          tension: 0.3,
+          fill: false,
+          pointRadius: 4,
+          pointBackgroundColor: '#fff',
+          pointBorderColor: '#EF4444',
+          pointBorderWidth: 2
+        },
+        {
+          label: 'Financeiro',
+          data: [3, 4, 5, 6, 8, 10, 11, 12, 12.5, 13, 13.2, 13.4],
+          borderColor: '#F59E0B',
+          backgroundColor: '#F59E0B',
+          tension: 0.3,
+          fill: false,
+          pointRadius: 4,
+          pointBackgroundColor: '#fff',
+          pointBorderColor: '#F59E0B',
+          pointBorderWidth: 2
+        },
+        {
+          label: 'Saúde',
+          data: [4, 5, 6, 8, 10, 12, 13, 14, 14.5, 15, 15.2, 15.3],
+          borderColor: '#10B981',
+          backgroundColor: '#10B981',
+          tension: 0.3,
+          fill: false,
+          pointRadius: 4,
+          pointBackgroundColor: '#fff',
+          pointBorderColor: '#10B981',
+          pointBorderWidth: 2
+        },
+        {
+          label: 'Tecnologia',
+          data: [5, 7, 6, 9, 12, 15, 14, 16, 17, 18, 18.5, 19],
+          borderColor: '#3B82F6',
+          backgroundColor: '#3B82F6',
+          tension: 0.3,
+          fill: false,
+          pointRadius: 4,
+          pointBackgroundColor: '#fff',
+          pointBorderColor: '#3B82F6',
+          pointBorderWidth: 2
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'bottom'
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          suggestedMax: 20,
+          title: {
+            display: false
+          }
+        },
+        x: {
+          grid: {
+            display: true
+          }
+        }
+      }
+    }
+  });
+
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Tecnologia', 'Saúde', 'Financeiro', 'Energia', 'Industrial'],
+      datasets: [{
+        label: 'Retorno Médio (%)',
+        data: [20, 15, 13, 11, 9],
+        backgroundColor: [
+          '#3B82F6', // azul
+          '#10B981', // verde
+          '#F59E0B', // laranja
+          '#EF4444', // vermelho
+          '#8B5CF6'  // roxo
+        ],
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: false
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            stepSize: 5
+          },
+          title: {
+            display: true,
+            text: '% de Retorno'
+          }
+        }
+      }
+    }
+  });
+
+}
+
+
+
+chamarGraficos();
+
+document.querySelector('#notificacaoIcon').addEventListener('click', function (e) {
+  e.stopPropagation();
+  const dropdown = document.querySelector('.notificacao-dropdown');
+  dropdown.classList.toggle('active');
+});
+
+document.addEventListener('click', function (e) {
+  const dropdown = document.querySelector('.notificacao-dropdown');
+  if (!e.target.closest('.notificacao-container')) {
+    dropdown.classList.remove('active');
+  }
+});*/
 </script>
 <script src="Style/js/fazerHamburguer.js"></script>

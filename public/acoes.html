@@ -28,7 +28,11 @@
                 <div class="notificacao-dropdown">
                 </div>
             </div>
-            <img id="perfilIcon" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" alt="">
+            <img id="perfilIcon" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" alt="Perfil" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">
+            <div class="opcoes-dropdown" role="menu" aria-hidden="true">
+                <a role="menuitem" href="perfil.html">Perfil</a>
+                <a role="menuitem" href="#" onclick="deslogar(); return false;">Sair</a>
+            </div>
 
             <div class="hamburger">
                 <div class="bar1"></div>
@@ -468,6 +472,40 @@
             dropdown.classList.remove('active');
         }
     });
+
+ 
+    (function () {
+        const perfil = document.querySelector('#perfilIcon');
+        const opcoes = document.querySelector('.opcoes-dropdown');
+
+        if (!perfil || !opcoes) return;
+
+        function abrirFecharPerfil() {
+            const ativo = opcoes.classList.toggle('active');
+            opcoes.setAttribute('aria-hidden', (!ativo).toString());
+            perfil.setAttribute('aria-expanded', ativo.toString());
+        }
+
+        perfil.addEventListener('click', function (ev) {
+            ev.stopPropagation();
+            abrirFecharPerfil();
+        });
+
+        perfil.addEventListener('keydown', function (ev) {
+            if (ev.key === 'Enter' || ev.key === ' ') {
+                ev.preventDefault();
+                abrirFecharPerfil();
+            }
+        });
+
+        document.addEventListener('click', function (ev) {
+            if (!ev.target.closest('#perfilIcon') && !ev.target.closest('.opcoes-dropdown')) {
+                opcoes.classList.remove('active');
+                opcoes.setAttribute('aria-hidden', 'true');
+                perfil.setAttribute('aria-expanded', 'false');
+            }
+        });
+    })();
 </script>
 
 <script src="Style/js/fazerHamburguer.js"></script>
