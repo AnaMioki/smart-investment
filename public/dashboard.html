@@ -54,7 +54,6 @@
       <div id="contentPrincipal">
         <div id="topoDash">
           <h1>Ranking de Setores</h1>
-          <!-- Values alterados para representar QUANTIDADE DE ANOS ATRÁS -->
           <select id="selectDash" onchange="atualizarDashboard()">
             <option value="1">1 ano (Atual)</option>
             <option value="2" selected>2 anos (Média)</option>
@@ -65,27 +64,24 @@
         </div>
 
         <div id="listSetores">
-          <!-- A Lista será preenchida via JS -->
           <div id="lista">
-            <!-- Conteúdo injetado dinamicamente aqui -->
           </div>
         </div>
 
         <div id="graphDash">
           <div>
-            <h1>Top 5 Retorno Médio por Setor</h1>
+            <h1>Rentabilidade vs Benchmark (Ibovespa)</h1>
             <canvas id="rankSetor"></canvas>
           </div>
 
           <div>
-            <h1>Volatilidade x Retorno (Dispersão)</h1>
-            <!-- Mudei para Scatter ou Bar pois Linha temporal precisa de outra query -->
+            <h1>Risco x Retorno (Top 5 Setores)</h1>
             <canvas id="graphSecundario"></canvas>
           </div>
         </div>
 
         <div id="graphGrande">
-          <h1>Volatilidade vs Retorno (Visão Geral)</h1>
+          <h1>Solidez: Lucro Líquido vs Geração de Caixa</h1>
           <canvas id="volatilidadeVolume"></canvas>
         </div>
       </div>
@@ -349,13 +345,18 @@
                     </div>
 
                     <div>
-                        <h1>EBITDA (Médio)</h1>
+                        <h1>EBITDA (Médio R$M)</h1>
                         <p>${setor.EBITDA}</p>
                     </div>
 
                     <div>
                         <h1>Volatilidade</h1>
                         <p class="corLaranja">${setor.volatilidade_periodo}%</p>
+                    </div>
+
+                    <div>
+                        <h1>Retorno (IBOVESPA)</h1>
+                        <p>14%</p>
                     </div>
 
                     <div>
@@ -370,87 +371,199 @@
     }
   }
 
-  function renderizarGraficos(dados) {
-    // Preparando Arrays para o ChartJS
-    const labelsSetor = dados.map(item => item.setor);
-    const dataRetorno = dados.map(item => item.rentabilidade_periodo);
-    const dataVolatilidade = dados.map(item => item.volatilidade_periodo);
+// Função auxiliar para pegar a média do Ibovespa conforme o filtro selecionado
+function getBenchmarkIbovespa(periodo) {
+    
+    let benchmark = 0;
+    
+    // Parse para garantir que é número
+    const p = parseInt(periodo);
 
-    // --- Gráfico 1: Top Retorno por Setor ---
+    switch(p) {
+        case 1: // Somente 2024
+            benchmark = -10.36; 
+            break;
+        case 2: // Média 2023-2024
+            benchmark = (22.28 - 10.36) / 2; // ~ 5.96%
+            break;
+        case 3: // Média 2022-2024
+            benchmark = (4.69 + 22.28 - 10.36) / 3; // ~ 5.53%
+            break;
+        case 4: // Média 2021-2024
+            benchmark = (-11.93 + 4.69 + 22.28 - 10.36) / 4; // ~ 1.17%
+            break;
+        case 5: // Média 2020-2024
+            benchmark = (2.92 - 11.93 + 4.69 + 22.28 - 10.36) / 5; // ~ 1.52%
+            break;
+        default:
+            benchmark = 5.0; 
+    
+    return benchmark.toFixed(2); 
+}
+
+function renderizarGraficos(dados) {
+    const periodoSelecionado = document.getElementById('selectDash').value;
+    const valorBenchmark = getBenchmarkIbovespa(periodoSelecionado);
+
+    // Ordena por rentabilidade (maior para menor) e pega o TOP 5
+    // Isso garante que todos os gráficos falem dos mesmos "campeões"
+    const top5 = dados
+        .sort((a, b) => b.rentabilidade_periodo - a.rentabilidade_periodo)
+        .slice(0, 5);
+        
+    const labelsTop5 = top5.map(d => d.setor);
+
+    // --- GRÁFICO 1: PERFORMANCE RELATIVA (Setor vs Ibovespa) ---
     const ctxRank = document.getElementById('rankSetor');
-    if (chartRankSetor) chartRankSetor.destroy(); // Destroi anterior para não bugar
+    if (chartRankSetor) chartRankSetor.destroy();
 
     chartRankSetor = new Chart(ctxRank, {
-      type: 'bar',
-      data: {
-        labels: labelsSetor.slice(0, 5), // Pega apenas os top 5
-        datasets: [{
-          label: 'Retorno Médio (%)',
-          data: dataRetorno.slice(0, 5),
-          backgroundColor: ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'],
-          borderRadius: 6
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: { legend: { display: false } },
-        scales: { y: { beginAtZero: true } }
-      }
+        type: 'bar',
+        data: {
+            labels: labelsTop5,
+            datasets: [
+                {
+                    label: 'Média Ibovespa',
+                    // Cria uma linha reta repetindo o valor do benchmark para cada coluna
+                    data: Array(5).fill(valorBenchmark),
+                    type: 'line', // Transforma este dataset em linha
+                    borderColor: '#6B7280', // Cinza escuro
+                    borderWidth: 2,
+                    borderDash: [5, 5], // Linha pontilhada
+                    pointRadius: 0,
+                    order: 0 // Garante que a linha fique por cima
+                },
+                {
+                    label: 'Rentabilidade do Setor (%)',
+                    data: top5.map(d => d.rentabilidade_periodo),
+                    // Pinta de Verde se venceu o Benchmark, Azul se perdeu (ou vice-versa, conforme sua regra)
+                    backgroundColor: top5.map(d => d.rentabilidade_periodo >= valorBenchmark ? '#10B981' : '#3B82F6'),
+                    borderRadius: 4,
+                    order: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: true, position: 'top' }, // Mostra legenda para identificar a linha
+                tooltip: {
+                    callbacks: {
+                        footer: (tooltipItems) => {
+                            let val = tooltipItems[0].raw;
+                            let diff = (val - valorBenchmark).toFixed(2);
+                            if(tooltipItems[0].dataset.type === 'line') return '';
+                            return `Diferença pro Ibov: ${diff > 0 ? '+' : ''}${diff}%`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: { 
+                    title: { display: true, text: 'TOP 5 Setores' },
+                    // Ajuste dinâmico: começa do 0 ou do menor valor para dar destaque
+                    suggestedMin: 0 
+                },
+                y: { 
+                    title: { display: true, text: 'Retorno (%)' },
+                    // Adiciona a linha de grade do Benchmark visualmente (zero line ou similar) se desejar
+                }
+            }
+        }
     });
 
-    // --- Gráfico 2: Volatilidade vs Retorno (Scatter Plot simulado com barras por enquanto) ---
-    // Nota: O gráfico de linha temporal original precisaria de uma query diferente (dados por mês).
-    // Aqui vou plotar Volatilidade comparada com retorno para aproveitar os dados que temos.
+    // --- GRÁFICO 2: MAPA DE EFICIÊNCIA (Risco x Retorno) - APENAS TOP 5 ---
     const ctxSec = document.getElementById('graphSecundario');
     if (chartSecundario) chartSecundario.destroy();
 
     chartSecundario = new Chart(ctxSec, {
-      type: 'bar',
-      data: {
-        labels: labelsSetor.slice(0, 5),
-        datasets: [
-          {
-            label: 'Retorno (%)',
-            data: dataRetorno.slice(0, 5),
-            backgroundColor: '#10B981',
-            borderRadius: 4
-          },
-          {
-            label: 'Volatilidade (%)',
-            data: dataVolatilidade.slice(0, 5),
-            backgroundColor: '#EF4444',
-            borderRadius: 4
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-      }
+        type: 'scatter',
+        data: {
+            datasets: [{
+                label: 'Setores Top 5',
+                data: top5.map(item => ({
+                    x: item.volatilidade_periodo, // Risco
+                    y: item.rentabilidade_periodo, // Retorno
+                    setor: item.setor
+                })),
+                backgroundColor: '#8B5CF6', // Roxo
+                pointRadius: 8, // Pontos maiores já que são poucos
+                pointHoverRadius: 10
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let p = context.raw;
+                            return `${p.setor}: Retorno ${p.y}% | Risco ${p.x}%`;
+                        }
+                    }
+                },
+                annotation: {
+                    // Opcional: Se quiser desenhar uma linha horizontal marcando o Ibovespa neste gráfico também
+                    // Requereria plugin externo, então vamos manter simples por enquanto.
+                }
+            },
+            scales: {
+                x: { 
+                    title: { display: true, text: 'Risco (Volatilidade %)' },
+                    // Ajuste dinâmico: começa do 0 ou do menor valor para dar destaque
+                    suggestedMin: 0 
+                },
+                y: { 
+                    title: { display: true, text: 'Retorno (%)' },
+                    // Adiciona a linha de grade do Benchmark visualmente (zero line ou similar) se desejar
+                }
+            }
+        }
     });
 
-    // --- Gráfico 3: Volatilidade Horizontal ---
+    // --- GRÁFICO 3: FUNDAMENTOS (DRE vs EBITDA) ---
     const ctxVol = document.getElementById('volatilidadeVolume');
     if (chartVolatilidade) chartVolatilidade.destroy();
 
-    chartVolatilidade = new Chart(ctxVol, {
-      type: 'bar',
-      data: {
-        labels: labelsSetor,
-        datasets: [{
-          label: 'Volatilidade do Período (%)',
-          data: dataVolatilidade,
-          backgroundColor: '#b388eb',
-          borderRadius: 6,
-          barThickness: 20,
-        }]
-      },
-      options: {
-        indexAxis: 'y', // Horizontal
-        responsive: true,
-      }
-    });
-  }
+    const limparValor = (val) => {
+        if(typeof val === 'number') return val;
+        return parseFloat(String(val).replace(/[^0-9.-]/g, '')); 
+    };
 
+    chartVolatilidade = new Chart(ctxVol, {
+        type: 'bar',
+        data: {
+            labels: labelsTop5,
+            datasets: [
+                {
+                    label: 'EBITDA (Caixa)',
+                    data: top5.map(d => limparValor(d.EBITDA)),
+                    backgroundColor: '#F59E0B', // Laranja
+                    borderRadius: 4,
+                    barPercentage: 0.6,
+                },
+                {
+                    label: 'Lucro Líquido (DRE)',
+                    data: top5.map(d => limparValor(d.DRE)),
+                    backgroundColor: '#10B981', // Verde
+                    borderRadius: 4,
+                    barPercentage: 0.6,
+                }
+            ]
+        },
+        options: {
+            indexAxis: 'y', // Gráfico Horizontal
+            responsive: true,
+            scales: {
+                x: {
+                    grid: { display: false } // Limpa o fundo vertical
+                }
+            }
+        }
+    });
+}
+
+  
   function sair() {
     sessionStorage.clear();
     window.location.href = "./login.html";
@@ -504,210 +617,5 @@
     });
   })();
 
-
-  /*
-function chamarGraficos() {
-  const ctx = document.getElementById('rankSetor');
-
-  const ctx1 = document.getElementById('graphLinha');
-
-
-  const ctx2 = document.getElementById('volatilidadeVolume');
-
-  new Chart(ctx2, {
-    type: 'bar',
-    data: {
-      labels: ['Tecnologia', 'Saúde', 'Financeiro', 'Energia', 'Consumo', 'Industrial'],
-      datasets: [
-        {
-          label: 'Volatilidade (%)',
-          data: [30, 25, 28, 22, 20, 24], // valores fictícios (em %)
-          backgroundColor: '#b388eb', // roxo
-          borderRadius: 6,
-          barThickness: 15,
-        },
-        {
-          label: 'Volume (M)',
-          data: [450, 400, 500, 300, 350, 320], // valores fictícios (em milhões)
-          backgroundColor: '#4285f4', // azul
-          borderRadius: 6,
-          barThickness: 15,
-        }
-      ]
-    },
-    options: {
-      indexAxis: 'y', // barras horizontais
-      responsive: true,
-      plugins: {
-        legend: {
-          position: 'bottom',
-          labels: {
-            boxWidth: 20,
-            color: '#333'
-          }
-        },
-
-      },
-      scales: {
-        x: {
-          beginAtZero: true,
-          grid: {
-            color: '#eee'
-          },
-          title: {
-            display: false
-          }
-        },
-        y: {
-          grid: {
-            display: false
-          },
-          ticks: {
-            color: '#333'
-          }
-        }
-      }
-    }
-  });
-
-
-
-  new Chart(ctx1, {
-    type: 'line',
-    data: {
-      labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-      datasets: [
-        {
-          label: 'Energia',
-          data: [2, 3, 4, 5, 7, 9, 9.5, 10, 11, 11.5, 11.7, 12],
-          borderColor: '#EF4444',
-          backgroundColor: '#EF4444',
-          tension: 0.3,
-          fill: false,
-          pointRadius: 4,
-          pointBackgroundColor: '#fff',
-          pointBorderColor: '#EF4444',
-          pointBorderWidth: 2
-        },
-        {
-          label: 'Financeiro',
-          data: [3, 4, 5, 6, 8, 10, 11, 12, 12.5, 13, 13.2, 13.4],
-          borderColor: '#F59E0B',
-          backgroundColor: '#F59E0B',
-          tension: 0.3,
-          fill: false,
-          pointRadius: 4,
-          pointBackgroundColor: '#fff',
-          pointBorderColor: '#F59E0B',
-          pointBorderWidth: 2
-        },
-        {
-          label: 'Saúde',
-          data: [4, 5, 6, 8, 10, 12, 13, 14, 14.5, 15, 15.2, 15.3],
-          borderColor: '#10B981',
-          backgroundColor: '#10B981',
-          tension: 0.3,
-          fill: false,
-          pointRadius: 4,
-          pointBackgroundColor: '#fff',
-          pointBorderColor: '#10B981',
-          pointBorderWidth: 2
-        },
-        {
-          label: 'Tecnologia',
-          data: [5, 7, 6, 9, 12, 15, 14, 16, 17, 18, 18.5, 19],
-          borderColor: '#3B82F6',
-          backgroundColor: '#3B82F6',
-          tension: 0.3,
-          fill: false,
-          pointRadius: 4,
-          pointBackgroundColor: '#fff',
-          pointBorderColor: '#3B82F6',
-          pointBorderWidth: 2
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          position: 'bottom'
-        }
-      },
-      scales: {
-        y: {
-          beginAtZero: true,
-          suggestedMax: 20,
-          title: {
-            display: false
-          }
-        },
-        x: {
-          grid: {
-            display: true
-          }
-        }
-      }
-    }
-  });
-
-
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['Tecnologia', 'Saúde', 'Financeiro', 'Energia', 'Industrial'],
-      datasets: [{
-        label: 'Retorno Médio (%)',
-        data: [20, 15, 13, 11, 9],
-        backgroundColor: [
-          '#3B82F6', // azul
-          '#10B981', // verde
-          '#F59E0B', // laranja
-          '#EF4444', // vermelho
-          '#8B5CF6'  // roxo
-        ],
-        borderRadius: 6
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          display: false
-        }
-      },
-      scales: {
-        y: {
-          beginAtZero: true,
-          ticks: {
-            stepSize: 5
-          },
-          title: {
-            display: true,
-            text: '% de Retorno'
-          }
-        }
-      }
-    }
-  });
-
-}
-
-
-
-chamarGraficos();
-
-document.querySelector('#notificacaoIcon').addEventListener('click', function (e) {
-  e.stopPropagation();
-  const dropdown = document.querySelector('.notificacao-dropdown');
-  dropdown.classList.toggle('active');
-});
-
-document.addEventListener('click', function (e) {
-  const dropdown = document.querySelector('.notificacao-dropdown');
-  if (!e.target.closest('.notificacao-container')) {
-    dropdown.classList.remove('active');
-  }
-});*/
 </script>
 <script src="Style/js/fazerHamburguer.js"></script>
