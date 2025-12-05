@@ -5,7 +5,7 @@ function receberDashboard(req, res) {
     var periodo = req.body.periodoServer; 
 
     // Lógica para definir os anos com base no ano atual (ex: 2025)
-    var anoAtual = new Date().getFullYear(); 
+    var anoAtual = (new Date().getFullYear() - 1); 
     // Se o ano fiscal ainda não fechou, talvez queira usar (anoAtual - 1) como base. 
     // Vou usar anoAtual como base, assumindo que temos dados parciais.
     

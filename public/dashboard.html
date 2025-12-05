@@ -308,7 +308,7 @@
     listaDiv.innerHTML = ""; // Limpa a lista atual
 
     // Percorre os dados recebidos e cria os cards HTML
-    // Vamos mostrar o TOP 4 na lista como no seu exemplo original
+    // Vamos mostrar o TOP 5 na lista
     for (let i = 0; i < 5 /*dados.length*/; i++) {
       let setor = dados[i];
 
@@ -334,7 +334,6 @@
                     <h2>${i + 1}</h2>
                     <div>
                         <h1>${setor.setor}</h1>
-                        <p>Dados consolidados</p>
                     </div>
                 </div>
 
@@ -359,7 +358,12 @@
                         <p class="corLaranja">${setor.volatilidade_periodo}%</p>
                     </div>
 
-                    <h1 class="${classificacaoCor}">${classificacaoTexto}</h1>
+                    <div>
+                        <h1>Rentabilidade</h1>
+                        <p class="${classificacaoCor}">${classificacaoTexto}</p>
+                    </div>
+
+                  
                 </div>
             </div>
             `;
