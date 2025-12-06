@@ -8,6 +8,7 @@
   <link rel="icon" type="image/x-icon" href="Style/assets/smartLogoVetor.ico">
   <link rel="stylesheet" href="Style/css/dashboardCSS.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
 </head>
 
 <body onload="atualizarDashboard()">
@@ -585,7 +586,9 @@ function renderizarGraficos(dados) {
             responsive: true,
             scales: {
                 x: {
-                    grid: { display: false } // Limpa o fundo vertical
+                    grid: { display: true },
+                    title: { display: true, text: 'R$(M)' },
+                    suggestedMin: 0 
                 }
             }
         }
