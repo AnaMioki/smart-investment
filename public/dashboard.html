@@ -70,12 +70,12 @@
 
         <div id="graphDash">
           <div>
-            <h1>Rentabilidade vs Benchmark (Ibovespa)</h1>
+            <h1>Rentabilidade Setor vs Rentabilidade (Ibovespa)</h1>
             <canvas id="rankSetor"></canvas>
           </div>
 
           <div>
-            <h1>Risco x Retorno (Top 5 Setores)</h1>
+            <h1><strong>Rentabilidade x Risco (Top 5 Setores)</strong></h1>
             <canvas id="graphSecundario"></canvas>
           </div>
         </div>
@@ -303,28 +303,54 @@
     const listaDiv = document.getElementById('lista');
     listaDiv.innerHTML = ""; // Limpa a lista atual
 
-    // Percorre os dados recebidos e cria os cards HTML
-    // Vamos mostrar o TOP 5 na lista
-    for (let i = 0; i < 5 /*dados.length*/; i++) {
-      let setor = dados[i];
+    // 1. Pega o período selecionado no <select>
+    const periodoSelecionado = document.getElementById('selectDash').value;
+    
+    // 2. Calcula o Benchmark (IBOVESPA) para esse período
+    // O retorno é string, então usamos parseFloat para fazer as contas de comparação depois
+    const benchmarkString = getBenchmarkIbovespa(periodoSelecionado);
+    const benchmarkValor = parseFloat(benchmarkString);
 
-      // Lógica simples de classificação (você pode aprimorar)
-      let classificacaoTexto = "Baixa";
-      let classificacaoCor = "corVermelha"; // CSS class
+    // Ordena os dados para garantir que a lista mostre os melhores primeiro (opcional, mas recomendado)
+    // Se seus dados já vêm ordenados do back-end, pode remover o .sort()
+    const dadosOrdenados = dados.sort((a, b) => b.rentabilidade_periodo - a.rentabilidade_periodo);
 
-      if (setor.rentabilidade_periodo > 15) {
-        classificacaoTexto = "Muito Alta";
-        classificacaoCor = "verde"; // CSS class baseada no seu HTML antigo
-      } else if (setor.rentabilidade_periodo > 10) {
-        classificacaoTexto = "Alta";
-        classificacaoCor = "azul";
-      } else if (setor.rentabilidade_periodo > 5) {
-        classificacaoTexto = "Média";
-        classificacaoCor = "amarelo";
-      }
+    // Loop para exibir o TOP 5
+    // Verifica se existem dados suficientes para não quebrar o loop
+    const limite = Math.min(dadosOrdenados.length, 5); 
 
-      // HTML Template String
-      listaDiv.innerHTML += `
+    for (let i = 0; i < 5; i++) {
+        let setor = dadosOrdenados[i];
+        let rentabilidadeSetor = setor.rentabilidade_periodo;
+
+        // --- Lógica de Classificação Dinâmica ---
+        let classificacaoTexto = "";
+        let classificacaoCor = ""; 
+
+        // Regra: Muito alta > IBOVESPA + 6.2
+        if (rentabilidadeSetor > (benchmarkValor + 6.2)) {
+            classificacaoTexto = "Muito Alta";
+            classificacaoCor = "verde"; // Classe CSS
+        } 
+        // Regra: Alta entre (IBOVESPA + 3.1) e (IBOVESPA + 6.2)
+        else if (rentabilidadeSetor >= (benchmarkValor + 3.1)) {
+            classificacaoTexto = "Alta";
+            classificacaoCor = "azul";
+        }
+        // Regra: Média entre (IBOVESPA - 3) e (IBOVESPA + 3) 
+        // Nota: Ajustei o limite superior para < 3.1 para não conflitar com a Alta
+        else if (rentabilidadeSetor >= (benchmarkValor - 3)) {
+            classificacaoTexto = "Média";
+            classificacaoCor = "amarelo";
+        }
+        // Regra: Baixa < IBOVESPA - 3
+        else {
+            classificacaoTexto = "Baixa";
+            classificacaoCor = "corVermelha";
+        }
+
+        // --- HTML Template ---
+        listaDiv.innerHTML += `
             <div>
                 <div class="numero">
                     <h2>${i + 1}</h2>
@@ -335,12 +361,17 @@
 
                 <div class="infos">
                     <div>
-                        <h1>Retorno</h1>
+                        <h1>Rentabilidade</h1>
                         <p class="corVerde">${setor.rentabilidade_periodo}%</p>
                     </div>
 
                     <div>
-                        <h1>DRE (Médio)</h1>
+                        <h1>Rentabilidade (IBOVESPA)</h1>
+                        <p>${benchmarkString}%</p>
+                    </div>
+
+                    <div>
+                        <h1>DRE (Médio R$M)</h1>
                         <p>${setor.DRE}</p>
                     </div>
 
@@ -355,21 +386,14 @@
                     </div>
 
                     <div>
-                        <h1>Retorno (IBOVESPA)</h1>
-                        <p>14%</p>
-                    </div>
-
-                    <div>
-                        <h1>Rentabilidade</h1>
+                        <h1>Retorno</h1>
                         <p class="${classificacaoCor}">${classificacaoTexto}</p>
                     </div>
-
-                  
                 </div>
             </div>
             `;
     }
-  }
+}
 
 // Função auxiliar para pegar a média do Ibovespa conforme o filtro selecionado
 function getBenchmarkIbovespa(periodo) {
@@ -397,11 +421,16 @@ function getBenchmarkIbovespa(periodo) {
             break;
         default:
             benchmark = 5.0; 
+    }
     
     return benchmark.toFixed(2); 
 }
 
+
 function renderizarGraficos(dados) {
+    Chart.defaults.font.size = 14; 
+    Chart.defaults.font.weight = 'bold';
+    Chart.defaults.color = '#000000';
     const periodoSelecionado = document.getElementById('selectDash').value;
     const valorBenchmark = getBenchmarkIbovespa(periodoSelecionado);
 
@@ -465,7 +494,7 @@ function renderizarGraficos(dados) {
                     suggestedMin: 0 
                 },
                 y: { 
-                    title: { display: true, text: 'Retorno (%)' },
+                    title: { display: true, text: 'Rentabilidade (%)' },
                     // Adiciona a linha de grade do Benchmark visualmente (zero line ou similar) se desejar
                 }
             }
@@ -514,7 +543,7 @@ function renderizarGraficos(dados) {
                     suggestedMin: 0 
                 },
                 y: { 
-                    title: { display: true, text: 'Retorno (%)' },
+                    title: { display: true, text: 'Rentabilidade (%)' },
                     // Adiciona a linha de grade do Benchmark visualmente (zero line ou similar) se desejar
                 }
             }
