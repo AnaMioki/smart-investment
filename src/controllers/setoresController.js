@@ -2,7 +2,9 @@
 
 
 function receberSetores(req, res) {
-    setoresModel.receberSetores().then(function (resultado) {
+    var anos = req.params.anos;
+    var perfil = req.params.perfil;
+    setoresModel.receberSetores(anos, perfil).then(function (resultado) {
         if (resultado.length > 0) {
             res.json(resultado);
 
@@ -18,8 +20,9 @@ function receberSetores(req, res) {
 
 function receberSetoresParam(req, res) {
     var setor = req.params.setor;
-
-    setoresModel.receberSetoresParam(setor).then(function (resultado) {
+    var anos = req.params.anos;
+    var perfil = req.params.perfil;
+    setoresModel.receberSetoresParam(setor, anos, perfil).then(function (resultado) {
         if (resultado.length > 0) {
             res.json(resultado);
 

@@ -1,13 +1,47 @@
 var database = require("../database/config")
 
-function receberSetoresParam(setor) {
-    var instrucaoSql = `select setor , count(*) as "quantidade" from empresa where setor != "Sem setor" and setor like '%${setor}%' group by setor;`;
+function receberSetoresParam(setor, anos, perfil) {
+    var instrucaoSql = `   SELECT 
+            setor,
+            
+            -- Retorna o número total de ações disponíveis para este perfil neste setor
+            SUM(qtd_empresas) as total_acoes_disponiveis,
+            
+            -- Cálculos de média ponderada (Soma total / Quantidade total)
+            TRUNCATE(SUM(soma_retorno) / SUM(qtd_empresas), 2) as rentabilidade_periodo,
+            TRUNCATE(SUM(soma_volatilidade) / SUM(qtd_empresas), 2) as volatilidade_periodo,
+            TRUNCATE(SUM(soma_dre) / SUM(qtd_empresas), 2) as DRE,
+            TRUNCATE(SUM(soma_ebitda) / SUM(qtd_empresas), 2) as EBITDA
+            
+        FROM dashboard_consolidado_usuario
+        WHERE ano_referencia IN (${anos})
+          AND perfil_investidor =  ('${perfil}') COLLATE utf8mb4_unicode_ci AND setor like '%${setor}%'
+        GROUP BY setor
+        ORDER BY rentabilidade_periodo DESC;`;
     console.log("Executando a instrução do SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql)
 }
 
-function receberSetores() {
-    var instrucaoSql = `select setor , count(*) as "quantidade" from empresa where setor != "Sem setor" group by setor;`;
+function receberSetores(anos, perfil) {
+    var instrucaoSql = `
+        SELECT 
+            setor,
+            
+            -- Retorna o número total de ações disponíveis para este perfil neste setor
+            SUM(qtd_empresas) as total_acoes_disponiveis,
+            
+            -- Cálculos de média ponderada (Soma total / Quantidade total)
+            TRUNCATE(SUM(soma_retorno) / SUM(qtd_empresas), 2) as rentabilidade_periodo,
+            TRUNCATE(SUM(soma_volatilidade) / SUM(qtd_empresas), 2) as volatilidade_periodo,
+            TRUNCATE(SUM(soma_dre) / SUM(qtd_empresas), 2) as DRE,
+            TRUNCATE(SUM(soma_ebitda) / SUM(qtd_empresas), 2) as EBITDA
+            
+        FROM dashboard_consolidado_usuario
+        WHERE ano_referencia IN (${anos})
+          AND perfil_investidor =  ('${perfil}') COLLATE utf8mb4_unicode_ci
+        GROUP BY setor
+        ORDER BY rentabilidade_periodo DESC;
+    `;
     console.log("Executando a instrução do SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql)
 }

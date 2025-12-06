@@ -620,6 +620,13 @@ img#perfilIcon {
     border-radius: 2vh;
 }
 
+.vermelho{
+    font-size: 1rem;
+    color: #890000;
+    background-color: #fec2c2;
+    padding: 2vh 3vh;
+    border-radius: 2vh;
+}
 /* Teste */
 
 .tooltip {
