@@ -33,7 +33,7 @@ function receberSetores(anos, perfil) {
             -- Cálculos de média ponderada (Soma total / Quantidade total)
             TRUNCATE(SUM(soma_retorno) / SUM(qtd_empresas), 2) as rentabilidade_periodo,
             TRUNCATE(SUM(soma_volatilidade) / SUM(qtd_empresas), 2) as volatilidade_periodo,
-            TRUNCATE(SUM(soma_dre) / SUM(qtd_empresas), 2) as DRE,
+            TRUNCATE((SUM(soma_dre) / SUM(qtd_empresas)/100000), 2) as DRE,
             TRUNCATE(SUM(soma_ebitda) / SUM(qtd_empresas), 2) as EBITDA
             
         FROM dashboard_consolidado_usuario
@@ -46,8 +46,8 @@ function receberSetores(anos, perfil) {
     return database.executar(instrucaoSql)
 }
 
-function buscarAcoesSetor(setor) {
-    var instrucaoSql = `select nome, ticker from empresa where setor = '${setor}';`;
+function buscarAcoesSetor(setor, limite) {
+    var instrucaoSql = `select nome, ticker from empresa where setor = '${setor}' LIMIT ${limite};`;
     console.log("Executando a instrução do SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql)
 }

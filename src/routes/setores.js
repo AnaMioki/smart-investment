@@ -12,7 +12,7 @@ rota.get('/receberSetoresParam/:setor/:anos/:perfil', function (req , res) {
     setoresController.receberSetoresParam(req , res);
 });
 
-rota.get('/buscarAcoesSetor/:setor', function (req , res) {
+rota.get('/buscarAcoesSetor/:setor/:limite', function (req , res) {
     setoresController.buscarAcoesSetor(req , res);
 });
 

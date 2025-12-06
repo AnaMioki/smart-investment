@@ -38,7 +38,8 @@ function receberSetoresParam(req, res) {
 
 function buscarAcoesSetor(req, res) {
     var setor = req.params.setor;
-    setoresModel.buscarAcoesSetor(setor).then(function (resultado) {
+    var limite = req.params.limite;
+    setoresModel.buscarAcoesSetor(setor, limite).then(function (resultado) {
         if (resultado.length > 0) {
             res.json(resultado);
         } else {

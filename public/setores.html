@@ -389,7 +389,7 @@
 
 
             lista.innerHTML += `  
-              <div onclick="abrirAcoesSetor(this,'${setor.setor}')">
+              <div onclick="abrirAcoesSetor(this,'${setor.setor}', ${setor.total_acoes_disponiveis})">
                             <div class="numero">
                                 
                                 <h2>${cont}</h2>
@@ -588,12 +588,12 @@
 
     }
 
-    async function abrirAcoesSetor(elemento, setor) {
+    async function abrirAcoesSetor(elemento, setor, limite) {
         const nome_lista = document.getElementById(`acoes_${setor}`);
 
         nome_lista.innerHTML = '<img src="Style/assets/Loading_icon.gif" alt="Carregando...">';
 
-        const response = await fetch(`/setores/buscarAcoesSetor/${setor}`);
+        const response = await fetch(`/setores/buscarAcoesSetor/${setor}/${limite}`);
         const dados = await response.json();
 
         var periodo = selectPeriodo.value;
