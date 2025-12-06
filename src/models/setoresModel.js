@@ -53,16 +53,27 @@ function buscarAcoesSetor(setor, limite) {
 }
 
 
-function buscarAcoesUnicas(ticker, anos) {
+function buscarAcoesUnicas(ticker, anos, idUsuario) {
     var instrucaoSql = `SELECT 
     e.*, 
     TRUNCATE(AVG(a.precoFechamento), 2) AS media_preco_fechamento,
     MAX(a.precoMaisAlto) AS max_preco_alto,
     MIN(a.precoMaisBaixo) AS min_preco_baixo,
-    TRUNCATE(AVG(a.volume), 2) AS media_volume
+    TRUNCATE(AVG(a.volume), 2) AS media_volume,
+
+    CASE 
+        WHEN MAX(af.idAcoesFavoritadas) IS NOT NULL THEN 1
+        ELSE 0
+    END AS favoritada
+
 FROM empresa e
 JOIN acoes a 
     ON e.idEmpresa = a.fkEmpresa
+
+LEFT JOIN acoesFavoritadas af
+    ON af.fkAcoes = e.idEmpresa
+   AND af.fkUsuario = ${idUsuario}
+
 WHERE 
     e.ticker = '${ticker}'
     AND a.dtAtual BETWEEN
@@ -77,6 +88,7 @@ WHERE
             FROM acoes 
             WHERE fkEmpresa = e.idEmpresa
         )
+
 GROUP BY e.idEmpresa
 LIMIT 1;`;
     console.log("Executando a instrução do SQL: \n" + instrucaoSql);

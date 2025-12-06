@@ -2,8 +2,7 @@
 var ambiente_processo = 'desenvolvimento';
 
 var caminho_env = ambiente_processo === 'producao' ? '.env' : '.env.dev';
-// Acima, temos o uso do operador ternário para definir o caminho do arquivo .env
-// A sintaxe do operador ternário é: condição ? valor_se_verdadeiro : valor_se_falso
+
 
 require("dotenv").config({ path: caminho_env });
 
@@ -17,18 +16,14 @@ var URL_SLACK_CHAMADO = process.env.URL_SLACK_CHAMADO;
 var app = express();
 
 
-// app.set('view engine', 'ejs'); // define o motor de template
-// app.set('views', './src/views'); // pasta onde estão seus arquivos .ejs
-
 var indexRouter = require("./src/routes/index");
 var usuarioRouter = require("./src/routes/usuarios");
 var setorRouter = require("./src/routes/setores");
 var notificacaoRouter = require("./src/routes/notificacoes");
 var dashboardRouter = require("./src/routes/dashboard");
 var empresasRouter = require("./src/routes/empresas");
-// var avisosRouter = require("./src/routes/avisos");
-// var medidasRouter = require("./src/routes/medidas");
-// var aquariosRouter = require("./src/routes/aquarios");
+var interactionRouter = require("./src/routes/interaction");
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -42,9 +37,8 @@ app.use("/setores", setorRouter);
 app.use("/notificacoes", notificacaoRouter);
 app.use("/dashboard", dashboardRouter); 
 app.use("/empresas", empresasRouter);
-// app.use("/avisos", avisosRouter);
-// app.use("/medidas", medidasRouter);
-// app.use("/aquarios", aquariosRouter);
+app.use("/interaction", interactionRouter);
+
 
 app.listen(PORTA_APP, function () {
     console.log(`

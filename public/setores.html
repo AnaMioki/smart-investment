@@ -137,6 +137,8 @@
 
 </html>
 
+
+
 <script>
     document.addEventListener("DOMContentLoaded", carregarNotificacoes);
 
@@ -286,6 +288,119 @@
     let chartDiversidade = null;
     let chartEficiencia = null;
 
+
+
+
+
+    function getBenchmarkIbovespa() {
+
+        let benchmark = 0;
+
+        const p = selectPeriodo.value;
+
+
+        if (selectTipo.value == "periodo") {
+            switch (p) {
+
+                case "2024": // 1 ano
+                    benchmark = -10.36;
+                    break;
+
+                case "2024, 2023": // 2 anos
+                    benchmark = (-10.36 + 22.28) / 2;
+                    break;
+
+                case "2024, 2023, 2022": // 3 anos
+                    benchmark = (-10.36 + 22.28 + 4.69) / 3;
+                    break;
+
+                case "2024, 2023, 2022, 2021": // 4 anos
+                    benchmark = (-10.36 + 22.28 + 4.69 - 11.93) / 4;
+                    break;
+
+                case "2024, 2023, 2022, 2021, 2020": // 5 anos
+                    benchmark = (-10.36 + 22.28 + 4.69 - 11.93 + 2.92) / 5;
+                    break;
+
+                case "2024, 2023, 2022, 2021, 2020, 2019": // 6 anos
+                    benchmark = (-10.36 + 22.28 + 4.69 - 11.93 + 2.92 + 31.58) / 6;
+                    break;
+
+                case "2024, 2023, 2022, 2021, 2020, 2019, 2018": // 7 anos
+                    benchmark = (-10.36 + 22.28 + 4.69 - 11.93 + 2.92 + 31.58 + 15.03) / 7;
+                    break;
+
+                case "2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017": // 8 anos
+                    benchmark = (-10.36 + 22.28 + 4.69 - 11.93 + 2.92 + 31.58 + 15.03 + 26.86) / 8;
+                    break;
+
+                case "2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016": // 9 anos
+                    benchmark = (-10.36 + 22.28 + 4.69 - 11.93 + 2.92 + 31.58 + 15.03 + 26.86 + 38.94) / 9;
+                    break;
+
+                case "2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015": // 10 anos
+                    benchmark = (-10.36 + 22.28 + 4.69 - 11.93 + 2.92 + 31.58 + 15.03 + 26.86 + 38.94 - 13.31) / 10;
+                    break;
+
+                default:
+                    benchmark = 5.0;
+            }
+
+        } else {
+            switch (p) {
+
+                case "2024": // 1 ano
+                    benchmark = -10.36;
+                    break;
+
+                case "2023": // 2 anos → últimos anos: 2023
+                    benchmark = 22.28;
+                    break;
+
+                case "2022": // 3 anos → último: 2022
+                    benchmark = 4.69;
+                    break;
+
+                case "2021": // 4 anos → último: 2021
+                    benchmark = -11.93;
+                    break;
+
+                case "2020": // 5 anos → último: 2020
+                    benchmark = 2.92;
+                    break;
+
+                case "2019": // 6 anos → último: 2019
+                    benchmark = 31.58;
+                    break;
+
+                case "2018": // 7 anos → último: 2018
+                    benchmark = 15.03;
+                    break;
+
+                case "2017": // 8 anos → último: 2017
+                    benchmark = 26.86;
+                    break;
+
+                case "2016": // 9 anos → último: 2016
+                    benchmark = 38.94;
+                    break;
+
+                case "2015": // 10 anos → último: 2015
+                    benchmark = -13.31;
+                    break;
+
+                default:
+                    benchmark = 5.0;
+            }
+
+        }
+
+
+
+        return benchmark.toFixed(2);
+    }
+
+
     async function carregarDados(anos, setorParam) {
 
 
@@ -358,15 +473,35 @@
             let classificacaoTexto = "baixa";
             let classificacaoCor = "vermelho";
 
-            if (setor.rentabilidade_periodo > 15) {
+            const periodoSelecionado = document.getElementById('selectPeriodo').value;
+
+            console.log(periodoSelecionado)
+
+            const benchmarkString = getBenchmarkIbovespa(periodoSelecionado);
+            const benchmarkValor = parseFloat(benchmarkString);
+
+
+            console.log(benchmarkString);
+            console.log(benchmarkValor);
+
+            if (setor.rentabilidade_periodo > (benchmarkValor + 6.2)) {
                 classificacaoTexto = "Muito Alta";
                 classificacaoCor = "verde";
-            } else if (setor.rentabilidade_periodo > 10) {
+
+            }
+            else if (setor.rentabilidade_periodo >= (benchmarkValor + 3.1)) {
                 classificacaoTexto = "Alta";
                 classificacaoCor = "azul";
-            } else if (setor.rentabilidade_periodo > 5) {
+            }
+
+            else if (setor.rentabilidade_periodo >= (benchmarkValor - 3)) {
                 classificacaoTexto = "Média";
                 classificacaoCor = "amarelo";
+            }
+
+            else {
+                classificacaoTexto = "Baixa";
+                classificacaoCor = "vermelho";
             }
 
 
@@ -384,11 +519,20 @@
                             <div class="infos">
                                 <div>
                                     <h1><span class="tooltip left-edge">
-                                            <strong>Rentabilidade (IBOVESPA)</strong>
+                                            <strong>Rentabilidade</strong>
                                             <span class="tip">É o lucro ou prejuízo percentual do investimento em
                                                 determinado período.</span>
                                         </span></h1>
                                     <p class="corVerde">${setor.rentabilidade_periodo}%</p>
+                                </div>
+
+                                <div>
+                                    <h1><span class="tooltip left-edge">
+                                            <strong>Rentabilidade (IBOVESPA)</strong>
+                                            <span class="tip">É o lucro ou prejuízo percentual do investimento em
+                                                determinado período.</span>
+                                        </span></h1>
+                                    <p class="corVerde">${benchmarkString}%</p>
                                 </div>
 
                                 <div>
@@ -440,7 +584,7 @@
             chartEficiencia.destroy();
         }
 
- 
+
 
         chartDiversidade = new Chart(document.getElementById('chartDiversidade'), {
             type: 'doughnut',
@@ -519,12 +663,6 @@
         total_setores_kpi.innerHTML = cont;
         searchSetor.value = '';
     }
-</script>
-
-
-
-<script>
-
 </script>
 
 
@@ -623,12 +761,72 @@
     });
 
 
+    function favoritar(idAcao) {
+        var imagem = `<img class="estrela" src="./Style/assets/estrelaCheia.svg"  onclick="event.stopPropagation(); desfavoritar(${idAcao})">`;
+        imagemPopUp.innerHTML = imagem;
 
+        fetch("/interaction/favoritarAcao", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                idacao: idAcao,
+                idUsuario: sessionStorage.ID_USUARIO
+            }),
+        })
+            .then((res) => {
+                if (res.ok) {
+                    console.log("Sucesso ao favoritar ação!");
+                } else {
+                    res.text().then((msg) =>
+                        console.log("Erro ao favoritar, tente novamente!")
+                    );
+                }
+            })
+            .catch((error) => {
+                console.error("Erro:", error);
+                console.log("Erro ao conectar com o servidor.");
+            });
+    }
+
+
+    function desfavoritar(idAcao) {
+        imagemPopUp.innerHTML = "";
+        var imagem = `<img class="estrela" src="./Style/assets/estrelaVazia.svg"  onclick="event.stopPropagation(); favoritar(${idAcao})">`;
+        imagemPopUp.innerHTML = "";
+        imagemPopUp.innerHTML = imagem;
+
+        fetch("/interaction/desfavoritarAcao", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                idacao: idAcao,
+                idUsuario: sessionStorage.ID_USUARIO
+            }),
+        })
+            .then((res) => {
+                if (res.ok) {
+                    console.log("Sucesso ao favoritar ação!");
+                } else {
+                    res.text().then((msg) =>
+                        console.log("Erro ao favoritar, tente novamente!")
+                    );
+                }
+            })
+            .catch((error) => {
+                console.error("Erro:", error);
+                console.log("Erro ao conectar com o servidor.");
+            });
+
+    }
 
     async function abrirInfoAcao(elemento, ticker, anos) {
 
         console.log(elemento, ticker)
-        const resposta = await fetch(`/setores/buscarAcoesUnicas/${ticker}/${anos}`);
+        const resposta = await fetch(`/setores/buscarAcoesUnicas/${ticker}/${anos}/${sessionStorage.ID_USUARIO}`);
         const dados = await resposta.json();
         console.log(dados[0]);
 
@@ -644,10 +842,21 @@
             mensagem = `Periodo: ${anos} anos.`;
         };
 
+        if (dados[0].favoritada == 0) {
+            var imagem = `<img class="estrela" src="./Style/assets/estrelaVazia.svg"  onclick="event.stopPropagation(); favoritar(${dados[0].idEmpresa})">`;
+        } else {
+            var imagem = `<img class="estrela" src="./Style/assets/estrelaCheia.svg"   onclick="event.stopPropagation(); desfavoritar(${dados[0].idEmpresa})">`;
+        }
+
+
+
         popup.innerHTML = `
             <div class="popup-conteudo">
                 <div class="popup-header">
                     <div class="dentro-popup">
+                        <div id="imagemPopUp">
+                            ${imagem}
+                        </div>
                     <h2>${dados[0].nome}</h2>
                     <img src="${dados[0].logo}">
                     </div>

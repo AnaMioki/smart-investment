@@ -8,4 +8,14 @@ router.get("/receberDados", function (req, res) {
 })
 
 
+router.post("/favoritarAcao", function (req, res) {
+    interactionController.favoritarAcao(req, res);
+})
+
+router.delete("/desfavoritarAcao", function (req, res) {
+    interactionController.desfavoritarAcao(req, res);
+})
+
+
+
 module.exports = router;

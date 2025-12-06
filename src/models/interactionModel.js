@@ -5,15 +5,29 @@ function hashSenha(senha) {
     return crypto.createHash('sha256').update(senha).digest('hex');
 }
 
-function receberDados(email, senha) {
-    const senhaHash = hashSenha(senha);
+
+
+function favoritarAcao(idacao, idUsuario) {
+
     var instrucaoSql = `
-        SELECT idUsuario, nome, email, perfil FROM usuario WHERE email = '${email}' AND senha = '${senhaHash}';
+        INSERT INTO acoesFavoritadas VALUES (DEFAULT, ${idacao}, ${idUsuario});
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }
 
+function desfavoritarAcao(idacao, idUsuario) {
+    var instrucaoSql = `
+        DELETE FROM acoesFavoritadas WHERE fkAcoes = ${idacao} AND fkUsuario = ${idUsuario};
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
+
+
+
 module.exports = {
-    receberDados
+    favoritarAcao,
+    desfavoritarAcao
 }

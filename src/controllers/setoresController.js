@@ -57,7 +57,9 @@ function buscarAcoesSetor(req, res) {
 function buscarAcoesUnicas(req, res) {
     var ticker = req.params.ticker;
     var anos = req.params.anos;
-    setoresModel.buscarAcoesUnicas(ticker,anos).then(function (resultado) {
+    var idUsuario = req.params.idUsuario;
+
+    setoresModel.buscarAcoesUnicas(ticker,anos, idUsuario).then(function (resultado) {
         if (resultado.length > 0) {
             res.json(resultado);
         } else {

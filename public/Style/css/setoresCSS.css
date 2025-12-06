@@ -403,6 +403,10 @@ img#perfilIcon {
 }
 
 
+#chartEficiencia{
+    height: 70% !important;
+}
+
 #grafSetores{
     display: flex;
     width: 100%;
@@ -419,7 +423,7 @@ img#perfilIcon {
     transition: 0.5s;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center !important;
     background-color: #ffffff;
 }
 
@@ -433,16 +437,16 @@ img#perfilIcon {
     font-weight: 100;
 }
 
-#graficoRadar{
-  width: 30vw !important;
-  height: 50vh !important;   /* <-- ESSENCIAL para deixar o gráfico quadrado */
+
+.estrela{
+    height: 4vh !important;
+    width: 4vh !important;
+    cursor: pointer;
+    transition: 0.5s;
 }
 
-#graficoBarra{
-    max-width: 100% !important;
-    min-width: 50% !important;
-    max-height: 87% !important;
-    
+.estrela:hover{
+    transform: scale(1.05);
 }
 
 

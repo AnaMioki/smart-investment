@@ -1,10 +1,14 @@
-var usuarioModel = require("../models/interactionModel");
+var interactionModel = require("../models/interactionModel");
 
-function receberDados(req, res) {
 
-    interactionModels.receberDados().then(function (resultado) {
+function desfavoritarAcao(req, res) {
+    var idacao = req.body.idacao;
+    var idUsuario = req.body.idUsuario;
+  
+    interactionModel.desfavoritarAcao(idacao, idUsuario).then(function (resultado) {
         if (resultado.length > 0) {
-            res.status(200).json(resultado);
+            res.json(resultado);
+
         } else {
             res.status(204).send("Nenhuma postagem encontrada!")
         }
@@ -16,6 +20,27 @@ function receberDados(req, res) {
 }
 
 
+function favoritarAcao(req, res) {
+    var idacao = req.body.idacao;
+    var idUsuario = req.body.idUsuario;
+
+    interactionModel.favoritarAcao( idacao , idUsuario).then(function (resultado) {
+        if (resultado.length > 0) {
+            res.json(resultado);
+
+        } else {
+            res.status(204).send("Nenhuma postagem encontrada!")
+        }
+    }).catch(function (erro) {
+        console.log(erro);
+        console.log("Houve um erro ao buscar as postagens.", erro.sqlMessage);
+        res.status(500).json(erro.sqlMessage);
+    });
+}
+
+
+
 module.exports = {
-    receberDados
+    desfavoritarAcao,
+    favoritarAcao
 }

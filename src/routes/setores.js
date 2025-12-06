@@ -16,7 +16,7 @@ rota.get('/buscarAcoesSetor/:setor/:limite', function (req , res) {
     setoresController.buscarAcoesSetor(req , res);
 });
 
-rota.get('/buscarAcoesUnicas/:ticker/:anos', function (req , res) {
+rota.get('/buscarAcoesUnicas/:ticker/:anos/:idUsuario', function (req , res) {
     setoresController.buscarAcoesUnicas(req , res);
 });
 
