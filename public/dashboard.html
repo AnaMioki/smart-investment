@@ -70,7 +70,7 @@
 
         <div id="graphDash">
           <div>
-            <h1>Rentabilidade Setor vs Rentabilidade (Ibovespa)</h1>
+            <h1><strong>Rentabilidade Setor vs Rentabilidade (Ibovespa)</strong></h1>
             <canvas id="rankSetor"></canvas>
           </div>
 
@@ -386,7 +386,7 @@
                     </div>
 
                     <div>
-                        <h1>Retorno</h1>
+                        <h1>Retorno diante do IBOVESPA</h1>
                         <p class="${classificacaoCor}">${classificacaoTexto}</p>
                     </div>
                 </div>
@@ -428,7 +428,7 @@ function getBenchmarkIbovespa(periodo) {
 
 
 function renderizarGraficos(dados) {
-    Chart.defaults.font.size = 14; 
+    Chart.defaults.font.size = 22; 
     Chart.defaults.font.weight = 'bold';
     Chart.defaults.color = '#000000';
     const periodoSelecionado = document.getElementById('selectDash').value;
@@ -527,7 +527,7 @@ function renderizarGraficos(dados) {
                     callbacks: {
                         label: function(context) {
                             let p = context.raw;
-                            return `${p.setor}: Retorno ${p.y}% | Risco ${p.x}%`;
+                            return `${p.setor}: Rentabilidade ${p.y}% | Risco ${p.x}%`;
                         }
                     }
                 },

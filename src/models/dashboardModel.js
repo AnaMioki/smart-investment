@@ -10,7 +10,7 @@ function receberDashboard(anos) {
             -- A mágica da média ponderada correta:
             TRUNCATE(SUM(soma_retorno) / SUM(qtd_empresas), 2) as rentabilidade_periodo,
             TRUNCATE(SUM(soma_volatilidade) / SUM(qtd_empresas), 2) as volatilidade_periodo,
-            TRUNCATE(SUM(soma_dre) / SUM(qtd_empresas), 2) as DRE,
+            TRUNCATE((SUM(soma_dre) / SUM(qtd_empresas)/10), 2) as DRE,
             TRUNCATE(SUM(soma_ebitda) / SUM(qtd_empresas), 2) as EBITDA
         FROM dashboard_setorial_base
         WHERE ano_referencia IN (${anosString})
