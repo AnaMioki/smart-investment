@@ -434,6 +434,7 @@ function renderizarGraficos(dados) {
     Chart.defaults.color = '#000000';
     const periodoSelecionado = document.getElementById('selectDash').value;
     const valorBenchmark = getBenchmarkIbovespa(periodoSelecionado);
+    const numBenchmark = parseFloat(valorBenchmark);
 
     // Ordena por rentabilidade (maior para menor) e pega o TOP 5
     // Isso garante que todos os gráficos falem dos mesmos "campeões"
@@ -453,7 +454,7 @@ function renderizarGraficos(dados) {
             labels: labelsTop5,
             datasets: [
                 {
-                    label: 'Média Ibovespa',
+                    label: 'Média Ibovespa (%)',
                     // Cria uma linha reta repetindo o valor do benchmark para cada coluna
                     data: Array(5).fill(valorBenchmark),
                     type: 'line', // Transforma este dataset em linha
@@ -509,7 +510,8 @@ function renderizarGraficos(dados) {
     chartSecundario = new Chart(ctxSec, {
         type: 'scatter',
         data: {
-            datasets: [{
+            datasets: [
+              {
                 label: 'Setores Top 5',
                 data: top5.map(item => ({
                     x: item.volatilidade_periodo, // Risco
@@ -519,7 +521,17 @@ function renderizarGraficos(dados) {
                 backgroundColor: '#8B5CF6', // Roxo
                 pointRadius: 8, // Pontos maiores já que são poucos
                 pointHoverRadius: 10
-            }]
+            },
+            {
+                    label: 'Média Ibovespa', // O texto que aparece lá em cima
+                    data: [], // Vazio para não desenhar nada no gráfico
+                    type: 'line', // Força o ícone ser uma linha
+                    borderColor: '#6B7280', // Mesma cor da linha de anotação
+                    borderWidth: 2,
+                    borderDash: [5, 5], // Mesmo pontilhado
+                    pointRadius: 0 // Sem bolinha na legenda
+                }
+          ]
         },
         options: {
             responsive: true,
@@ -533,8 +545,25 @@ function renderizarGraficos(dados) {
                     }
                 },
                 annotation: {
-                    // Opcional: Se quiser desenhar uma linha horizontal marcando o Ibovespa neste gráfico também
-                    // Requereria plugin externo, então vamos manter simples por enquanto.
+                    annotations: {
+                        linhaIbovespa: {
+                            type: 'line',
+                            yMin: numBenchmark, // Altura da linha baseada no filtro
+                            yMax: numBenchmark,
+                            borderColor: '#6B7280', // Cor Cinza Escuro (Igual gráfico 1)
+                            borderWidth: 2,
+                            borderDash: [5, 5], // Pontilhado
+                            label: {
+                                display: true,
+                                content: `Ibov: ${valorBenchmark}%`, // Texto da etiqueta
+                                position: 'end', // Fica na ponta direita
+                                backgroundColor: 'rgba(107, 114, 128, 0.7)',
+                                color: 'black',
+                                font: { size: 14, weight: 'bold' },
+                                yAdjust: -10 // Sobe um pouquinho a etiqueta para não tapar a linha
+                            }
+                        }
+                    }
                 }
             },
             scales: {
