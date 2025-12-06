@@ -143,15 +143,15 @@
                             
                             <div class="especificacao">
                                 <h1><span class="tooltip left-edge">
-                                        Sharpe
-                                        <span class="tip">Mostra quanto o investidor ganhou para cada unidade de risco
-                                            assumido.</span>
+                                        DRE
+                                        <span class="tip">DRE indica o desempenho financeiro da empresa, mostrando se ela lucrou ou teve prejuízo.</span>
                                     </span></h1>
                                 <h1><span class="tooltip left-edge">
-                                        Beta
-                                        <span class="tip">Indica o nível de sensibilidade do ativo ao mercado.</span>
+                                        EBITDA
+                                        <span class="tip">Mostra o lucro operacional da empresa antes de juros, impostos e despesas extras.</span>
                                     </span></h1>
-                                <h1>Volume</h1>
+                                <h1>Volume</h1> 
+                                <!-- volume mantem? -->
                             </div>
                         </div>
 
@@ -170,10 +170,10 @@
                                 </div>
 
                                 <div class="especificacao">
-                                    <h1 class="disaparecido">Sharpe:</h1>
-                                    <h1 class="sharpe"></h1>
-                                    <h1 class="disaparecido">Beta:</h1>
-                                    <h1 class="beta"></h1>
+                                    <h1 class="disaparecido">DRE:</h1>
+                                    <h1 class="dre"></h1>
+                                    <h1 class="disaparecido">EBITDA:</h1>
+                                    <h1 class="ebitda"></h1>
                                     <h1 class="disaparecido">Volume:</h1>
                                     <h1 class="volume"></h1>
                                 </div>
@@ -246,6 +246,73 @@
 </html>
 
 <script>
+
+    async function carregarAcoes() {
+        try {
+            const resposta = await fetch("/acoes/listarTodas");
+
+            if (!resposta.ok) {
+                console.error("Erro ao buscar ações:", resposta.status);
+                return;
+            }
+
+            const lista = await resposta.json();
+            renderizarAcoes(lista);
+
+        } catch (erro) {
+            console.error("Erro no fetch:", erro);
+        }
+    }
+
+    // fazer verificação
+    function renderizarAcoes(lista) {
+        const container = document.getElementById("listaAcoes");
+
+        // limpa cards antigos, exceto o cabeçalho
+        container.querySelectorAll(".card").forEach(c => c.remove());
+
+        lista.forEach(acao => {
+            const card = document.createElement("div");
+            card.classList.add("card");
+
+            card.innerHTML = `
+            <div>
+                <div class="tipo">
+                    <img class="icon-favorito" src="Style/assets/estrelaCheia.svg">
+
+                    <div>
+                        <h1 class="acao-nome">${acao.nomeEmpresa}</h1>
+                        <p class="acao-ticker">${acao.ticker}</p>
+                    </div>
+
+                    <h1 class="setor">${acao.setor}</h1>
+                    <h1 class="preco">R$ ${acao.precoAtual ?? "-"}</h1>
+                    <h1 class="retorno verde">${acao.retorno ?? "-"}%</h1>
+                </div>
+
+                <div class="especificacao">
+                    <h1 class="disaparecido">Sharpe:</h1>
+                    <h1 class="sharpe">${acao.sharpe ?? "-"}</h1>
+
+                   <!-- <h1 class="disaparecido">Beta:</h1> -->
+                   <!-- <h1 class="beta">${acao.beta ?? "-"}</h1> -->
+
+                    <h1 class="disaparecido">Volume:</h1>
+                    <h1 class="volume">${acao.volume ?? "-"}</h1>
+                </div>
+            </div>
+        `;
+
+            // redireciona ao clicar
+            card.addEventListener("click", () => {
+                window.location.href = `acao.html?id=${acao.idEmpresa}`;
+            });
+
+            container.appendChild(card);
+        });
+    }
+
+    carregarAcoes();
     document.addEventListener("DOMContentLoaded", carregarNotificacoes);
 
     async function carregarNotificacoes() {
