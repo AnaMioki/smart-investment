@@ -35,24 +35,20 @@ function listarTodasAcoesDeAcordoComPerfil(req, res) {
         });
 }
 
-// function classificarAcao(acao) {
-//     if (acao.volatilidade < 0.5 && acao.pvp <= 1) {
-//         return 'Conservador';
-//     }
-
-//     if (acao.volatilidade < 1.5 && acao.rentabilidade >= 1 && acao.rentabilidade <= 20) {
-//         return 'Moderado';
-//     }
-
-//     if (acao.volatilidade >= 0.5 && acao.volatilidade <= 4 && acao.rentabilidade > 5) {
-//         return 'Arrojado';
-//     }
-
-//     return 'Neutro';
-// }
+function listarSetores(req, res) {
+    acoesModel.listarSetores()
+        .then(resultado => {
+            res.status(200).json(resultado);
+        })
+        .catch(erro => {
+            console.error("Erro ao buscar setores:", erro);
+            res.status(500).json(erro);
+        });
+}
 
 
 
 module.exports = {
-    listarTodasAcoesDeAcordoComPerfil
+    listarTodasAcoesDeAcordoComPerfil,
+    listarSetores
 }

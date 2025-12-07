@@ -11,5 +11,9 @@ router.get("/listarTodas/:perfil", function (req, res) {
 
 // router.get("/listarTodas/:perfil", acoesController.listarTodasAcoesDeAcordoComPerfil);
 
+router.get("/setores", function (req, res) {
+    acoesController.listarSetores(req, res);
+});
+
 
 module.exports = router;

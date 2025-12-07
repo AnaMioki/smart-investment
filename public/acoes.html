@@ -29,7 +29,8 @@
                 <div class="notificacao-dropdown">
                 </div>
             </div>
-            <img id="perfilIcon" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" alt="Perfil" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">
+            <img id="perfilIcon" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" alt="Perfil" role="button"
+                tabindex="0" aria-haspopup="true" aria-expanded="false">
             <div class="opcoes-dropdown" role="menu" aria-hidden="true">
                 <a role="menuitem" href="perfil.html">Perfil</a>
                 <a role="menuitem" href="#" onclick="sair()">Sair</a>
@@ -55,7 +56,8 @@
                 <div id="selectAcoes">
                     <h1>Análise de Ações</h1>
                     <div>
-                        <select name="seletorSetor" id="selectPeriodo">
+                        <!-- comentando os setores mockados -->
+                        <!-- <select name="seletorSetor" id="selectPeriodo">
                             <option>Todos Setores</option>
                             <option>Tecnologia</option>
                             <option>Saúde</option>
@@ -67,6 +69,14 @@
                             <option value="volatibilidade">Por volatilidade</option>
                             <option value="valor">Por valor</option>
                         </select>
+                        </select> -->
+                        <!-- <select name="seletorTipo" id="selectTipo">
+                            <option value="retorno" selected>Por retorno</option>
+                            <option value="volatibilidade">Por volatilidade</option>
+                            <option value="valor">Por valor</option>
+                        </select> -->
+
+                        <select name="seletorSetor" id="selectPeriodo"></select>
                     </div>
                 </div>
 
@@ -323,13 +333,44 @@
     </div>
 
     <!-- teste -->
-    onload="carregarAcoes()">
+                        onload="carregarAcoes(); carregarSetores">
 
-    </body>
+</body>
 
 </html>
 
 <script>
+
+    async function carregarSetores() {
+        const select = document.getElementById("selectPeriodo");
+
+        try {
+            const resp = await fetch("/acoes/setores");
+
+            if (!resp.ok) {
+                console.error("Erro ao carregar setores");
+                return;
+            }
+
+            const setores = await resp.json();
+
+            // se quiser deixar a opção padrão, mas as kpis terão q ficar vazias
+            // select.innerHTML = `<option value="">Todos Setores</option>`;
+
+            // dinamicoo
+            setores.forEach(s => {
+                select.innerHTML += `
+                <option value="${s.setor}">
+                    ${s.setor}
+                </option>
+            `;
+            });
+
+        } catch (erro) {
+            console.error("Erro fetch setores:", erro);
+        }
+    }
+    carregarSetores();
 
     async function carregarAcoes() {
         const perfil = sessionStorage.PERFIL_USUARIO;
@@ -413,6 +454,7 @@
         });
     }
 
+    // colocar aqui para carregar as ações ao abrir a página e setores para juntar
     carregarAcoes();
     document.addEventListener("DOMContentLoaded", carregarNotificacoes);
 
@@ -582,8 +624,8 @@
         }
     });
 
- 
-       function sair() {
+
+    function sair() {
         sessionStorage.clear();
         window.location.href = "./login.html";
     }
