@@ -11,6 +11,7 @@
 </head>
 
 <body>
+
     <div id="mainContainer">
         <div id="header">
             <img id="logo" src="Style/assets/smartLogoVetor.svg" alt="logoSmartInvestment">
@@ -129,7 +130,7 @@
 
                     <div id="listaAcoes">
                         <div class="descricao">
-                             <div class="tipo">
+                            <div class="tipo">
                                 <img src="Style/assets/imagemVazia.webp">
                                 <h1>Ação</h1>
                                 <h1>Setor</h1>
@@ -140,22 +141,24 @@
                                             determinado período.</span>
                                     </span></h1>
                             </div>
-                            
+
                             <div class="especificacao">
                                 <h1><span class="tooltip left-edge">
                                         DRE
-                                        <span class="tip">DRE indica o desempenho financeiro da empresa, mostrando se ela lucrou ou teve prejuízo.</span>
+                                        <span class="tip">DRE indica o desempenho financeiro da empresa, mostrando se
+                                            ela lucrou ou teve prejuízo.</span>
                                     </span></h1>
                                 <h1><span class="tooltip left-edge">
                                         EBITDA
-                                        <span class="tip">Mostra o lucro operacional da empresa antes de juros, impostos e despesas extras.</span>
+                                        <span class="tip">Mostra o lucro operacional da empresa antes de juros, impostos
+                                            e despesas extras.</span>
                                     </span></h1>
-                                <h1>Volume</h1> 
+                                <h1>Volume</h1>
                                 <!-- volume mantem? -->
                             </div>
                         </div>
 
-                         <!-- modelo da acao -->
+                        <!-- modelo da acao -->
                         <div id="card-modelo" class="card" style="display: none;">
                             <div>
                                 <div class="tipo">
@@ -180,8 +183,8 @@
                             </div>
                         </div>
 
-                         <!-- deixando uma ação mockada comentada para registro -->
-                         <!-- <div id="card-modelo" class="card" style="display: none;">
+                        <!-- deixando uma ação mockada comentada para registro -->
+                        <!-- <div id="card-modelo" class="card" style="display: none;">
                             <div>
                                 <div class="tipo">
                                     <img class="icon-favorito" src="Style/assets/estrelaCheia.svg">
@@ -239,17 +242,24 @@
         </div>
     </div>
 
+    <!-- teste -->
+    onload="carregarAcoes()">
 
-
-</body>
+    </body>
 
 </html>
 
 <script>
 
     async function carregarAcoes() {
+        const perfil = sessionStorage.PERFIL_USUARIO;
+
+        if (!perfil) {
+            console.error("Perfil não encontrado no sessionStorage!");
+            return;
+        }
         try {
-            const resposta = await fetch("/acoes/listarTodas");
+            const resposta = await fetch(`/acoes/listarTodas/${perfil}`);
 
             if (!resposta.ok) {
                 console.error("Erro ao buscar ações:", resposta.status);
@@ -262,6 +272,15 @@
         } catch (erro) {
             console.error("Erro no fetch:", erro);
         }
+
+        //outra forma de fazer
+        //  fetch(`/acoes/listar/${perfil}`)
+        // .then(res => res.json())
+        // .then(acoes => {
+        //     console.log("Ações do perfil:", perfil, acoes);
+        //     renderizarAcoes(acoes);
+        // })
+        // .catch(err => console.error(err));
     }
 
     // fazer verificação
@@ -287,15 +306,17 @@
 
                     <h1 class="setor">${acao.setor}</h1>
                     <h1 class="preco">R$ ${acao.precoAtual ?? "-"}</h1>
-                    <h1 class="retorno verde">${acao.retorno ?? "-"}%</h1>
+                    <!-- <h1 class="retorno verde">${acao.retorno ?? "-"}%</h1> -->
+                    <h1 class="retorno verde">${acao.rentabilidadeAnual ?? "-"}%</h1>
+
                 </div>
 
                 <div class="especificacao">
-                    <h1 class="disaparecido">Sharpe:</h1>
-                    <h1 class="sharpe">${acao.sharpe ?? "-"}</h1>
+                    <h1 class="disaparecido">DRE:</h1>
+                    <h1 class="dre">${acao.dre ?? "-"}</h1>
 
-                   <!-- <h1 class="disaparecido">Beta:</h1> -->
-                   <!-- <h1 class="beta">${acao.beta ?? "-"}</h1> -->
+                    <h1 class="disaparecido">EBITDA:</h1> 
+                    <h1 class="ebitda">${acao.ebitda ?? "-"}</h1> 
 
                     <h1 class="disaparecido">Volume:</h1>
                     <h1 class="volume">${acao.volume ?? "-"}</h1>
@@ -402,7 +423,7 @@
         const diffDias = Math.floor(diffHoras / 24);
         return `Há ${diffDias} dia${diffDias > 1 ? "s" : ""}`;
     }
-    
+
     function criarGraficoEvolucaoPrecos() {
         const ctx = document.getElementById('graphLinha').getContext('2d');
 
