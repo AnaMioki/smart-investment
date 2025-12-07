@@ -248,8 +248,6 @@
         </div>
     </div>
 
-    <!-- teste -->
-    onload="carregarAcoes(); carregarSetores">
 
 </body>
 
@@ -257,25 +255,45 @@
 
 <script>
 
+    // centraliza tudo que precisa ser iniciado ao carregar a página, tava mó bagunça do carai
+    document.addEventListener("DOMContentLoaded", init);
+    function init() {
+        console.log("Página carregada. Iniciando...");
+        const perfil = sessionStorage.PERFIL_USUARIO;
+
+        if (!perfil) {
+            console.error("Perfil não encontrado");
+            return;
+        }
+
+
+        carregarSetores();
+        carregarAcoes(perfil);
+        carregarNotificacoes();
+        criarGraficoEvolucaoPrecos();
+    }
+
+
     document.getElementById("selectPeriodo").addEventListener("change", filtrarPorSetor);
-
+    // metodo complementar para redirecionar rotas
+    // se é a rota que puxa todas as ações ou a filtrada por setor (ambas levando em consideração o perfil do usuário)
     function filtrarPorSetor() {
-    const setorSelecionado = selectPeriodo.value;
-    const perfil = sessionStorage.PERFIL_USUARIO;
+        const setorSelecionado = selectPeriodo.value;
+        const perfil = sessionStorage.PERFIL_USUARIO;
 
-     if (!perfil) {
-        console.error("Perfil não encontrado no sessionStorage!");
-        return;
-    }
+        if (!perfil) {
+            console.error("Perfil não encontrado no sessionStorage!");
+            return;
+        }
 
-    if (!setorSelecionado || setorSelecionado === "Todos Setores" || setorSelecionado === "") {
-        carregarAcoes(perfil); // traz TODAS AS ACOES indepente do setor.
-    } else {
-        carregarAcoesPorSetor(perfil, setorSelecionado); // traz filtrado, ihu!
-        console.log("perfil do usuario:", perfil);
-        console.log("setor selecionado:", setorSelecionado);
+        if (!setorSelecionado || setorSelecionado === "Todos Setores" || setorSelecionado === "") {
+            carregarAcoes(perfil); // traz TODAS AS ACOES indepente do setor.
+        } else {
+            carregarAcoesPorSetor(perfil, setorSelecionado); // traz filtrado, ihu!
+            console.log("perfil do usuario:", perfil);
+            console.log("setor selecionado:", setorSelecionado);
+        }
     }
-}
 
     async function carregarSetores() {
         const select = document.getElementById("selectPeriodo");
@@ -306,7 +324,6 @@
             console.error("Erro fetch setores:", erro);
         }
     }
-    carregarSetores();
 
 
     // async function carregarAcoesPorSetor(perfil, setor) {
@@ -315,20 +332,20 @@
     // renderizarAcoes(dados);
     // }
     async function carregarAcoesPorSetor(perfil, setor) {
-    try {
-        const resp = await fetch(`/acoes/listar/${perfil}/${setor}`);
+        try {
+            const resp = await fetch(`/acoes/listar/${perfil}/${setor}`);
 
-        if (!resp.ok) {
-            console.error("Erro na rota filtrada:", resp.status);
-            return;
+            if (!resp.ok) {
+                console.error("Erro na rota filtrada:", resp.status);
+                return;
+            }
+
+            const lista = await resp.json();
+            renderizarAcoes(lista);
+        } catch (erro) {
+            console.error("Erro no fetch setor:", erro);
         }
-
-        const lista = await resp.json();
-        renderizarAcoes(lista);
-    } catch (erro) {
-        console.error("Erro no fetch setor:", erro);
     }
-}
 
     async function carregarAcoes(perfil) {
         // já coloquei no filtrarPorSetor
@@ -366,7 +383,7 @@
     function renderizarAcoes(lista) {
         const container = document.getElementById("listaAcoes");
 
-        // limpa cards antigos, exceto o cabeçalho
+        // limpa cards antigos, tirando o cabeçalho
         container.querySelectorAll(".card").forEach(c => c.remove());
 
         lista.forEach(acao => {
@@ -412,9 +429,8 @@
         });
     }
 
-    // colocar aqui para carregar as ações ao abrir a página e setores para juntar
-    carregarAcoes();
-    document.addEventListener("DOMContentLoaded", carregarNotificacoes);
+    // vou comentar esse  DOM porque já tá sendo chamado na init lá em cima
+    // document.addEventListener("DOMContentLoaded", carregarNotificacoes);
 
     async function carregarNotificacoes() {
         const idUsuario = sessionStorage.ID_USUARIO;
