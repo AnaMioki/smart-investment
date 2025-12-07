@@ -74,9 +74,14 @@
 
                 <div id="kpisAcoes">
                     <div>
+                        <!-- <div>
+                            <p>Ações Recomendadas</p>
+                            <h1 >6</h1>
+                        </div>
+                        <img src="Style/assets/flechaSetores.svg" class="fundoAzul"> -->
                         <div>
                             <p>Ações Recomendadas</p>
-                            <h1>6</h1>
+                            <h1 id="acoesRecomendadas">-</h1>
                         </div>
                         <img src="Style/assets/flechaSetores.svg" class="fundoAzul">
                     </div>
@@ -89,9 +94,11 @@
                                         determinado período.</span>
                                 </span> Médio
                             </p>
-                            <h1 class="verde">+21.8%</h1>
+                            <!-- <h1 class="verde">-%</h1> -->
+                            <h1 class="retornoMedio">-%</h1>
                         </div>
                         <img src="Style/assets/setaPraCimaSetores.svg" class="fundoVerde">
+
                     </div>
 
                     <div>
@@ -100,9 +107,11 @@
                                     Volatilidade <span class="tip">Mostra o quanto o preço oscila ao longo do
                                         tempo.</span>
                                 </span> Média</p>
-                            <h1 class="laranja">26.7%</h1>
+                            <!-- <h1 class="laranja">-%</h1> -->
+                            <h1 class="volatibilidadeMedia">-%</h1>
                         </div>
                         <img src="Style/assets/metricaSetores.svg" class="fundoLaranja">
+
                     </div>
 
                     <div>
@@ -111,7 +120,8 @@
                                     P/E <span class="tip">(Price to Earnings) é o índice preço/lucro, que mostra quantas
                                         vezes o lucro anual de uma empresa está sendo pago pelo preço da ação</span>
                                 </span> Médio</p>
-                            <h1 class="roxo">35.2</h1>
+                            <!-- <h1 class="roxo">-</h1> -->
+                            <h1 class="peMedio">-%</h1>
                         </div>
                         <img src="Style/assets/sifrao.svg" class="fundoRoxo">
                     </div>
@@ -268,32 +278,93 @@
 
 
         carregarSetores();
+        carregarKPIs(perfil); // vazio pq no início não tem filtro
         carregarAcoes(perfil);
-        carregarNotificacoes();
+        carregarNotificacoes(perfil);
         criarGraficoEvolucaoPrecos();
     }
 
 
-    document.getElementById("selectPeriodo").addEventListener("change", filtrarPorSetor);
+    // não pode fazer assim: document.getElementById("selectPeriodo").addEventListener("change", filtrarPorSetor, carregarKPIs);
+    document.getElementById("selectPeriodo").addEventListener("change", () => {
+        setor = document.getElementById("selectPeriodo").value;
+        const perfil = sessionStorage.PERFIL_USUARIO;
+        filtrarPorSetor(perfil);
+        carregarKPIs(perfil);
+    });
+
     // metodo complementar para redirecionar rotas
     // se é a rota que puxa todas as ações ou a filtrada por setor (ambas levando em consideração o perfil do usuário)
-    function filtrarPorSetor() {
-        const setorSelecionado = selectPeriodo.value;
-        const perfil = sessionStorage.PERFIL_USUARIO;
+
+    let setor = "";
+
+    function filtrarPorSetor(perfil) {
+        //setor = selectPeriodo.value;   // comentei porque antes não tinha uma variável global
+        //const perfil = sessionStorage.PERFIL_USUARIO;
 
         if (!perfil) {
             console.error("Perfil não encontrado no sessionStorage!");
             return;
         }
 
-        if (!setorSelecionado || setorSelecionado === "Todos Setores" || setorSelecionado === "") {
+        if (!setor || setor === "Todos Setores" || setor === "") {
             carregarAcoes(perfil); // traz TODAS AS ACOES indepente do setor.
         } else {
-            carregarAcoesPorSetor(perfil, setorSelecionado); // traz filtrado, ihu!
+            carregarAcoesPorSetor(perfil); // traz filtrado, ihu!
             console.log("perfil do usuario:", perfil);
-            console.log("setor selecionado:", setorSelecionado);
+            console.log("setor selecionado:", setor);
         }
     }
+
+    async function carregarKPIs(perfil) {
+        try {
+            //const perfil = sessionStorage.PERFIL_USUARIO;
+            //const setor = document.getElementById("selectPeriodo").value;
+
+            // só para teste:
+            if (!perfil) {
+                console.error("Perfil não fornecido!");
+                return;
+            }
+
+            const resp = await fetch(`/acoes/kpis/${perfil}/${setor}`);
+            if (!resp.ok) throw new Error("Erro ao buscar KPIs");
+
+            const dados = await resp.json();
+            if (!dados || Object.keys(dados).length === 0) {
+                console.warn("Sem KPIs disponíveis para este setor");
+                return;
+            }
+
+            document.querySelector("acoesRecomendadas").textContent = dados.acoesRecomendadas;
+            document.querySelector("retornoMedio").textContent = dados.retornoMedio.toFixed(2) + "%";
+            document.querySelector("volatilidadeMedia").textContent = dados.volatilidadeMedia.toFixed(2) + "%";
+            document.querySelector("peMedio").textContent = dados.peMedio.toFixed(2);
+
+            // document.querySelector("#kpisAcoes div:nth-child(1) h1").textContent = dados.acoesRecomendadas;
+            // document.querySelector("#kpisAcoes div:nth-child(2) h1").textContent = dados.retornoMedio.toFixed(2) + "%";
+            // document.querySelector("#kpisAcoes div:nth-child(3) h1").textContent = dados.volatilidadeMedia.toFixed(2) + "%";
+            // document.querySelector("#kpisAcoes div:nth-child(4) h1").textContent = dados.peMedio.toFixed(2);
+
+            // document.querySelector("#kpisAcoes div:nth-child(2) h1").className = dados.retornoMedio >= 0 ? "verde" : "laranja";
+            // document.querySelector("#kpisAcoes div:nth-child(3) h1").className = dados.volatilidadeMedia >= 20 ? "laranja" : "azul";
+
+            document.querySelector("retornoMedio").className = dados.retornoMedio >= 0 ? "verde" : "laranja";
+            document.querySelector("volatilidadeMedia").className = dados.volatilidadeMedia >= 20 ? "laranja" : "azul";
+
+            // jeito mais cu doce
+            // const retornoEl = document.querySelector("#kpisAcoes div:nth-child(2) h1");
+            // retornoEl.className = dados.retornoMedio >= 0 ? "verde" : "laranja";
+
+            // const volatilidadeEl = document.querySelector("#kpisAcoes div:nth-child(3) h1");
+            // volatilidadeEl.className = dados.volatilidadeMedia >= 20 ? "laranja" : "azul";
+
+        } catch (erro) {
+            console.error("Erro ao carregar KPIs:", erro);
+        }
+    }
+
+
 
     async function carregarSetores() {
         const select = document.getElementById("selectPeriodo");
@@ -308,7 +379,7 @@
 
             const setores = await resp.json();
 
-            // se quiser deixar a opção padrão, mas as kpis terão q ficar vazias
+            // opçao padrão
             select.innerHTML = `<option value="">Todos Setores</option>`;
 
             // dinamicoo
@@ -331,7 +402,7 @@
     // const dados = await resposta.json();
     // renderizarAcoes(dados);
     // }
-    async function carregarAcoesPorSetor(perfil, setor) {
+    async function carregarAcoesPorSetor(perfil) {
         try {
             const resp = await fetch(`/acoes/listar/${perfil}/${setor}`);
 
@@ -369,14 +440,6 @@
             console.error("Erro no fetch:", erro);
         }
 
-        //outra forma de fazer
-        //  fetch(`/acoes/listar/${perfil}`)
-        // .then(res => res.json())
-        // .then(acoes => {
-        //     console.log("Ações do perfil:", perfil, acoes);
-        //     renderizarAcoes(acoes);
-        // })
-        // .catch(err => console.error(err));
     }
 
     // fazer verificação
@@ -419,6 +482,9 @@
                 </div>
             </div>
         `;
+
+            const retornoEl = card.querySelector(".retorno");
+            retornoEl.className = acao.rentabilidadeAnual >= 0 ? "verde" : "laranja";
 
             // redireciona ao clicar
             card.addEventListener("click", () => {
