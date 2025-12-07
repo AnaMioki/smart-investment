@@ -351,7 +351,7 @@
         }
 
         // --- HTML Template ---
-        listaDiv.innerHTML += `
+listaDiv.innerHTML += `
             <div>
                 <div class="numero">
                     <h2>${i + 1}</h2>
@@ -362,32 +362,62 @@
 
                 <div class="infos">
                     <div>
-                        <h1>Rentabilidade</h1>
+                        <h1>
+                            <span class="tooltip">
+                                <strong>Rentabilidade</strong>
+                                <span class="tip">Retorno percentual médio acumulado pelo setor neste período.</span>
+                            </span>
+                        </h1>
                         <p class="corVerde">${setor.rentabilidade_periodo}%</p>
                     </div>
 
                     <div>
-                        <h1>Rentabilidade (IBOVESPA)</h1>
+                        <h1>
+                            <span class="tooltip">
+                                Rentabilidade (IBOVESPA)
+                                <span class="tip">Performance do índice Ibovespa (Média de Mercado) no mesmo período.</span>
+                            </span>
+                        </h1>
                         <p>${benchmarkString}%</p>
                     </div>
 
                     <div>
-                        <h1>DRE (Médio R$M)</h1>
+                        <h1>
+                            <span class="tooltip">
+                                DRE (Médio R$M)
+                                <span class="tip">Lucro Líquido médio das empresas do setor.</span>
+                            </span>
+                        </h1>
                         <p>${setor.DRE}</p>
                     </div>
 
                     <div>
-                        <h1>EBITDA (Médio R$M)</h1>
+                        <h1>
+                            <span class="tooltip">
+                                EBITDA (Médio R$M)
+                                <span class="tip">Potencial de geração de caixa operacional (Lucro antes de juros/impostos).</span>
+                            </span>
+                        </h1>
                         <p>${setor.EBITDA}</p>
                     </div>
 
                     <div>
-                        <h1>Volatilidade</h1>
+                        <h1>
+                            <span class="tooltip">
+                                Volatilidade
+                                <span class="tip">Mede o risco: quanto o preço variou para cima ou para baixo.</span>
+                            </span>
+                        </h1>
                         <p class="corLaranja">${setor.volatilidade_periodo}%</p>
                     </div>
 
                     <div>
-                        <h1>Retorno diante do IBOVESPA</h1>
+                        <h1>
+                            <span class="tooltip">
+                                Status (vs. IBOV)
+                                <span class="tip">Classificação do setor comparado à média do mercado (Ibovespa).</span>
+                            </span>
+                        </h1>
                         <p class="${classificacaoCor}">${classificacaoTexto}</p>
                     </div>
                 </div>

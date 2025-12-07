@@ -520,8 +520,7 @@
                                 <div>
                                     <h1><span class="tooltip left-edge">
                                             <strong>Rentabilidade</strong>
-                                            <span class="tip">É o lucro ou prejuízo percentual do investimento em
-                                                determinado período.</span>
+                                            <span class="tip">Retorno percentual médio acumulado pelo setor neste período.</span>
                                         </span></h1>
                                     <p class="corVerde">${setor.rentabilidade_periodo}%</p>
                                 </div>
@@ -529,8 +528,7 @@
                                 <div>
                                     <h1><span class="tooltip left-edge">
                                             <strong>Rentabilidade (IBOVESPA)</strong>
-                                            <span class="tip">É o lucro ou prejuízo percentual do investimento em
-                                                determinado período.</span>
+                                            <span class="tip">Performance do índice Ibovespa (Média de Mercado) no mesmo período.</span>
                                         </span></h1>
                                     <p class="corVerde">${benchmarkString}%</p>
                                 </div>
@@ -538,7 +536,7 @@
                                 <div>
                                     <h1><span class="tooltip left-edge">
                                             <strong>DRE</strong> <br> <strong>(Médio R$M)</strong>
-                                            <span class="tip">Demonstrativo de resultado em exercicio .</span>
+                                            <span class="tip">Lucro Líquido médio das empresas do setor.</span>
                                         </span></h1>
                                     <p>${setor.DRE}</p>
                                 </div>
@@ -546,8 +544,7 @@
                                 <div>
                                     <h1><span class="tooltip left-edge">
                                             <strong>EBITDA</strong><br><strong>(Médio R$M)</strong>
-                                            <span class="tip">Indica o nível de sensibilidade do ativo ao
-                                                mercado.</span>
+                                            <span class="tip">Potencial de geração de caixa operacional (Lucro antes de juros/impostos).</span>
                                         </span></h1>
                                     <p>${setor.EBITDA}</p>
                                 </div> 
@@ -555,11 +552,18 @@
                                 <div>
                                     <h1><span class="tooltip left-edge">
                                             <strong>Volatilidade</strong>
-                                            <span class="tip">Mostra o quanto o preço oscila ao longo do tempo.</span>
+                                            <span class="tip">Mede o risco: quanto o preço variou para cima ou para baixo.</span>
                                         </span></h1>
                                     <p class="${corVolatilidade}">${setor.volatilidade_periodo}%</p>
                                 </div>
-                                <h1 class="${classificacaoCor}">${classificacaoTexto}</h1>
+                                <div>
+                                    <h1><span class="tooltip">
+                                        <strong>Status (vs. IBOV)</strong>
+                                        <span class="tip">Classificação do setor comparado à média do mercado (Ibovespa).</span>
+                                        </span>
+                                    </h1>
+                                    <p class="${classificacaoCor}">${classificacaoTexto}</p>
+                                </div>
                             </div>
 
                         </div>
