@@ -65,7 +65,9 @@
                             <option value="valor">Por valor</option>
                         </select> -->
 
-                        <select name="seletorSetor" id="selectPeriodo"></select>
+                        <select name="seletorSetor" id="selectPeriodo">
+                            <option>Todos Setores</option>
+                        </select>
 
                     </div>
                 </div>
@@ -249,50 +251,92 @@
     <!-- teste -->
     onload="carregarAcoes(); carregarSetores">
 
-    </body>
+</body>
 
 </html>
 
 <script>
 
-async function carregarSetores() {
-    const select = document.getElementById("selectPeriodo");
+    document.getElementById("selectPeriodo").addEventListener("change", filtrarPorSetor);
 
-    try {
-        const resp = await fetch("/acoes/setores");
+    function filtrarPorSetor() {
+    const setorSelecionado = selectPeriodo.value;
+    const perfil = sessionStorage.PERFIL_USUARIO;
 
-        if (!resp.ok) {
-            console.error("Erro ao carregar setores");
-            return;
-        }
+     if (!perfil) {
+        console.error("Perfil não encontrado no sessionStorage!");
+        return;
+    }
 
-        const setores = await resp.json();
+    if (!setorSelecionado || setorSelecionado === "Todos Setores" || setorSelecionado === "") {
+        carregarAcoes(perfil); // traz TODAS AS ACOES indepente do setor.
+    } else {
+        carregarAcoesPorSetor(perfil, setorSelecionado); // traz filtrado, ihu!
+        console.log("perfil do usuario:", perfil);
+        console.log("setor selecionado:", setorSelecionado);
+    }
+}
 
-        // se quiser deixar a opção padrão, mas as kpis terão q ficar vazias
-        // select.innerHTML = `<option value="">Todos Setores</option>`;
+    async function carregarSetores() {
+        const select = document.getElementById("selectPeriodo");
 
-        // dinamicoo
-        setores.forEach(s => {
-            select.innerHTML += `
+        try {
+            const resp = await fetch("/acoes/setores");
+
+            if (!resp.ok) {
+                console.error("Erro ao carregar setores");
+                return;
+            }
+
+            const setores = await resp.json();
+
+            // se quiser deixar a opção padrão, mas as kpis terão q ficar vazias
+            select.innerHTML = `<option value="">Todos Setores</option>`;
+
+            // dinamicoo
+            setores.forEach(s => {
+                select.innerHTML += `
                 <option value="${s.setor}">
                     ${s.setor}
                 </option>
             `;
-        });
+            });
 
-    } catch (erro) {
-        console.error("Erro fetch setores:", erro);
+        } catch (erro) {
+            console.error("Erro fetch setores:", erro);
+        }
     }
-}
-carregarSetores();
+    carregarSetores();
 
-    async function carregarAcoes() {
-        const perfil = sessionStorage.PERFIL_USUARIO;
 
-        if (!perfil) {
-            console.error("Perfil não encontrado no sessionStorage!");
+    // async function carregarAcoesPorSetor(perfil, setor) {
+    // const resposta = await fetch(`/acoes/listar/${perfil}/${setor}`);
+    // const dados = await resposta.json();
+    // renderizarAcoes(dados);
+    // }
+    async function carregarAcoesPorSetor(perfil, setor) {
+    try {
+        const resp = await fetch(`/acoes/listar/${perfil}/${setor}`);
+
+        if (!resp.ok) {
+            console.error("Erro na rota filtrada:", resp.status);
             return;
         }
+
+        const lista = await resp.json();
+        renderizarAcoes(lista);
+    } catch (erro) {
+        console.error("Erro no fetch setor:", erro);
+    }
+}
+
+    async function carregarAcoes(perfil) {
+        // já coloquei no filtrarPorSetor
+        //const perfil = sessionStorage.PERFIL_USUARIO;
+        // if (!perfil) {
+        //     console.error("Perfil não encontrado no sessionStorage!");
+        //     return;
+        // }
         try {
             const resposta = await fetch(`/acoes/listarTodas/${perfil}`);
 

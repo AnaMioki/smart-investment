@@ -28,9 +28,43 @@ function listarTodasAcoesDeAcordoComPerfil() {
     return database.executar(instrucaoSql);
 }
 
-//código do gui
+// mesmissima lógica da consulta pra pegar ação com base no perfil, mas agora filtrando por setor como parametro.
+function listarAcoesPorSetor(setor) {
+    var instrucaoSql = `
+        SELECT 
+            e.idEmpresa,
+            e.nome,
+            e.setor,
+            it.rentabilidadeAnual,
+            it.precoSobreValorPatrimonial,
+            sub.volatilidade_media_ano,
+
+            -- DRE
+            ((it.valorMercado - it.patrimonioLiquido) / it.patrimonioLiquido) AS dre,
+
+            -- EBITDA
+            (it.valorMercado / it.multiploSetorial) AS ebitda,
+
+            it.volume,
+            it.ano
+
+        FROM empresa e
+        JOIN infoTemporal it 
+            ON e.idEmpresa = it.fkEmpresa
+        JOIN sub_acoes_calculado sub 
+            ON sub.fkEmpresa = e.idEmpresa
+        
+        WHERE it.ano = (SELECT MAX(ano) FROM infoTemporal)
+        AND e.setor = '${setor}';
+    `;
+
+    console.log("Executando SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
 
 
 module.exports = {  
-listarTodasAcoesDeAcordoComPerfil
+listarTodasAcoesDeAcordoComPerfil,
+listarAcoesPorSetor
 };

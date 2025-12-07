@@ -15,5 +15,9 @@ router.get("/setores", function (req, res) {
     acoesController.listarSetores(req, res);
 });
 
+//leva em consideração o perfil também
+rota.get('/listarAcoesPorSetor/:perfil/:setor', function (req , res) {
+    setoresController.listarAcoesPorSetor(req , res);
+});
 
 module.exports = router;

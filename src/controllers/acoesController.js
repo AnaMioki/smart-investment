@@ -46,9 +46,47 @@ function listarSetores(req, res) {
         });
 }
 
+function listarAcoesPorSetor(req, res) {
+    const perfil = req.params.perfil.toLowerCase();
+    var setor = req.params.setor;
+
+    setoresModel.listarAcoesPorSetor(setor).then(resultado => {
+
+            let filtradas = resultado;
+
+            // if (setor !== "Todos") {
+            //     filtradas = filtradas.filter(a => a.setor === setor);
+            // }
+
+            filtradas = filtradas.filter(acao => {
+                const vol = acao.volatilidade_media_ano;
+                const pvpa = acao.precoSobreValorPatrimonial;
+                const retorno = acao.rentabilidadeAnual;
+
+                if (perfil === "conservador") {
+                    return vol < 0.5 && pvpa <= 1;
+                }
+                if (perfil === "moderado") {
+                    return vol < 1.5 && retorno >= 1 && retorno <= 20;
+                }
+                if (perfil === "arrojado") {
+                    return vol >= 0.5 && vol <= 4 && retorno > 5;
+                }
+
+                return false;
+            });
+        // } else {
+        //     res.status(204).send("Nenhuma ação encontrada para este setor!");
+        // }
+    }).catch(erro => {
+        console.log("Erro ao listar ações:", erro.sqlMessage);
+        res.status(500).json(erro.sqlMessage);
+    });
+}
 
 
 module.exports = {
     listarTodasAcoesDeAcordoComPerfil,
-    listarSetores
+    listarSetores,
+    listarAcoesPorSetor
 }
