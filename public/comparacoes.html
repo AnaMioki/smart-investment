@@ -49,11 +49,11 @@
             <div id="conteudo">
                 <div class="containerTitulo">
                     <h1>Comparações</h1>
-                    <select id="selecionarTipo">
+                    <!-- <select id="selecionarTipo">
                         <option value="acoes">Ações</option>
                         <option value="fundos">Fundos Imobiliários</option>
                         <option value="criptomoedas">Criptomoedas</option>
-                    </select>
+                    </select> -->
                 </div>
 
                 <div class="secao">
@@ -345,12 +345,12 @@
 
             html += '<div class="containerGraficos">';
             html += `
-                <div class="secaoGrafico">
+                <!-- <div class="secaoGrafico">
                     <h3>Análise Multidimensional</h3>
                     <div class="grafico">
                         <canvas id="graficoRadar"></canvas>
                     </div>
-                </div>
+                </div> -->
             `;
             html += '</div>';
 
@@ -385,6 +385,7 @@
             html += '</div>';
 
             html += `
+                <!--
                 <div class="secaoGrafico resumoComparativo">
                     <h3>Resumo Comparativo</h3>
                     <table class="tabelaResumo">
@@ -424,7 +425,7 @@
                             </tr>
                         </tbody>
                     </table>
-                </div>
+                </div> -->
             `;
 
             container.innerHTML = html;

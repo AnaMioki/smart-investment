@@ -19,10 +19,15 @@ router.get("/setores", function (req, res) {
 
 //leva em consideração o perfil também
 router.get('/listarAcoesPorSetor/:perfil/:setor', function (req , res) {
-    setoresController.listarAcoesPorSetor(req , res);
+    acoesController.listarAcoesPorSetor(req , res);
 });
 
 router.get("/kpis/:perfil/:setor?", kpisController.pegarKpisPorSetor);
+
+//router.get("/kpis/:perfil", kpisController.pegarKpisPorSetor);
+
+router.get("/grafico/evolucao/:perfil/:setor?", acoesController.graficoEvolucao);
+
 
 
 module.exports = router;
