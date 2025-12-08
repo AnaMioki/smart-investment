@@ -68,9 +68,102 @@ function listarAcoesPorSetor(setor) {
     return database.executar(instrucaoSql);
 }
 
+function pegarTop3AcoesRecomendadasGraficoEvolucao(perfil, setor) {
+    // acho assim melhor pq aqui ele pega as mais rentáveis:
+    // let instrucaoSql = `
+    //     SELECT 
+    //         e.nome,
+    //         e.ticker,
+    //         it.rentabilidadeAnual
+    //     FROM empresa e
+    //     JOIN infoTemporal it ON e.idEmpresa = it.fkEmpresa
+    //     WHERE it.ano = (SELECT MAX(ano) FROM infoTemporal)
+    // `;
+
+    // logica do victor pra pegar as ações recomendadas:
+    let instrucaoSql = `
+        SELECT 
+            e.nome,
+            e.ticker,
+            e.setor,
+            it.rentabilidadeAnual,
+            it.precoSobreValorPatrimonial
+        FROM dashboard_acoes d
+        JOIN empresa e ON d.fkEmpresa = e.idEmpresa
+        JOIN infoTemporal it ON e.idEmpresa = it.fkEmpresa
+        WHERE (it.precoSobreValorPatrimonial <= 1 OR it.rentabilidadeAnual > 15)
+        AND it.ano = (SELECT MAX(ano) FROM infoTemporal)
+        -- AND perfil = '${perfil}'
+    `;
+
+    if (setor) {
+        instrucaoSql += ` AND e.setor = '${setor}' `;
+    }
+
+    instrucaoSql += `
+        ORDER BY it.rentabilidadeAnual DESC
+        LIMIT 3;
+    `;
+
+    console.log("SQL RECOMENDADAS:", instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
+// utilizando a view para o gráfico de evolução de preço
+function pegarEvolucaoPorTickers(tickers) {
+    const lista = tickers.map(t => `'${t}'`).join(",");
+
+    const instrucaoSql = `
+        SELECT 
+            acao,
+            ticker,
+            mes,
+            preco_medio_mensal
+        FROM evolucao_preco_2024
+        WHERE ticker IN (${lista})
+        ORDER BY ticker, mes;
+    `;
+
+    return database.executar(instrucaoSql);
+}
+
+// function graficoEvolucao(perfil, setor) {
+//     let filtroSetor = "";
+//     if (setor !== "todos") {
+//         filtroSetor = `AND setor = '${setor}'`;
+//     }
+
+//       const instrucaoSql = `
+//         SELECT TOP 3 ticker
+//         FROM dashboard_acoes
+//         WHERE (precoSobreValorPatrimonial <= 1 OR rentabilidadeAnual > 15)
+//         -- pra garantir pegar os ultimos
+//         AND it.ano = (SELECT MAX(ano) FROM infoTemporal)
+//         AND perfil = '${perfil}'
+//         ${filtroSetor}
+//         ORDER BY rentabilidadeAnual DESC;
+//     `;
+//     return database.executar(instrucaoSql)
+//         .then(top3 => {
+//             if (top3.length === 0) return [];
+
+//             const tickers = top3.map(t => `'${t.ticker}'`).join(",");
+
+//             const instrucaoSql = `
+//                 SELECT acao, ticker, mes, preco_medio_mensal
+//                 FROM evolucao_preco_2024
+//                 WHERE ticker IN (${tickers})
+//                 ORDER BY ticker, mes;
+//             `;
+//             return database.executar(instrucaoSql);
+//         });
+// }
 
 
-module.exports = {  
-listarTodasAcoesDeAcordoComPerfil,
-listarAcoesPorSetor
+
+module.exports = {
+    listarTodasAcoesDeAcordoComPerfil,
+    listarAcoesPorSetor,
+    pegarTop3AcoesRecomendadasGraficoEvolucao,
+    pegarEvolucaoPorTickers
 };

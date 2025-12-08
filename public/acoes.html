@@ -381,6 +381,7 @@
         const perfil = sessionStorage.PERFIL_USUARIO;
         filtrarPorSetor(perfil);
         carregarKPIs(perfil);
+        criarGraficoEvolucaoPrecos();
     });
  // metodo complementar para redirecionar rotas
     // se é a rota que puxa todas as ações ou a filtrada por setor (ambas levando em consideração o perfil do usuário)
@@ -416,7 +417,9 @@
                 return;
             }
 
-            const resp = await fetch(`/acoes/kpis/${perfil}/${setor}`);
+            // assim pq no meu init o meu setor começa vazio ("todos setores")
+            // então se não tiver a opção vazia, ele vai quebrar
+            const resp = await fetch(`/acoes/kpis/${perfil}/${setor || ""}`);
             if (!resp.ok) throw new Error("Erro ao buscar KPIs");
 
             const dados = await resp.json();
@@ -425,28 +428,20 @@
                 return;
             }
 
-            document.querySelector("acoesRecomendadas").textContent = dados.acoesRecomendadas;
-            document.querySelector("retornoMedio").textContent = dados.retornoMedio.toFixed(2) + "%";
-            document.querySelector("volatilidadeMedia").textContent = dados.volatilidadeMedia.toFixed(2) + "%";
-            document.querySelector("peMedio").textContent = dados.peMedio.toFixed(2);
+            document.getElementById("acoesRecomendadas").textContent = dados.acoesRecomendadas;
+            document.querySelector(".retornoMedio").textContent = dados.retornoMedio.toFixed(2) + "%";
+            document.querySelector(".volatibilidadeMedia").textContent = dados.volatilidadeMedia.toFixed(2) + "%";
+            document.querySelector(".peMedio").textContent = dados.peMedio.toFixed(2);
 
-            // document.querySelector("#kpisAcoes div:nth-child(1) h1").textContent = dados.acoesRecomendadas;
-            // document.querySelector("#kpisAcoes div:nth-child(2) h1").textContent = dados.retornoMedio.toFixed(2) + "%";
-            // document.querySelector("#kpisAcoes div:nth-child(3) h1").textContent = dados.volatilidadeMedia.toFixed(2) + "%";
-            // document.querySelector("#kpisAcoes div:nth-child(4) h1").textContent = dados.peMedio.toFixed(2);
 
-            // document.querySelector("#kpisAcoes div:nth-child(2) h1").className = dados.retornoMedio >= 0 ? "verde" : "laranja";
-            // document.querySelector("#kpisAcoes div:nth-child(3) h1").className = dados.volatilidadeMedia >= 20 ? "laranja" : "azul";
+            const retorno = document.querySelector(".retornoMedio");
+            retorno.classList.remove("verde", "laranja");
+            retorno.classList.add(dados.retornoMedio >= 0 ? "verde" : "laranja");
 
-            document.querySelector("retornoMedio").className = dados.retornoMedio >= 0 ? "verde" : "laranja";
-            document.querySelector("volatilidadeMedia").className = dados.volatilidadeMedia >= 20 ? "laranja" : "azul";
+            const vol = document.querySelector(".volatibilidadeMedia");
+            vol.classList.remove("laranja", "azul");
+            vol.classList.add(dados.volatilidadeMedia >= 20 ? "laranja" : "azul");
 
-            // jeito mais cu doce
-            // const retornoEl = document.querySelector("#kpisAcoes div:nth-child(2) h1");
-            // retornoEl.className = dados.retornoMedio >= 0 ? "verde" : "laranja";
-
-            // const volatilidadeEl = document.querySelector("#kpisAcoes div:nth-child(3) h1");
-            // volatilidadeEl.className = dados.volatilidadeMedia >= 20 ? "laranja" : "azul";
 
         } catch (erro) {
             console.error("Erro ao carregar KPIs:", erro);
@@ -493,7 +488,7 @@
     // }
     async function carregarAcoesPorSetor(perfil) {
         try {
-            const resp = await fetch(`/acoes/listar/${perfil}/${setor}`);
+            const resp = await fetch(`/acoes/listarAcoesPorSetor/${perfil}/${setor}`);
 
             if (!resp.ok) {
                 console.error("Erro na rota filtrada:", resp.status);
@@ -538,6 +533,12 @@
         // limpa cards antigos, tirando o cabeçalho
         container.querySelectorAll(".card").forEach(c => c.remove());
 
+
+        if (!lista || lista.length === 0) {
+            container.innerHTML = "<p>Nenhuma ação encontrada.</p>";
+            return;
+        }
+
         lista.forEach(acao => {
             const card = document.createElement("div");
             card.classList.add("card");
@@ -572,8 +573,12 @@
             </div>
         `;
 
+            // const retornoEl = card.querySelector(".retorno");
+            // retornoEl.className = acao.rentabilidadeAnual >= 0 ? "verde" : "laranja";
             const retornoEl = card.querySelector(".retorno");
-            retornoEl.className = acao.rentabilidadeAnual >= 0 ? "verde" : "laranja";
+            retornoEl.classList.remove("verde", "laranja");
+            retornoEl.classList.add(acao.rentabilidadeAnual >= 0 ? "verde" : "laranja");
+
 
             // redireciona ao clicar
             card.addEventListener("click", () => {
@@ -691,54 +696,135 @@
         return `Há ${diffDias} dia${diffDias > 1 ? "s" : ""}`;
     }
 
-    function criarGraficoEvolucaoPrecos() {
+    // function criarGraficoEvolucaoPrecos() {
+    //     const ctx = document.getElementById('graphLinha').getContext('2d');
+
+    //     const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+    //     const datapoints = [140, 150, 155, 160, 175, 180, 176, 180, 180, 180, 179, 180];
+
+    //     new Chart(ctx, {
+    //         type: 'line',
+    //         data: {
+    //             labels: meses,
+    //             datasets: [{
+    //                 label: 'Evolução de Preços',
+    //                 data: datapoints,
+    //                 fill: false,
+    //                 borderColor: 'rgba(75, 192, 192, 1)',
+    //                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
+
+    //             }]
+    //         },
+    //         options: {
+    //             responsive: true,
+    //             maintainAspectRatio: false,
+    //             scales: {
+    //                 y: {
+    //                     beginAtZero: true,
+    //                     ticks: {
+    //                         stepSize: 45
+    //                     },
+    //                     grid: {
+    //                         color: 'rgba(0,0,0,0.05)'
+    //                     }
+    //                 },
+    //                 x: {
+    //                     grid: {
+    //                         color: 'rgba(0,0,0,0.05)'
+    //                     }
+    //                 }
+    //             },
+    //             plugins: {
+    //                 legend: {
+    //                     display: false
+    //                 }
+    //             }
+    //         }
+    //     });
+    // }
+
+
+    async function carregarEvolucao(perfil, setor) {
+        const resp = await fetch(`/acoes/grafico/evolucao/${perfil}/${setor || ""}`);
+        //const listaAcoes= await resp.json();
+        const data = await resp.json();
+
+        const listaAcoes = organizarDadosParaGrafico(data.evolucao);
+
+        criarGraficoEvolucaoPrecos(listaAcoes);
+
+        // organizar dados
+        // const meses = dados.map(item => item.mes);
+        // const precos = dados.map(item => item.preco_medio_mensal);
+
+
+    }
+
+    function organizarDadosParaGrafico(evolucao) {
+
+        const mesesNomes = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
+            "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+
+        const acoesAgrupadas = {};
+
+        evolucao.forEach(linha => {
+            if (!acoesAgrupadas[linha.ticker]) {
+                acoesAgrupadas[linha.ticker] = {
+                    ticker: linha.ticker,
+                    historico: []
+                };
+            }
+
+            acoesAgrupadas[linha.ticker].historico.push({
+                mes: mesesNomes[linha.mes - 1],
+                preco_medio_mensal: linha.preco_medio_mensal
+            });
+        });
+
+        return Object.values(acoesAgrupadas);
+    }
+
+    // deixando dinamico
+    function criarGraficoEvolucaoPrecos(listaAcoes) {
         const ctx = document.getElementById('graphLinha').getContext('2d');
 
-        const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
-        const datapoints = [140, 150, 155, 160, 175, 180, 176, 180, 180, 180, 179, 180];
 
-        new Chart(ctx, {
+        if (!listaAcoes || listaAcoes.length === 0) {
+            console.warn("Nenhuma ação encontrada para o gráfico.");
+            return;
+        }
+
+
+        const meses = listaAcoes[0].historico.map(h => h.mes);
+
+        const datasets = listaAcoes.map(acao => ({
+            label: acao.ticker,
+            //data: gerarValoresMock(),
+            data: acao.historico.map(p => p.preco_medio_mensal),
+            borderWidth: 2,
+            fill: false,
+            tension: 0.2
+        }));
+
+        // destroi grafico antigo
+        if (window.graficoEvolucao) {
+            window.graficoEvolucao.destroy();
+        }
+
+        window.graficoEvolucao = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: meses,
-                datasets: [{
-                    label: 'Evolução de Preços',
-                    data: datapoints,
-                    fill: false,
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-
-                }]
+                datasets: datasets
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 45
-                        },
-                        grid: {
-                            color: 'rgba(0,0,0,0.05)'
-                        }
-                    },
-                    x: {
-                        grid: {
-                            color: 'rgba(0,0,0,0.05)'
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                }
+                plugins: { legend: { position: 'top' } }
             }
         });
     }
 
-    criarGraficoEvolucaoPrecos();
+    // criarGraficoEvolucaoPrecos();
 
     document.querySelector('#notificacaoIcon').addEventListener('click', function (e) {
         e.stopPropagation();
@@ -791,6 +877,7 @@
             }
         });
     })();
+
 </script>
 
 <script src="Style/js/fazerHamburguer.js"></script>

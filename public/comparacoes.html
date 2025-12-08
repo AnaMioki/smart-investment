@@ -77,6 +77,7 @@
                     <div class="opcoesAcoes" id="opcaoSetores">
 
                     </div>
+
                 </div>
 
                 <div class="secao">
@@ -547,7 +548,6 @@
             html += '</div>';
 
             html += '<div class="containerGraficos">';
-
             html += '</div>';
 
             html += '<div class="containerGraficos">';
@@ -581,6 +581,7 @@
             html += '</div>';
 
             html += `
+                <!--
                 <div class="secaoGrafico resumoComparativo">
                     
                     <h3>Resumo Comparativo</h3>
@@ -618,7 +619,7 @@
                             </tr>
                         </tbody>
                     </table>
-                </div>
+                </div> -->
             `;
 
             container.innerHTML = html;
@@ -796,45 +797,45 @@
             }
         });
 
-         function sair() {
-        sessionStorage.clear();
-        window.location.href = "./login.html";
-    }
-
-
-      
-    (function () {
-        const perfil = document.querySelector('#perfilIcon');
-        const opcoes = document.querySelector('.opcoes-dropdown');
-
-        if (!perfil || !opcoes) return;
-
-        function abrirFecharPerfil() {
-            const ativo = opcoes.classList.toggle('active');
-            opcoes.setAttribute('aria-hidden', (!ativo).toString());
-            perfil.setAttribute('aria-expanded', ativo.toString());
+        function sair() {
+            sessionStorage.clear();
+            window.location.href = "./login.html";
         }
 
-        perfil.addEventListener('click', function (ev) {
-            ev.stopPropagation();
-            abrirFecharPerfil();
-        });
 
-        perfil.addEventListener('keydown', function (ev) {
-            if (ev.key === 'Enter' || ev.key === ' ') {
-                ev.preventDefault();
+
+        (function () {
+            const perfil = document.querySelector('#perfilIcon');
+            const opcoes = document.querySelector('.opcoes-dropdown');
+
+            if (!perfil || !opcoes) return;
+
+            function abrirFecharPerfil() {
+                const ativo = opcoes.classList.toggle('active');
+                opcoes.setAttribute('aria-hidden', (!ativo).toString());
+                perfil.setAttribute('aria-expanded', ativo.toString());
+            }
+
+            perfil.addEventListener('click', function (ev) {
+                ev.stopPropagation();
                 abrirFecharPerfil();
-            }
-        });
+            });
 
-        document.addEventListener('click', function (ev) {
-            if (!ev.target.closest('#perfilIcon') && !ev.target.closest('.opcoes-dropdown')) {
-                opcoes.classList.remove('active');
-                opcoes.setAttribute('aria-hidden', 'true');
-                perfil.setAttribute('aria-expanded', 'false');
-            }
-        });
-    })();
+            perfil.addEventListener('keydown', function (ev) {
+                if (ev.key === 'Enter' || ev.key === ' ') {
+                    ev.preventDefault();
+                    abrirFecharPerfil();
+                }
+            });
+
+            document.addEventListener('click', function (ev) {
+                if (!ev.target.closest('#perfilIcon') && !ev.target.closest('.opcoes-dropdown')) {
+                    opcoes.classList.remove('active');
+                    opcoes.setAttribute('aria-hidden', 'true');
+                    perfil.setAttribute('aria-expanded', 'false');
+                }
+            });
+        })();
 
 
     </script>

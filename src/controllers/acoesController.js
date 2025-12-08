@@ -84,9 +84,39 @@ function listarAcoesPorSetor(req, res) {
     });
 }
 
+async function graficoEvolucao(req, res) {
+    const perfil = req.params.perfil;
+    const setor = req.query.setor || null;
+
+    try {
+        // aq ele pega as top 3 de acordo com o setor
+        const recomendadas = await acoesModel.pegarTop3AcoesRecomendadasGraficoEvolucao(perfil, setor);
+
+        if (recomendadas.length === 0) {
+            return res.status(404).json({ msg: "Nenhuma ação recomendada encontrada." });
+        }
+
+        const tickers = recomendadas.map(r => r.ticker);
+
+        // pega a evolução dessas 3 ações
+        const evolucao = await acoesModel.pegarEvolucaoPorTickers(tickers);
+
+        res.status(200).json({
+            recomendadas,
+            evolucao
+        });
+
+    } catch (erro) {
+        console.error("Erro no gráfico:", erro);
+        return res.status(500).json(erro);
+    }
+}
+
+
 
 module.exports = {
     listarTodasAcoesDeAcordoComPerfil,
     listarSetores,
-    listarAcoesPorSetor
+    listarAcoesPorSetor,
+    graficoEvolucao
 }
