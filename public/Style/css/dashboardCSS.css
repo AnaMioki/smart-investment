@@ -32,8 +32,6 @@ body {
 
 ;
 
-
-
 #logo {
     max-width: 9vh;
     height: 9vh;
@@ -97,7 +95,6 @@ img#logo {
     height: 100dvh;
     width: 100%;
 }
-
 #perfilIcon {
     max-width: 9vh;
     height: 9vh;
@@ -157,48 +154,13 @@ img#perfilIcon {
     object-fit: contain;
     display: block;
 }
-
-#pencilIcon {
-    width: 3.5vh;
-    height: 3.5vh;
-    position: absolute;
-    top: 2vh;
-    right: 2vh;
-    cursor: pointer;
-    opacity: 0.6;
-    transition: transform 0.3s ease;
-}
-
-#pencilIcon:hover {
-    opacity: 1 !important;
-}
-
-#alertaAlteracao {
-    background-color: #00ad51;
-    z-index: 2;
-    position: fixed;
-    margin-top: 2vh;
-    margin-left: 2vh;
-    width: 35vw;
-    height: 10vh;
-    border-radius: 2vh;
-    border: #004225 solid 2px;
-    transition: all 0.5s ease;
-    text-align: center;
-    padding-top: 2vh;
-    font-size: 2rem;
-    font-weight: 700;
-    color: white;
-}
-
 /* Mobile menu (oculto por padrão) */
 .mobile-menu {
     display: none;
     flex-direction: column;
     background-color: #ffffff;
     position: absolute;
-    top: 7vh;
-    /* altura do header */
+    top: 7vh; /* altura do header */
     right: 2vh;
     width: 50vw;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -227,19 +189,42 @@ img#perfilIcon {
 
 
 @media (max-width: 1000px) {
-
-
-
-    #perfilIcon,
-    .notification-container,
-    .navbar {
+    
+    #perfilIcon, .notification-container, .navbar{
         display: none !important;
     }
-
+    
     .hamburger {
-        display: flex !important;
+       display: flex !important;
     }
-        #lista div{
+
+
+
+#kpiSetores{
+
+    gap: 2vh;
+    flex-direction: column;
+}
+#kpiSetores div{
+    width: 100% !important;
+
+}
+
+    #grafSetores{
+    flex-direction: column;
+    }
+
+    #grafSetores div{
+    width: 100% !important;
+    }
+
+
+    #topoSetor{
+        flex-direction: column;
+        align-items: self-start !important;
+    }
+
+    #lista div{
         flex-direction: column;
     }
 
@@ -251,9 +236,8 @@ img#perfilIcon {
         flex-direction: row !important;
         flex-wrap: wrap ;
     }
-    
 }
-
+ 
 
 
 .hamburger {
@@ -266,126 +250,130 @@ img#perfilIcon {
     margin-right: 2vh;
 }
 
-
 .hamburger .bar1,
 .hamburger .bar2,
 .hamburger .bar3 {
     height: 3px;
     width: 100%;
-    background-color: #000;
+    background-color: #004225;
     border-radius: 2px;
     transition: all 0.3s ease;
-    transform-origin: center;
-    margin: 0.6vh 0;
 }
 
-.hamburger.active .bar1 {
-    transform: rotate(45deg) translateX(2vh) translateY(2vh);
-    width: 40px;
+.mobile-menu {
+    display: none;
+    flex-direction: column;
+    background-color: #ffffff;
+    position: absolute;
+    top: 9vh;
+    right: 0;
+    width: 100%; /* Ocupa largura total no mobile */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    z-index: 999;
+    text-align: center;
 }
 
-.hamburger.active .bar2 {
-    opacity: 0;
+.mobile-menu.active {
+    display: flex;
 }
 
-.hamburger.active .bar3 {
-    transform: rotate(-45deg) translateX(1vh) translateY(-1vh);
-    width: 40px;
+.mobile-menu a {
+    padding: 15px 0;
+    color: #004225;
+    text-decoration: none;
+    font-size: 1.2rem;
+    border-bottom: 1px solid #eee;
 }
 
-
-/* Parte principal do site */
-
-#mainContainer {
-    height: 100dvh;
-    width: 100%;
-}
-
-#mainContent{
+/* --- CONTEÚDO PRINCIPAL --- */
+#mainContent {
     display: flex;
     flex-direction: column;
-    height: 100%;
     width: 100%;
-    padding: 3dvh;
+    padding: 3vh;
+    overflow-y: auto; /* Permite scroll no conteúdo principal */
+    flex: 1;
 }
 
-#contentPrincipal{
-    display: flex ;
+#contentPrincipal {
+    display: flex;
     flex-direction: column;
     width: 100%;
-    height: fit-content !important;
+    height: auto;
     padding: 2vh;
-    border: rgba(183, 183, 183, 0.185) solid 0.3vh;
+    border: 1px solid rgba(183, 183, 183, 0.2);
+    background: #fff;
     border-radius: 2vh;
     gap: 4vh;
 }
 
-#topoDash{
+/* TOPO DO DASHBOARD */
+#topoDash {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap; /* Permite quebrar linha em telas pequenas */
+    gap: 15px;
 }
 
-#topoDash h1{
-    font-size: 1.2rem;
+#topoDash h1 {
+    font-size: 1.5rem;
     color: #000;
-    font-weight: 100;
+    font-weight: 600;
 }
 
-#topoDash select{
+#topoDash select {
     background-color: #F3F3F5;
-    border: none;
-    transition: 0.5s;
-    padding: 0.8vh 1vh;
+    border: 1px solid #ddd;
+    padding: 10px;
     cursor: pointer;
-    font-size: 2.4vh;
-    border-radius: 1vh;
+    font-size: 1rem;
+    border-radius: 8px;
 }
 
-#topoDash select:hover{
-    transform: scale(1.03);
+/* --- LISTA DE SETORES --- */
+#listSetores {
+    width: 100%;
 }
 
-
-#lista{
+#lista {
     display: flex;
     flex-direction: column;
-    gap: 6vh;
+    gap: 2vh;
 }
 
-
-
-#lista div{
-    justify-content: space-between;
+#lista > div {
     display: flex;
-    padding: 1vh;
-    border: solid #00000012;
-    border-radius: 2vh;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 12px;
     width: 100%;
-    cursor: pointer;
-    transition: 0.5s;
+    background: #fff;
+    transition: transform 0.2s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
-#lista div *{
-    scale: 0.92;
+#lista > div:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-#lista div:hover{
-    transform: scale(1.02);
-}
-
-.numero{
+.numero {
     padding: 0;
     box-sizing: border-box;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-start !important;;
     align-items: center;
     border: none !important;
     width: 20% !important;
 }
 
-.numero h2{
+.numero h2 {
     height: 60%;
     text-align: center ;
     align-items: center;
@@ -405,7 +393,7 @@ img#perfilIcon {
     border: none !important;
 }
 
-.numero div h1{
+.numero div h1 {
     font-size: 1.6rem;
     font-weight: 100;
     color: #000;
@@ -415,66 +403,104 @@ img#perfilIcon {
     font-size: 1rem;
 }
 
-
-.infos{
+.infos {
     display: flex;
-    width: 70% !important;
+    width: 75%;
+    justify-content: space-between;
     align-items: center;
-    border: none !important;
+    flex-wrap: wrap; /* Permite quebrar linha */
+    gap: 10px;
 }
 
-.infos div{
+.infos div {
     display: flex;
     flex-direction: column;
-    border: none !important;
+    align-items: center;
+    text-align: center;
 }
 
-.infos div h1{
-    font-size: 1.3rem;
+.infos div h1 {
+    font-size: 1.4rem;
     font-weight: 300;
+    font-weight: bold;
+    margin-bottom: 5px;
 }
 
-.infos div p{
+.infos div p {
     font-size: 1.5rem;
+    font-weight: bold;
 }
 
-.corVerde{
-    color: #00A63E;
+/* Cores Utilitárias */
+.corVerde { color: #00A63E; }
+.corLaranja { color: #F54900; }
+.corVermelha { color: #E7000B; }
+.azul { color: #193CB8; background-color: #DBEAFE; padding: 5px 10px; border-radius: 6px; font-size: 0.9rem;}
+.verde { color: #016630; background-color: #DCFCE7; padding: 5px 10px; border-radius: 6px; font-size: 0.9rem;}
+.amarelo { color: #894B00; background-color: #FEF9C2; padding: 5px 10px; border-radius: 6px; font-size: 0.9rem;}
+
+/* --- ÁREA DOS GRÁFICOS --- */
+#graphDash {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 20px;
+    flex-wrap: wrap; /* CRUCIAL para responsividade */
 }
 
-.corLaranja{
-    color: #F54900;
+#graphDash > div {
+    flex: 1; /* Cresce para ocupar espaço */
+    min-width: 300px; /* Se ficar menor que 300px, quebra linha */
+    display: flex; 
+    flex-direction: column;
+    padding: 20px;
+    border: 1px solid #eee;
+    background-color: #ffffff;
+    border-radius: 15px;
+    gap: 15px;
+    height: 400px; /* Altura fixa para manter consistência */
+    position: relative; /* Necessário para o Chart.js */
 }
 
-.corVermelha{
-    color: #E7000B;
-}
-
-.azul{
+#graphDash div h1 {
+    font-weight: 600;
     font-size: 1rem;
-    color: #193CB8;
-    background-color: #DBEAFE;
-    padding: 2vh 3vh;
-    border-radius: 2vh;
+    color: #333;
+    margin-bottom: 10px;
 }
 
-.verde{
+/* Canvas Responsivo */
+#graphDash div canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* GRÁFICO GRANDE (EMBAIXO) */
+#graphGrande {
+    display: flex;
+    flex-direction: column;
+    width: 100%; 
+    height: 400px; /* Altura fixa */
+    padding: 20px;
+    border: 1px solid #eee;
+    border-radius: 15px;
+    background-color: #ffffff;
+    position: relative;
+}
+
+#graphGrande h1 {
     font-size: 1rem;
-    color: #016630;
-    background-color: #DCFCE7;
-    padding: 2vh 3vh;
-    border-radius: 2vh;
+    font-weight: 600;
+    margin-bottom: 15px;
 }
 
-.amarelo{
-    font-size: 1rem;
-    color: #894B00;
-    background-color: #FEF9C2;
-    padding: 2vh 3vh;
-    border-radius: 2vh;
+#graphGrande canvas {
+   width: 100% !important;
+   height: 90% !important; /* Deixa um espaço para o título */
 }
 
-  .notificacao-dropdown {
+/* --- DROPDOWNS --- */
+.notificacao-dropdown, .opcoes-dropdown {
     display: none;
     position: absolute;
     top: 100%;
@@ -485,267 +511,96 @@ img#perfilIcon {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     z-index: 1000;
     padding: 12px;
-    margin-top: 10px;
+}
+.notificacao-dropdown.active, .opcoes-dropdown.active { display: block; }
 
-    a{
-        text-decoration: none;
-        color: #004225;
-        font-weight: 600;
-        display: block;
-        text-align: center;
-        margin-top: 8px;
+/* TOOLTIP */
+.tooltip { position: relative; display: inline-block; cursor: help; border-bottom: 1px dotted #999; }
+.tooltip .tip {
+    position: absolute;
+    bottom: 125%; left: 50%; transform: translateX(-50%);
+    background-color: #333; color: #fff;
+    text-align: center; padding: 8px; border-radius: 6px;
+    width: 200px; visibility: hidden; opacity: 0;
+    transition: opacity 0.3s; z-index: 10; font-size: 12px; font-weight: normal;
+}
+.tooltip .tip::after {
+    content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px;
+    border-width: 5px; border-style: solid; border-color: #333 transparent transparent transparent;
+}
+.tooltip:hover .tip { visibility: visible; opacity: 1; }
+
+
+/* ==============================================
+   MEDIA QUERIES (RESPONSIVIDADE MÓVEL)
+   ============================================== */
+@media (max-width: 1000px) {
+
+    /* Header Mobile */
+    #header {
+        padding: 0 15px;
+    }
+    .navbar, #perfilIcon, .notification-container {
+        display: none !important; /* Esconde menu desktop */
+    }
+    .hamburger {
+        display: flex !important; /* Mostra menu mobile */
     }
 
-    a:hover{
-        opacity: 0.7;
+    /* Conteúdo Principal */
+    #mainContent {
+        padding: 15px;
+    }
+    
+    #topoDash {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    #topoDash select {
+        width: 100%;
+    }
+
+    /* Lista de Setores (Cards) */
+    #lista > div {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .numero {
+        width: 100%;
+        margin-bottom: 10px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+    }
+
+    .infos {
+        width: 100%;
+        justify-content: space-between; /* Distribui itens */
+        gap: 15px;
+    }
+    
+    /* Em telas muito pequenas, empilha as infos também */
+    @media (max-width: 480px) {
+        .infos {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 2 colunas */
+            gap: 20px;
+        }
+    }
+
+    /* Gráficos Mobile */
+    #graphDash {
+        flex-direction: column; /* Um embaixo do outro */
+    }
+    
+    #graphDash > div {
+        width: 100%;
+        height: 350px; /* Altura um pouco menor para mobile */
+    }
+
+    #graphGrande {
+        height: 350px;
     }
 }
-
-.notificacao-dropdown.active {
-    display: block;
-}
-
-.notificacao-item {
-    padding: 12px;
-    border-bottom: 1px solid #f0f0f0;
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-}
-
-.notificacao-item:last-child {
-    border-bottom: none;
-}
-
-.notificacao-content {
-    flex: 1;
-}
-
-.notificacao-title {
-    font-weight: 600;
-    color: #004225;
-    margin-bottom: 4px;
-    font-size: 14px;
-}
-
-.notificacao-text {
-    color: #666;
-    font-size: 13px;
-    line-height: 1.4;
-}
-
-.notificacao-time {
-    color: #999;
-    font-size: 12px;
-    margin-top: 4px;
-}
-
-
-/* Parte dos gráficos */
-
-
-
-#graphDash{
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    gap: 3vh;
-    flex-direction: row;
-    height: 100%;
-    flex-wrap: wrap;
-}
-
-#graphDash div{
-    display: flex; 
-    flex-direction: column;
-    padding: 4vh;
-    border: solid rgba(128, 128, 128, 0.202) 0.4vh;
-    background-color: #ffffff;
-    border-radius: 3vh ;
-    gap: 2vh;
-}
-
-#graphDash div h1{
-    font-weight: 100;
-    font-size: 1rem ;
-    color: #000;
-}
-
-#graphDash div canvas{
-    height: 46vh;
-
-}
-
-#graphGrande{
-    display: flex;
-    flex-direction: column;
-    gap: 1vh;
-    width: 100% !important; 
-
-    padding: 3vh;
-    border: solid rgba(128, 128, 128, 0.227) 0.4vh;
-    border-radius: 4vh;
-    justify-content: center;
-    background-color: #ffffff;
-}
-
-#graphGrande h1{
-    align-self: flex-start;
-    font-size: 1rem;
-    font-weight: 100;
-}
-
-#graphGrande canvas{
-    height: 60% !important;
-   width: 60% !important;
-}
-
-
-.login-overlay {
-    position: fixed;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(0,0,0,0.45);
-    z-index: 1200;
-}
-
-.login-card {
-    width: 92%;
-    max-width: 480px;
-    background: #fff;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    text-align: center;
-    color: #222;
-}
-
-.login-card h3 {
-    margin-bottom: 6px;
-    font-size: 1.4rem;
-}
-
-.login-card p {
-    margin-bottom: 14px;
-    color: #555;
-    font-size: 0.98rem;
-}
-
-.progress {
-    width: 100%;
-    height: 10px;
-    background: #eef3ee;
-    border-radius: 8px;
-    overflow: hidden;
-    margin-bottom: 14px;
-}
-
-.progress-bar {
-    width: 0%;
-    height: 100%;
-    background: linear-gradient(90deg,#54b987,#16a34a);
-    transition: width 0.08s linear;
-}
-
-.login-actions {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-}
-
-.login-actions button {
-    padding: 8px 14px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 0.95rem;
-}
-
-#btnLoginNow {
-    background: linear-gradient(180deg,#0ea46a,#087a47);
-    color: #fff;
-}
-
-@media (max-width: 480px) {
-    .login-card { padding: 16px; }
-    .login-actions { flex-direction: column; gap: 8px; }
-    #btnLoginNow { width: 100%; }
-}
-
-
-/* Dropdown do perfil */
-.opcoes-dropdown {
-    display: none;
-    position: absolute;
-    top: 9.5vh; /* logo abaixo do header */
-    right: 2.5vh;
-    min-width: 180px;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-    z-index: 1200;
-    padding: 6px 6px;
-}
-.opcoes-dropdown.active {
-    display: block;
-}
-.opcoes-dropdown a {
-    display: block;
-    padding: 10px 12px;
-    color: #004225;
-    text-decoration: none;
-    font-weight: 600;
-    border-radius: 6px;
-}
-.opcoes-dropdown a:hover {
-    background: #f3f7f5;
-}
-
-.tooltip {
-    position: relative;
-    display: inline-block;
-    cursor: help;
-  }
-
-  /* O BALÃO DE TEXTO */
-  .tooltip .tip {
-    position: absolute;
-    bottom: 120%;               /* aparece acima por padrão */
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #111;
-    color: #fff;
-    text-align: center;
-    padding: 8px 12px;
-    border-radius: 6px;
-    white-space: normal;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
-    z-index: 10;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    width: max-content;
-    max-width: 220px;
-  }
-
-  /* Setinha do tooltip */
-  .tooltip .tip::after {
-    content: "";
-    position: absolute;
-    top: 100%; /* padrão: aparece abaixo do balão (pois o balão está acima da palavra) */
-    left: 50%;
-    transform: translateX(-50%);
-    border-width: 6px;
-    border-style: solid;
-    border-color: #111 transparent transparent transparent;
-  }
-
-  /* MOSTRAR AO PASSAR O MOUSE */
-  .tooltip:hover .tip {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(-50%) translateY(-4px);
-  }
