@@ -2,33 +2,36 @@ var database = require("../database/config");
 
 function listarTodasAcoesDeAcordoComPerfil(perfil) {
     var instrucaoSql = `
-    SELECT 
-        e.idEmpresa,
-        e.nome,
-        e.ticker,
-        e.setor,
-        it.rentabilidadeAnual,
-        it.precoSobreValorPatrimonial,
-        it.patrimonioLiquidoAcao,
-        it.DRE,
-        it.EBITDA,
-        a.volume,
-        ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 AS volatilidade,
-        it.ano AS ano_referencia,
-        CASE 
-            WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 < 0.5 
-                AND it.precoSobreValorPatrimonial <= 1 THEN 'Conservador'
-            WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 < 1.5 
-                AND it.rentabilidadeAnual BETWEEN 1 AND 20 THEN 'Moderado'
-            WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 BETWEEN 0.5 AND 4
-                AND it.rentabilidadeAnual > 5 THEN 'Arrojado'
-            ELSE 'Neutro'
-        END AS perfil_investidor
-    FROM infoTemporal it
-    INNER JOIN empresa e ON it.fkEmpresa = e.idEmpresa
-    INNER JOIN acoes a ON a.fkEmpresa = e.idEmpresa AND YEAR(a.dtAtual) = it.ano
-    WHERE it.ano = (SELECT MAX(ano) FROM infoTemporal)
-    HAVING perfil_investidor = '${perfil}';
+           SELECT *
+        FROM (
+            SELECT 
+                e.idEmpresa,
+                e.nome,
+                e.ticker,
+                e.setor,
+                it.rentabilidadeAnual,
+                it.precoSobreValorPatrimonial,
+                it.patrimonioLiquidoAcao,
+                it.DRE,
+                it.EBITDA,
+                a.volume,
+                ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 AS volatilidade,
+                it.ano AS ano_referencia,
+                CASE 
+                    WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 < 0.5 
+                         AND it.precoSobreValorPatrimonial <= 1 THEN 'Conservador'
+                    WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 < 1.5 
+                         AND it.rentabilidadeAnual BETWEEN 1 AND 20 THEN 'Moderado'
+                    WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 BETWEEN 0.5 AND 4
+                         AND it.rentabilidadeAnual > 5 THEN 'Arrojado'
+                    ELSE 'Neutro'
+                END AS perfil_investidor
+            FROM infoTemporal it
+            INNER JOIN empresa e ON it.fkEmpresa = e.idEmpresa
+            INNER JOIN acoes a ON a.fkEmpresa = e.idEmpresa AND YEAR(a.dtAtual) = it.ano
+            WHERE it.ano = (SELECT MAX(ano) FROM infoTemporal)
+        ) AS sub
+        WHERE sub.perfil_investidor = '${perfil}';
         `;
     // var instrucaoSql = `
     // SELECT 
@@ -68,40 +71,72 @@ function listarSetores() {
 }
 
 // mesmissima lógica da consulta pra pegar ação com base no perfil, mas agora filtrando por setor como parametro.
-function listarAcoesPorSetor(setor) {
+function listarAcoesPorSetor(perfil, setor) {
     var instrucaoSql = `
-        SELECT 
-            e.idEmpresa,
-            e.nome,
-            e.setor,
-            it.rentabilidadeAnual,
-            it.precoSobreValorPatrimonial,
-
-            -- comentei por enquanto esse valor pq não existe no banco: 
-            -- sub.volatilidade_media_ano,
-
-            -- DRE
-            ((it.valorMercado - it.patrimonioLiquido) / it.patrimonioLiquido) AS dre,
-
-            -- EBITDA
-            (it.valorMercado / it.multiploSetorial) AS ebitda,
-
-            it.volume,
-            it.ano
-
-        FROM empresa e
-        JOIN infoTemporal it 
-            ON e.idEmpresa = it.fkEmpresa
-        JOIN sub_acoes_calculado sub 
-            ON sub.fkEmpresa = e.idEmpresa
-        
-        WHERE it.ano = (SELECT MAX(ano) FROM infoTemporal)
-        AND e.setor = '${setor}';
+              SELECT *
+FROM (
+    SELECT 
+        e.idEmpresa,
+        e.nome,
+        e.ticker,
+        e.setor,
+        it.rentabilidadeAnual,
+        it.precoSobreValorPatrimonial,
+        it.patrimonioLiquidoAcao,
+        it.DRE,
+        it.EBITDA,
+        a.volume,
+        ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 AS volatilidade,
+        it.ano AS ano_referencia,
+        CASE 
+            WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 < 0.5 
+                 AND it.precoSobreValorPatrimonial <= 1 THEN 'Conservador'
+            WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 < 1.5 
+                 AND it.rentabilidadeAnual BETWEEN 1 AND 20 THEN 'Moderado'
+            WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 BETWEEN 0.5 AND 4
+                 AND it.rentabilidadeAnual > 5 THEN 'Arrojado'
+            ELSE 'Neutro'
+        END AS perfil_investidor
+    FROM infoTemporal it
+    INNER JOIN empresa e ON it.fkEmpresa = e.idEmpresa
+    INNER JOIN acoes a ON a.fkEmpresa = e.idEmpresa AND YEAR(a.dtAtual) = it.ano
+    WHERE it.ano = (SELECT MAX(ano) FROM infoTemporal)
+        AND e.setor = '${setor}'
+    ) AS sub
+    WHERE sub.perfil_investidor = '${perfil}';
     `;
 
     console.log("Executando SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }
+
+//  SELECT 
+//             e.idEmpresa,
+//             e.nome,
+//             e.setor,
+//             it.rentabilidadeAnual,
+//             it.precoSobreValorPatrimonial,
+
+//             -- comentei por enquanto esse valor pq não existe no banco: 
+//             -- sub.volatilidade_media_ano,
+
+//             -- DRE
+//             ((it.valorMercado - it.patrimonioLiquido) / it.patrimonioLiquido) AS dre,
+
+//             -- EBITDA
+//             (it.valorMercado / it.multiploSetorial) AS ebitda,
+
+//             it.volume,
+//             it.ano
+
+//         FROM empresa e
+//         JOIN infoTemporal it 
+//             ON e.idEmpresa = it.fkEmpresa
+//         JOIN sub_acoes_calculado sub 
+//             ON sub.fkEmpresa = e.idEmpresa
+
+//         WHERE it.ano = (SELECT MAX(ano) FROM infoTemporal)
+//         AND e.setor = '${setor}';
 
 function pegarTop3AcoesRecomendadasGraficoEvolucao(perfil, setor) {
     // acho assim melhor pq aqui ele pega as mais rentáveis:

@@ -95,7 +95,7 @@
                                 </span> Médio
                             </p>
                             <!-- <h1 class="verde">-%</h1> -->
-                            <h1 class="retornoMedio">-%</h1>
+                            <h1 class="retornoMedio">-</h1>
                         </div>
                         <img src="Style/assets/setaPraCimaSetores.svg" class="fundoVerde">
 
@@ -108,7 +108,7 @@
                                         tempo.</span>
                                 </span> Média</p>
                             <!-- <h1 class="laranja">-%</h1> -->
-                            <h1 class="volatibilidadeMedia">-%</h1>
+                            <h1 class="volatibilidadeMedia">-</h1>
                         </div>
                         <img src="Style/assets/metricaSetores.svg" class="fundoLaranja">
 
@@ -121,7 +121,7 @@
                                         vezes o lucro anual de uma empresa está sendo pago pelo preço da ação</span>
                                 </span> Médio</p>
                             <!-- <h1 class="roxo">-</h1> -->
-                            <h1 class="peMedio">-%</h1>
+                            <h1 class="peMedio">-</h1>
                         </div>
                         <img src="Style/assets/sifrao.svg" class="fundoRoxo">
                     </div>
@@ -265,11 +265,23 @@
 
 <script>
 
+    let setor = "";
+
+
     // centraliza tudo que precisa ser iniciado ao carregar a página, tava mó bagunça do carai
     document.addEventListener("DOMContentLoaded", init);
+
+    window.onload = () => {
+        pegarKpisPorSetor(perfilSelecionado, "");
+    };
+
     function init() {
         console.log("Página carregada. Iniciando...");
         const perfil = sessionStorage.PERFIL_USUARIO;
+
+        //setor = document.getElementById("selectPeriodo").value;
+        setor = ""; // inicia vazio, ou seja, "todos setores"
+        console.log("setor inicial:", setor);
 
         if (!perfil) {
             console.error("Perfil não encontrado");
@@ -277,9 +289,10 @@
         }
 
 
-        carregarSetores();
+        carregarSetores(); // nao pode tirar daqui
+        filtrarPorSetor(perfil);
         carregarKPIs(perfil); // vazio pq no início não tem filtro
-        carregarAcoes(perfil);
+        //carregarAcoes(perfil);
         carregarNotificacoes(perfil);
         criarGraficoEvolucaoPrecos();
     }
@@ -289,6 +302,7 @@
     document.getElementById("selectPeriodo").addEventListener("change", () => {
         setor = document.getElementById("selectPeriodo").value;
         const perfil = sessionStorage.PERFIL_USUARIO;
+        
         filtrarPorSetor(perfil);
         carregarKPIs(perfil);
         criarGraficoEvolucaoPrecos();
@@ -297,9 +311,6 @@
     // metodo complementar para redirecionar rotas
     // se é a rota que puxa todas as ações ou a filtrada por setor (ambas levando em consideração o perfil do usuário)
 
-    let setor =  document.getElementById("selectPeriodo").value || "";;
-
-  
     function filtrarPorSetor(perfil) {
         //setor = selectPeriodo.value;   // comentei porque antes não tinha uma variável global
         //const perfil = sessionStorage.PERFIL_USUARIO;
@@ -443,11 +454,33 @@
         const container = document.getElementById("listaAcoes");
 
         // limpa cards antigos, tirando o cabeçalho
-        container.querySelectorAll(".card").forEach(c => c.remove());
+        // container.querySelectorAll(".card").forEach(c => c.remove());
 
+
+        // if (!lista || lista.length === 0) {
+        //     // Cria uma div para a mensagem
+        //     const msg = document.createElement("div");
+        //     msg.classList.add("mensagem-vazia");
+        //     msg.textContent = "Nenhuma ação encontrada para este setor.";
+        //     container.appendChild(msg);
+        //     return;
+        // }
+
+        container.querySelectorAll(".card").forEach(c => {
+            if (c.id !== "card-modelo") c.remove();
+        });
+
+        // remove mensagens antigas
+        container.querySelectorAll(".mensagem-vazia").forEach(c => c.remove());
 
         if (!lista || lista.length === 0) {
-            container.innerHTML = "<p>Nenhuma ação encontrada.</p>";
+            // cria a mensagem depois do cabeçalho
+            const msg = document.createElement("div");
+            msg.classList.add("mensagem-vazia");
+            msg.textContent = "Nenhuma ação encontrada para este setor.";
+
+            const cabecalho = container.querySelector(".descricao");
+            cabecalho.insertAdjacentElement("afterend", msg); // insere depois do cabeçalho
             return;
         }
 
@@ -461,23 +494,23 @@
                     <img class="icon-favorito" src="Style/assets/estrelaCheia.svg">
 
                     <div>
-                        <h1 class="acao-nome">${acao.nomeEmpresa}</h1>
+                        <h1 class="acao-nome">${acao.nome}</h1>
                         <p class="acao-ticker">${acao.ticker}</p>
                     </div>
 
                     <h1 class="setor">${acao.setor}</h1>
-                    <h1 class="preco">R$ ${acao.precoAtual ?? "-"}</h1>
+                    <h1 class="preco">R$ ${acao.precoSobreValorPatrimonial.toFixed(2) ?? "-"}</h1>
                     <!-- <h1 class="retorno verde">${acao.retorno ?? "-"}%</h1> -->
-                    <h1 class="retorno verde">${acao.rentabilidadeAnual ?? "-"}%</h1>
+                    <h1 class="retorno verde">${acao.rentabilidadeAnual.toFixed(2) ?? "-"}%</h1>
 
                 </div>
 
                 <div class="especificacao">
                     <h1 class="disaparecido">DRE:</h1>
-                    <h1 class="dre">${acao.dre ?? "-"}</h1>
+                    <h1 class="dre">${acao.DRE.toFixed(2) ?? "-"}</h1>
 
                     <h1 class="disaparecido">EBITDA:</h1> 
-                    <h1 class="ebitda">${acao.ebitda ?? "-"}</h1> 
+                    <h1 class="ebitda">${acao.EBITDA.toFixed(2) ?? "-"}</h1> 
 
                     <h1 class="disaparecido">Volume:</h1>
                     <h1 class="volume">${acao.volume ?? "-"}</h1>
