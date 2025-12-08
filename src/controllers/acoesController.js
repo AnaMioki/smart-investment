@@ -2,8 +2,13 @@ var acoesModel = require('../models/acoesModel');
 
 function listarTodasAcoesDeAcordoComPerfil(req, res) {
 
-    const perfil = req.params.perfil;  //pede o perfil coomo requisição para puxar as ações corretas
+    let perfil = req.params.perfil;  //pede o perfil coomo requisição para puxar as ações corretas
     console.log("perfil recebido na rota: ", perfil);
+
+    const perfisValidos = ["conservador", "Moderado", "Arrojado", "Neutro"];
+    if (!perfisValidos.includes(perfil)) {
+        return res.status(400).json({ erro: "Perfil inválido" });
+    }
 
     //acoesModel.listarTodasAcoesDeAcordoComPerfil(perfil)
     acoesModel.listarTodasAcoesDeAcordoComPerfil(perfil)
@@ -48,38 +53,21 @@ function listarSetores(req, res) {
 }
 
 function listarAcoesPorSetor(req, res) {
-    const perfil = req.params.perfil.toLowerCase();
+    const perfil = req.params.perfil;
     var setor = req.params.setor;
 
-    acoesModel.listarAcoesPorSetor(setor).then(resultado => {
-
-        let filtradas = resultado;
-
-        // if (setor !== "Todos") {
-        //     filtradas = filtradas.filter(a => a.setor === setor);
-        // }
-
-        filtradas = filtradas.filter(acao => {
-            const vol = acao.volatilidade_media_ano;
-            const pvpa = acao.precoSobreValorPatrimonial;
-            const retorno = acao.rentabilidadeAnual;
-
-            if (perfil === "conservador") {
-                return vol < 0.5 && pvpa <= 1;
+    acoesModel.listarAcoesPorSetor(perfil, setor)
+        .then(resultado => {
+            if (!resultado || resultado.length === 0) {
+                res.status(204).send("Nenhuma ação encontrada para este setor e perfil!");
+            } else {
+                res.status(200).json(resultado);
             }
-            if (perfil === "moderado") {
-                return vol < 1.5 && retorno >= 1 && retorno <= 20;
-            }
-            if (perfil === "arrojado") {
-                return vol >= 0.5 && vol <= 4 && retorno > 5;
-            }
-
-            return false;
-        });
+        })
         // } else {
         //     res.status(204).send("Nenhuma ação encontrada para este setor!");
         // }
-    }).catch(erro => {
+    .catch(erro => {
         console.log("Erro ao listar ações:", erro.sqlMessage);
         res.status(500).json(erro.sqlMessage);
     });

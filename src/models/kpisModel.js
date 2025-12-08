@@ -7,36 +7,127 @@ async function pegarKpisPorSetor(perfil, setor) {
         const setorFiltro = setor && setor !== "" ? setor : null;
 
         let queryAcoesRecomendadas = `
-            SELECT COUNT(*) AS acoes_recomendadas
-            FROM dashboard_acoes
-            WHERE (precoSobreValorPatrimonial <= 1 OR rentabilidadeAnual > 15)
-            AND perfil = '${perfil}'
-            ${setorFiltro ? `AND setor = '${setorFiltro}'` : ""}
+           SELECT COUNT(*) AS acoes_recomendadas
+                FROM (
+            SELECT 
+            e.idEmpresa,
+            e.nome,
+            it.rentabilidadeAnual,
+            it.precoSobreValorPatrimonial,
+            it.patrimonioLiquidoAcao,
+            ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 AS volatilidade,
+            it.ano AS ano_referencia,
+            CASE 
+                WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 < 0.5 
+                    AND it.precoSobreValorPatrimonial <= 1 THEN 'Conservador'
+                WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 < 1.5 
+                    AND it.rentabilidadeAnual BETWEEN 1 AND 20 THEN 'Moderado'
+                WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 BETWEEN 0.5 AND 4
+                    AND it.rentabilidadeAnual > 5 THEN 'Arrojado'
+                ELSE 'Neutro'
+            END AS perfil_investidor
+                FROM infoTemporal it
+                INNER JOIN empresa e ON it.fkEmpresa = e.idEmpresa
+                INNER JOIN acoes a ON a.fkEmpresa = e.idEmpresa AND YEAR(a.dtAtual) = it.ano
+                WHERE it.ano = (SELECT MAX(ano) FROM infoTemporal)
+                ${setorFiltro ? `AND e.setor = '${setorFiltro}'` : ""}
+
+            ) AS sub
+            WHERE sub.perfil_investidor = '${perfil}'
+            AND (sub.precoSobreValorPatrimonial <= 1 OR sub.rentabilidadeAnual > 15);
         `;
+
+
+        //  SELECT COUNT(*) AS acoes_recomendadas
+        //     FROM dashboard_acoes
+        //     WHERE (precoSobreValorPatrimonial <= 1 OR rentabilidadeAnual > 15)
+        //     -- AND perfil = '${perfil}'
+        //     ${setorFiltro ? `AND setor = '${setorFiltro}'` : ""}
         const acoesRecomendadas = await database.executar(queryAcoesRecomendadas);
 
         let queryRetorno = `
-            SELECT AVG(rentabilidadeAnual) AS retorno_medio
-            FROM dashboard_acoes
-            WHERE perfil = '${perfil}'
-            ${setorFiltro ? `AND setor = '${setorFiltro}'` : ""}
+            SELECT AVG(sub.rentabilidadeAnual) AS retorno_medio
+        FROM (
+            SELECT 
+                e.setor,
+                it.rentabilidadeAnual,
+                CASE 
+                    WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 < 0.5 
+                        AND it.precoSobreValorPatrimonial <= 1 THEN 'Conservador'
+                    WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 < 1.5 
+                       AND it.rentabilidadeAnual BETWEEN 1 AND 20 THEN 'Moderado'
+                   WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 BETWEEN 0.5 AND 4
+                        AND it.rentabilidadeAnual > 5 THEN 'Arrojado'
+                    ELSE 'Neutro'
+                END AS perfil_investidor
+            FROM infoTemporal it
+           JOIN empresa e ON it.fkEmpresa = e.idEmpresa
+            JOIN acoes a ON a.fkEmpresa = e.idEmpresa AND YEAR(a.dtAtual) = it.ano
+           WHERE it.ano = (SELECT MAX(ano) FROM infoTemporal)
+           ${setorFiltro ? `AND e.setor = '${setorFiltro}'` : ""}
+        ) AS sub
+        WHERE sub.perfil_investidor = '${perfil}';
         `;
+        // SELECT AVG(rentabilidadeAnual) AS retorno_medio
+        //     FROM dashboard_acoes
+        //     ${setorFiltro ? `WHERE setor = '${setorFiltro}'` : ""}
         const retornoMedio = await database.executar(queryRetorno);
 
         let queryVolatilidade = `
-            SELECT AVG(volatilidade) AS volatilidade_media
-            FROM dashboard_acoes
-            WHERE perfil = '${perfil}'
-            ${setorFiltro ? `AND setor = '${setorFiltro}'` : ""}
+            SELECT AVG(sub.volatilidade) AS volatilidade_media
+            FROM (
+                SELECT 
+                    e.setor,
+                    ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 AS volatilidade,
+                    CASE 
+                        WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 < 0.5 
+                        AND it.precoSobreValorPatrimonial <= 1 THEN 'Conservador'
+                    WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 < 1.5 
+                        AND it.rentabilidadeAnual BETWEEN 1 AND 20 THEN 'Moderado'
+                    WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 BETWEEN 0.5 AND 4
+                        AND it.rentabilidadeAnual > 5 THEN 'Arrojado'
+                    ELSE 'Neutro'
+                END AS perfil_investidor
+            FROM infoTemporal it
+            JOIN empresa e ON it.fkEmpresa = e.idEmpresa
+            JOIN acoes a ON a.fkEmpresa = e.idEmpresa AND YEAR(a.dtAtual) = it.ano
+            WHERE it.ano = (SELECT MAX(ano) FROM infoTemporal)
+            ${setorFiltro ? `AND e.setor = '${setorFiltro}'` : ""}
+        ) AS sub
+        WHERE sub.perfil_investidor = '${perfil}';
         `;
+        // SELECT AVG(volatilidade) AS volatilidade_media
+        //     FROM dashboard_acoes
+        //     -- WHERE perfil = '${perfil}'
+        //     ${setorFiltro ? `WHERE setor = '${setorFiltro}'` : ""}
         const volatilidadeMedia = await database.executar(queryVolatilidade);
 
         let queryPE = `
-            SELECT AVG(patrimonioLiquidoAcao) AS pe_medio
-            FROM dashboard_acoes
-            WHERE perfil = '${perfil}'
-            ${setorFiltro ? `AND setor = '${setorFiltro}'` : ""}
+                SELECT AVG(sub.patrimonioLiquidoAcao) AS pe_medio
+                    FROM (
+                SELECT 
+                    e.setor,
+                    it.patrimonioLiquidoAcao,
+                    CASE 
+                        WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 < 0.5 
+                            AND it.precoSobreValorPatrimonial <= 1 THEN 'Conservador'
+                        WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 < 1.5 
+                            AND it.rentabilidadeAnual BETWEEN 1 AND 20 THEN 'Moderado'
+                        WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 BETWEEN 0.5 AND 4
+                            AND it.rentabilidadeAnual > 5 THEN 'Arrojado'
+                        ELSE 'Neutro'
+                    END AS perfil_investidor
+                FROM infoTemporal it
+                JOIN empresa e ON it.fkEmpresa = e.idEmpresa
+                JOIN acoes a ON a.fkEmpresa = e.idEmpresa AND YEAR(a.dtAtual) = it.ano
+                WHERE it.ano = (SELECT MAX(ano) FROM infoTemporal)
+                ${setorFiltro ? `AND e.setor = '${setorFiltro}'` : ""}
+            ) AS sub
+            WHERE sub.perfil_investidor = '${perfil}';
         `;
+        // SELECT AVG(patrimonioLiquidoAcao) AS pe_medio
+        //     FROM dashboard_acoes
+        //     ${setorFiltro ? `WHERE setor = '${setorFiltro}'` : ""}
         const peMedio = await database.executar(queryPE);
 
         // aq ta retornando tds as kpis em um objeto só, e quem chamar vai executar td de uma vez

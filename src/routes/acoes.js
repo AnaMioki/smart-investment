@@ -22,7 +22,9 @@ router.get('/listarAcoesPorSetor/:perfil/:setor', function (req , res) {
     acoesController.listarAcoesPorSetor(req , res);
 });
 
-router.get("/kpis/:perfil/:setor?", kpisController.pegarKpisPorSetor);
+router.get("/kpis/:perfil/:setor?", function (req , res){
+    kpisController.pegarKpisPorSetor(req, res);
+} );
 
 //router.get("/kpis/:perfil", kpisController.pegarKpisPorSetor);
 
