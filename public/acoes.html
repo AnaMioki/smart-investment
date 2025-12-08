@@ -297,8 +297,9 @@
     // metodo complementar para redirecionar rotas
     // se é a rota que puxa todas as ações ou a filtrada por setor (ambas levando em consideração o perfil do usuário)
 
-    let setor = "";
+    let setor =  document.getElementById("selectPeriodo").value || "";;
 
+  
     function filtrarPorSetor(perfil) {
         //setor = selectPeriodo.value;   // comentei porque antes não tinha uma variável global
         //const perfil = sessionStorage.PERFIL_USUARIO;
