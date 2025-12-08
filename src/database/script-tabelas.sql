@@ -10,7 +10,7 @@ email VARCHAR(60) NOT NULL UNIQUE,
 senha VARCHAR(255) NOT NULL,
 perfil VARCHAR(20),
 	CONSTRAINT chkPerfil 
-		CHECK (perfil IN ('Conservador', 'Moderado', 'Arrojado'))
+		CHECK (perfil IN ('Conservador', 'Moderado', 'Arrojado', 'Administrador'))
 ); 
 
 CREATE TABLE empresa (
@@ -34,23 +34,24 @@ CONSTRAINT fkAcoesEmpresa FOREIGN KEY (fkEmpresa) REFERENCES empresa(idEmpresa)
 );
 
 CREATE TABLE acoesFavoritadas (
-idAcoesFavoritadas INT PRIMARY KEY AUTO_INCREMENT,
+idAcoesFavoritadas INT AUTO_INCREMENT,
 fkAcoes INT NOT NULL,
-CONSTRAINT fkAcoesFavoritadas FOREIGN KEY (fkAcoes) REFERENCES acoes(idAcoes),
+CONSTRAINT fkAcoesFavoritadas FOREIGN KEY (fkAcoes) REFERENCES empresa(idEmpresa),
 fkUsuario INT NOT NULL,
-CONSTRAINT fkUsuarioAcoesFavoritadas FOREIGN KEY (fkUsuario) REFERENCES usuario(idUsuario)
+CONSTRAINT fkUsuarioAcoesFavoritadas FOREIGN KEY (fkUsuario) REFERENCES usuario(idUsuario),
+CONSTRAINT primaryKeys PRIMARY KEY (idAcoesFavoritadas, fkAcoes, fkUsuario)
 );
 
 CREATE TABLE notificacoes (
 idNotificacoes INT PRIMARY KEY AUTO_INCREMENT,
 tipo VARCHAR(30),
+dtNotificacao DATETIME DEFAULT CURRENT_TIMESTAMP(),
+lido TINYINT DEFAULT 0,
 CONSTRAINT chkTipoNotificacoes
 		CHECK (tipo IN ('Ação sugerida', 'Ação Favoritada', 'Alerta')),
 mensagem VARCHAR(255),
-dtNotificacao DATETIME DEFAULT CURRENT_TIMESTAMP(),
-lido TINYINT DEFAULT 0,
 fkAcoes INT NOT NULL,
-CONSTRAINT fkAcoesNotificacoes FOREIGN KEY (fkAcoes) REFERENCES acoes(idAcoes),
+CONSTRAINT fkAcoesNotificacoes FOREIGN KEY (fkAcoes) REFERENCES empresa(idEmpresa),
 fkUsuario INT NOT NULL,
 CONSTRAINT fkUsuarioNotificacoes FOREIGN KEY (fkUsuario) REFERENCES usuario(idUsuario)
 );
@@ -88,10 +89,10 @@ CONSTRAINT primariesKeyInfoEmpresa PRIMARY KEY (idInfo, fkEmpresa)
 -- ('Bruno Cordeiro', '1985-09-23', 'bruno.cordeiro@email.com', 'senha123', 'Moderado'),
 -- ('Carla Menezes', '1998-02-15', 'carla.menezes@email.com', 'senha123', 'Arrojado');
 
-INSERT INTO empresa (nome, ticker, setor, logo) VALUES
-('Vale S.A.', 'VALE3', 'Mineração', 'vale_logo.png'),
-('Petrobras', 'PETR4', 'Energia', 'petrobras_logo.png'),
-('Itaú Unibanco', 'ITUB4', 'Financeiro', 'itau_logo.png');
+-- INSERT INTO empresa (nome, ticker, setor, logo) VALUES
+-- ('Vale S.A.', 'VALE3', 'Mineração', 'vale_logo.png'),
+-- ('Petrobras', 'PETR4', 'Energia', 'petrobras_logo.png'),
+-- ('Itaú Unibanco', 'ITUB4', 'Financeiro', 'itau_logo.png');
 
 -- INSERT INTO acoes (
 --  dtAtual, precoAbertura, precoFechamento, precoMaisAlto, precoMaisBaixo, volume, ticker, fkEmpresa
@@ -469,7 +470,58 @@ INNER JOIN acoes a ON a.fkEmpresa = e.idEmpresa AND YEAR(a.dtAtual) = it.ano;
 
 select * from infoTemporal;
 
-			-- TELA DE DASHBOARD
+			-- TELA DE DASHBOARD   find
+
+CREATE OR REPLACE VIEW dashboard_setorial_base AS
+SELECT 
+    e.setor,
+    it.ano as ano_referencia,
+    
+    -- Quantidade de empresas naquele ano
+    COUNT(DISTINCT e.idEmpresa) as qtd_empresas,
+    
+    -- Agora sim: Soma PURA (sem multiplicar pelos dias de cotação)
+    SUM(it.rentabilidadeAnual) as soma_retorno,
+    SUM(it.DRE) as soma_dre,
+    SUM(it.EBITDA) as soma_ebitda,
+    
+    -- Soma da Volatilidade (que já vem compactada da subquery abaixo)
+    SUM(sub_acoes.volatilidade_media_ano) as soma_volatilidade
+
+FROM empresa e
+-- 1. Pega dados financeiros (1 linha por ano)
+INNER JOIN infoTemporal it ON e.idEmpresa = it.fkEmpresa
+
+-- 2. Pega dados de ações COMPACTADOS (Transforma N dias em 1 linha de média anual)
+INNER JOIN (
+    SELECT 
+        fkEmpresa,
+        YEAR(dtAtual) as ano,
+        -- Calcula a média de volatilidade DO ANO para aquela empresa
+        AVG( (precoMaisAlto - precoMaisBaixo) / precoAbertura * 100 ) as volatilidade_media_ano
+    FROM acoes
+    GROUP BY fkEmpresa, YEAR(dtAtual)
+) sub_acoes ON e.idEmpresa = sub_acoes.fkEmpresa AND it.ano = sub_acoes.ano
+
+GROUP BY e.setor, it.ano;
+select * from infoTemporal i join empresa e on i.fkEmpresa = e.idEmpresa;
+select * from acoes a join empresa e on a.fkEmpresa = e.idEmpresa join infoTemporal i on e.idEmpresa = i.fkEmpresa;
+
+insert into usuario (idUsuario, nome, dtNascimento, email, senha, perfil) values
+	(default, 'Victor', '2002-09-03', 'teste@123', '46070d4bf934fb0d4b06d9e2c46e346944e322444900a435d7d9a95e6d7435f5', 'arrojado');
+
+SELECT 
+    setor,
+    -- A mágica da média ponderada correta:
+    SUM(soma_retorno) / SUM(qtd_empresas) as rentabilidade_periodo,
+    SUM(soma_volatilidade) / SUM(qtd_empresas) as volatilidade_periodo,
+    SUM(soma_dre)/ SUM(qtd_empresas) as DRE,
+    SUM(soma_dre)/ SUM(qtd_empresas)as EBITDA
+FROM dashboard_setorial_base
+WHERE ano_referencia IN (2022, 2023, 2024)
+GROUP BY setor;	
+
+/* COMO ESTAVA ANTES A TELA DASHBOARD
 -- MÉDIA PARA ANO ATUAL
 SELECT 
     setor,
@@ -504,7 +556,7 @@ SELECT
     COUNT(DISTINCT idEmpresa) AS num_acoes
 FROM dashboard_setorial_detalhado
 WHERE setor = 'Mineração' 
-AND ano >= (SELECT MAX(ano) -1 FROM infoTemporal);
+AND ano >= (SELECT MAX(ano) -1 FROM infoTemporal);*/
 
 
 					-- TELA SETORES 
@@ -556,6 +608,9 @@ SELECT
 FROM dashboard_kpi_setorial
 WHERE ano IN (SELECT MAX(ano) FROM dashboard_kpi_setorial);
 
+describe infoTemporal;
+
+describe empresa;
 --   EXEMPLO PARA 2 ANOS;
 SELECT 
     COUNT(DISTINCT setor) AS total_setores,
@@ -864,7 +919,7 @@ SELECT
     e.setor,
     it.rentabilidadeAnual AS retorno,
     ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 AS volatilidade,
-    it.pratrimonioLiquido AS patrimonioLiquido, -- era Max_drawndown
+    it.patrimonioLiquido AS patrimonioLiquido, -- era Max_drawndown
     it.patrimonioLiquidoAcao AS patrimonioLiquidoAcao, -- era Sharpe
     it.precoSobreValorPatrimonial AS liquidez,
     it.DRE AS DRE,
@@ -932,9 +987,84 @@ AND YEAR(dtAtual) = 2024
 GROUP BY ticker, MONTH(dtAtual)
 ORDER BY ticker, mes;
 
+
+-- VIEW PARA TELA SETORES E QUAISQUER MAIS QUE PRECISAR, JUNTO DO PERFIL DO USUÁRIO --
+
+
+
+CREATE OR REPLACE VIEW dashboard_consolidado_usuario AS
+SELECT 
+    e.setor,
+    it.ano as ano_referencia,
+    
+    -- === AQUI ESTÁ A FUSÃO DA LÓGICA DE PERFIL ===
+    CASE 
+        -- Regra Conservador: Volatilidade baixa (<15%) e P/VP justo (<=1)
+        WHEN sub_acoes.volatilidade_media_ano < 0.5 AND it.precoSobreValorPatrimonial <= 1 THEN 'Conservador'
+        
+        -- Regra Moderado: Volatilidade média (15-25%) e Rentabilidade consistente (8-20%)
+        WHEN sub_acoes.volatilidade_media_ano < 1.5 AND it.rentabilidadeAnual BETWEEN 1 AND 20  THEN 'Moderado'
+        
+        -- Regra Arrojado: Alta rentabilidade (>15%) e aceita alta volatilidade (>25%)
+        WHEN sub_acoes.volatilidade_media_ano BETWEEN  0.5 AND  4 AND it.rentabilidadeAnual > 5  THEN 'Arrojado'
+        
+        -- Se não cair em nenhuma regra, é Neutro
+        ELSE 'Neutro'
+    END AS perfil_investidor,
+
+    -- Conta quantas empresas se encaixam neste perfil neste setor (Isso resolve a questão do "4 ações disponíveis")
+    COUNT(DISTINCT e.idEmpresa) as qtd_empresas,
+    
+    -- Somas para calcular as médias ponderadas depois
+    SUM(it.rentabilidadeAnual) as soma_retorno,
+    SUM(it.DRE) as soma_dre,
+    SUM(it.EBITDA) as soma_ebitda,
+    SUM(sub_acoes.volatilidade_media_ano) as soma_volatilidade
+
+FROM empresa e
+INNER JOIN infoTemporal it ON e.idEmpresa = it.fkEmpresa
+
+-- Subquery para garantir que a volatilidade seja anualizada corretamente antes de classificar
+INNER JOIN (
+    SELECT 
+        fkEmpresa,
+        YEAR(dtAtual) as ano,
+        AVG( (precoMaisAlto - precoMaisBaixo) / precoAbertura * 100 ) as volatilidade_media_ano
+    FROM acoes
+    GROUP BY fkEmpresa, YEAR(dtAtual)
+) sub_acoes ON e.idEmpresa = sub_acoes.fkEmpresa AND it.ano = sub_acoes.ano
+
+-- Agrupa por Setor, Ano e PERFIL. 
+-- Assim, o banco já deixa separado o que é "Tecnologia de Conservador" vs "Tecnologia de Arrojado".
+GROUP BY e.setor, it.ano, perfil_investidor;
+
+-- SELECT PARA PUCAR TUDO DE UMA VEZ, JÁ COM AS VARIÁVEIS:
+
+    SELECT 
+            setor,
+            
+            -- Retorna o número total de ações disponíveis para este perfil neste setor
+            SUM(qtd_empresas) as total_acoes_disponiveis,
+            
+            -- Cálculos de média ponderada (Soma total / Quantidade total)
+            TRUNCATE(SUM(soma_retorno) / SUM(qtd_empresas), 2) as rentabilidade_periodo,
+            TRUNCATE(SUM(soma_volatilidade) / SUM(qtd_empresas), 2) as volatilidade_periodo,
+            TRUNCATE(SUM(soma_dre) / SUM(qtd_empresas), 2) as DRE,
+            TRUNCATE(SUM(soma_ebitda) / SUM(qtd_empresas), 2) as EBITDA
+            
+        FROM dashboard_consolidado_usuario
+        WHERE ano_referencia IN (2024)-- (${anosString})
+          AND perfil_investidor =  ('Moderado') COLLATE utf8mb4_unicode_ci -- '${perfil}'
+        GROUP BY setor
+        ORDER BY rentabilidade_periodo DESC;
+        
+
+
+
+/*
  -- -------- PARA TER UMA NOÇÃO MELHOR, ESSA É A VIEW QUE SERVE PARA DIFERENCIAR OS PERFIS DE USUÁRIO, USAREI ELA COMO BASE PARA MODIFICAR AS OUTRAS VIEWS; ESTOU FAZENDO TESTES AINDA.
  
- CREATE OR REPLACE VIEW acoes_com_perfil AS
+CREATE OR REPLACE VIEW acoes_com_perfil AS
 SELECT 
     e.ticker,
     e.nome,
