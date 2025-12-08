@@ -1,35 +1,70 @@
 var database = require("../database/config");
 
-function listarTodasAcoesDeAcordoComPerfil() {
+function listarTodasAcoesDeAcordoComPerfil(perfil) {
     var instrucaoSql = `
     SELECT 
-    e.idEmpresa,
-    e.nome,
-    e.setor,
-    it.rentabilidadeAnual,
-    it.precoSobreValorPatrimonial,
+        e.idEmpresa,
+        e.nome,
+        e.ticker,
+        e.setor,
+        it.rentabilidadeAnual,
+        it.precoSobreValorPatrimonial,
+        it.patrimonioLiquidoAcao,
+        it.DRE,
+        it.EBITDA,
+        a.volume,
+        ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 AS volatilidade,
+        it.ano AS ano_referencia,
+        CASE 
+            WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 < 0.5 
+                AND it.precoSobreValorPatrimonial <= 1 THEN 'Conservador'
+            WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 < 1.5 
+                AND it.rentabilidadeAnual BETWEEN 1 AND 20 THEN 'Moderado'
+            WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 BETWEEN 0.5 AND 4
+                AND it.rentabilidadeAnual > 5 THEN 'Arrojado'
+            ELSE 'Neutro'
+        END AS perfil_investidor
+    FROM infoTemporal it
+    INNER JOIN empresa e ON it.fkEmpresa = e.idEmpresa
+    INNER JOIN acoes a ON a.fkEmpresa = e.idEmpresa AND YEAR(a.dtAtual) = it.ano
+    WHERE it.ano = (SELECT MAX(ano) FROM infoTemporal)
+    HAVING perfil_investidor = '${perfil}';
+        `;
+    // var instrucaoSql = `
+    // SELECT 
+    // e.idEmpresa,
+    // e.nome,
+    // e.setor,
+    // it.rentabilidadeAnual,
+    // it.precoSobreValorPatrimonial,
 
-    -- comentei por enquanto esse valor pq não existe no banco: 
-    -- sub.volatilidade_media_ano,
+    // -- comentei por enquanto esse valor pq não existe no banco: 
+    // -- sub.volatilidade_media_ano,
 
 
-     --  DRE da ação
-    ( (it.valorMercado - it.patrimonioLiquido) / it.patrimonioLiquido ) AS dre,
+    //  --  DRE da ação
+    // ( (it.valorMercado - it.patrimonioLiquido) / it.patrimonioLiquido ) AS dre,
 
-    --  EBITDA da ação
-    ( it.valorMercado / it.multiploSetorial ) AS ebitda,
-     it.volume,
+    // --  EBITDA da ação
+    // ( it.valorMercado / it.multiploSetorial ) AS ebitda,
+    //  it.volume,
 
-    it.ano -- n tenho crtza
-        FROM empresa e
-        JOIN infoTemporal it ON e.idEmpresa = it.fkEmpresa
-        JOIN sub_acoes_calculado sub ON sub.fkEmpresa = e.idEmpresa
-        -- garante que vai vir a ação mais recente
-        -- isso só funciona se todas as empresas tiverem o mesmo conjunto de anos se não, pode “sumir” empresa
-        WHERE it.ano = (SELECT MAX(ano) FROM infoTemporal);
-    `;
+    // it.ano -- n tenho crtza
+    //     FROM empresa e
+    //     JOIN infoTemporal it ON e.idEmpresa = it.fkEmpresa
+    //     JOIN sub_acoes_calculado sub ON sub.fkEmpresa = e.idEmpresa
+    //     -- garante que vai vir a ação mais recente
+    //     -- isso só funciona se todas as empresas tiverem o mesmo conjunto de anos se não, pode “sumir” empresa
+    //     WHERE it.ano = (SELECT MAX(ano) FROM infoTemporal);
+    // `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
+}
+
+function listarSetores() {
+    return database.executar(`
+        SELECT DISTINCT setor FROM empresa ORDER BY setor;
+    `);
 }
 
 // mesmissima lógica da consulta pra pegar ação com base no perfil, mas agora filtrando por setor como parametro.
@@ -164,6 +199,7 @@ function pegarEvolucaoPorTickers(tickers) {
 module.exports = {
     listarTodasAcoesDeAcordoComPerfil,
     listarAcoesPorSetor,
+    listarSetores,
     pegarTop3AcoesRecomendadasGraficoEvolucao,
     pegarEvolucaoPorTickers
 };
