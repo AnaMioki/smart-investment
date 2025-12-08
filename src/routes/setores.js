@@ -20,6 +20,9 @@ rota.get('/buscarAcoesUnicas/:ticker/:anos/:idUsuario', function (req , res) {
     setoresController.buscarAcoesUnicas(req , res);
 });
 
+rota.get('/evolucaoMeses/:idEmpresa/:ano', function (req , res) {
+    setoresController.evolucaoMeses(req , res);
+});
 
 
 module.exports = rota;

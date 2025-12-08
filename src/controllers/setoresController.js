@@ -72,9 +72,28 @@ function buscarAcoesUnicas(req, res) {
     });
 }
 
+function evolucaoMeses(req, res) {
+    var idEmpresa = req.params.idEmpresa;
+    var ano = req.params.ano;
+
+    setoresModel.evolucaoMeses(idEmpresa, ano).then(function (resultado) {
+        if (resultado.length > 0) {
+            res.json(resultado);
+        } else {
+            res.status(204).send("Nenhuma ação encontrada para este setor!")
+        }
+    }).catch(function (erro) {
+        console.log(erro);
+        console.log("Houve um erro ao buscar as ações do setor.", erro.sqlMessage);
+        res.status(500).json(erro.sqlMessage);
+    });
+}
+
+
 module.exports = {
     receberSetores,
     buscarAcoesSetor,
     buscarAcoesUnicas,
-    receberSetoresParam
+    receberSetoresParam,
+    evolucaoMeses
 }

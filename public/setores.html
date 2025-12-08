@@ -251,7 +251,7 @@
                     `;
 
                 container.appendChild(item);
-                console.log(not.tipo)
+
             }
             contador++;
         });
@@ -406,13 +406,12 @@
 
         var response;
 
-        console.log(setorParam);
         if (searchSetor.value == '') {
             response = await fetch(`/setores/receberSetores/${anos}/${sessionStorage.PERFIL_USUARIO}`);
-            console.log("Entrei aqui")
+
         } else {
             response = await fetch(`/setores/receberSetoresParam/${setorParam}/${anos}/${sessionStorage.PERFIL_USUARIO}`)
-            console.log("Entrei aqui2")
+         
         }
 
 
@@ -475,14 +474,11 @@
 
             const periodoSelecionado = document.getElementById('selectPeriodo').value;
 
-            console.log(periodoSelecionado)
+            
 
             const benchmarkString = getBenchmarkIbovespa(periodoSelecionado);
             const benchmarkValor = parseFloat(benchmarkString);
 
-
-            console.log(benchmarkString);
-            console.log(benchmarkValor);
 
             if (setor.rentabilidade_periodo > (benchmarkValor + 6.2)) {
                 classificacaoTexto = "Muito Alta";
@@ -576,7 +572,6 @@
         }
         setorPorcentagem.sort((a, b) => b - a);
 
-        console.log(setorNomeLista, setorQtdLista, setorPorcentagem);
 
         Chart.defaults.font.size = 14; 
         Chart.defaults.font.weight = 'bold';

@@ -10,7 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
-<body>
+<body onload="carregarDados(selectPeriodo.value)">
     <div id="mainContainer">
         <div class="container">
             <div id="header">
@@ -29,11 +29,12 @@
                     <div class="notificacao-dropdown">
                     </div>
                 </div>
-         <img id="perfilIcon" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" alt="Perfil" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">
-            <div class="opcoes-dropdown" role="menu" aria-hidden="true">
-                <a role="menuitem" href="perfil.html">Perfil</a>
-                <a role="menuitem" href="#" onclick="sair()">Sair</a>
-            </div>
+                <img id="perfilIcon" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" alt="Perfil" role="button"
+                    tabindex="0" aria-haspopup="true" aria-expanded="false">
+                <div class="opcoes-dropdown" role="menu" aria-hidden="true">
+                    <a role="menuitem" href="perfil.html">Perfil</a>
+                    <a role="menuitem" href="#" onclick="sair()">Sair</a>
+                </div>
 
                 <div class="hamburger">
                     <div class="bar1"></div>
@@ -53,15 +54,33 @@
             <div id="conteudo">
                 <div class="containerTitulo">
                     <h1>Comparações</h1>
-                    <select id="selecionarTipo">
-                        <option value="acoes">Ações</option>
-                        <option value="fundos">Fundos Imobiliários</option>
-                        <option value="criptomoedas">Criptomoedas</option>
-                    </select>
+                    <div>
+
+                        <select name="seletorPeriodo" id="selectPeriodo"
+                            onchange="carregarDados(selectPeriodo.value); atualizarResultadosComparacao()">
+                        </select>
+                        <select name="seletorTipo" id="selectTipo" onchange="trocarTipo()">
+                            <option value="periodo" selected>Por período</option>
+                            <option value="anos">Por ano</option>
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="secao">
+                    <p class="instrucaoSelecao">Selecione os setores que deseja ver as ações: </p>
+
+                    <div class="acoesEscolhidas" id="setorEscolhido">
+
+                    </div>
+
+                    <div class="opcoesAcoes" id="opcaoSetores">
+
+                    </div>
                 </div>
 
                 <div class="secao">
-                    <p class="instrucaoSelecao">Selecione até 4 itens para comparar</p>
+                    <p class="instrucaoSelecao">Selecione até 4 ações para comparar</p>
 
                     <div class="acoesEscolhidas" id="acoesEscolhidas">
 
@@ -72,14 +91,48 @@
                     </div>
                 </div>
 
+
                 <div id="resultadosComparacao">
-                    <h2>Comparação de Indicadores</h2>
+
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+
+        function trocarTipo() {
+            if (selectTipo.value == "periodo") {
+                selectPeriodo.innerHTML = `
+            <option value="2024" selected>1 ano</option>
+            <option value="2024, 2023">2 anos</option>
+            <option value="2024, 2023, 2022">3 anos</option>
+            <option value="2024, 2023, 2022, 2021">4 anos</option>
+            <option value="2024, 2023, 2022, 2021, 2020">5 anos</option>
+            <option value="2024, 2023, 2022, 2021, 2020, 2019">6 anos</option>
+            <option value="2024, 2023, 2022, 2021, 2020, 2019, 2018">7 anos</option>
+            <option value="2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017">8 anos</option>
+            <option value="2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016">9 anos</option>
+            <option value="2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015">10 anos</option>`;
+            } else {
+                selectPeriodo.innerHTML = `
+            <option value="2024" selected>2024</option>
+            <option value="2023">2023</option>
+            <option value="2022">2022</option>
+            <option value="2021">2021</option>
+            <option value="2020">2020</option>
+            <option value="2019">2019</option>
+            <option value="2018">2018</option>
+            <option value="2017">2017</option>
+            <option value="2016">2016</option>
+            <option value="2015">2015</option>
+            `;
+            }
+        }
+
+        trocarTipo();
+
+
         document.addEventListener("DOMContentLoaded", carregarNotificacoes);
 
         async function carregarNotificacoes() {
@@ -117,7 +170,6 @@
                 .catch(err => console.error(err));
         }
 
-        // função global usada pelo link "Sair"
         function deslogar() {
             // ajusta conforme sua rota de logout/login
             sessionStorage.clear();
@@ -130,7 +182,6 @@
             const container = document.querySelector(".notificacao-dropdown");
             const badge = document.querySelector(".notification-badge");
 
-            // Limpa o container (evita duplicar)
             container.innerHTML = "";
             var qtd_not = 0;
 
@@ -140,9 +191,8 @@
                 }
             });
 
-            // Atualiza badge (mostra no máx. 9+). Se não houver notificações, oculta o badge.
             if (!badge) {
-                // elemento não encontrado — nada a fazer
+
             } else if (qtd_not <= 0) {
                 badge.style.display = 'none';
                 badge.textContent = '';
@@ -165,7 +215,6 @@
                     `;
 
                     container.appendChild(item);
-                    console.log(not.tipo)
                 }
                 contador++;
             });
@@ -193,26 +242,139 @@
             return `Há ${diffDias} dia${diffDias > 1 ? "s" : ""}`;
         }
 
-        const todasAcoes = {
-            'AAPL': { nome: 'AAPL - Apple', setor: 'Tecnologia' },
-            'MSFT': { nome: 'MSFT - Microsoft', setor: 'Tecnologia' },
-            'GOOGL': { nome: 'GOOGL - Alphabet', setor: 'Tecnologia' },
-            'TSLA': { nome: 'TSLA - Tesla', setor: 'Automotivo' },
-            'JNJ': { nome: 'JNJ - Johnson & Johnson', setor: 'Saúde' },
-            'JPM': { nome: 'JPM - JPMorgan', setor: 'Financeiro' }
-        };
+        let setoresEscolhisdos = [];
 
-        let acoesEscolhidas = ['AAPL', 'MSFT'];
+        let infoacoes = [];
 
-        document.addEventListener('DOMContentLoaded', function () {
-            atualizarAcoesEscolhidas();
+
+        async function carregarDados(anos) {
+            const resp = await fetch(`/setores/receberSetores/${anos}/${sessionStorage.PERFIL_USUARIO}`);
+            const dados = await resp.json();
+
+
+            setoresEscolhisdos = dados;
+
+            atualizarOpcoesSetor();
+
+
+
+
+
+        }
+
+        async function carregarAcoesSetor() {
+            infoacoes = [];
+            todasAcoes = {};
+
+            for (const item of setorSelecionado) {
+                const respDados = await fetch(
+                    `/setores/buscarAcoesSetor/${item.setor}/${item.quantidade}`
+                );
+
+                const dadosSetor = await respDados.json();
+
+                infoacoes.push({
+                    setor: item.setor,
+                    quantidade: item.quantidade,
+                    acoes: dadosSetor
+                });
+
+                dadosSetor.forEach(acao => {
+                    todasAcoes[acao.ticker] = {
+                        nome: `${acao.ticker} - ${acao.nome}`,
+                        setor: item.setor
+                    };
+                });
+            }
+
             atualizarOpcoesAcoes();
-            atualizarResultadosComparacao();
-        });
+        }
+
+
+        let setorSelecionado = [];
+
+
+        function atualizarSetoresEscolhidos() {
+            const container = document.getElementById('setorEscolhido');
+            container.innerHTML = '';
+
+            setorSelecionado.forEach(item => {
+                const divTag = document.createElement('div');
+                divTag.className = 'tagAcao';
+                divTag.innerHTML = `
+            ${item.setor} (${item.quantidade})
+            <button class="botaoRemover" onclick="removerSetor('${item.setor}')">×</button>
+        `;
+                container.appendChild(divTag);
+            });
+        }
+
+
+        function atualizarOpcoesSetor() {
+            const container = document.getElementById('opcaoSetores');
+            container.innerHTML = '';
+
+            setoresEscolhisdos.forEach(item => {
+
+                if (!setorSelecionado.some(s => s.setor === item.setor)) {
+
+                    const botao = document.createElement('button');
+                    botao.className = 'opcaoAcao';
+                    botao.onclick = () => adicionarSetor(item.setor, item.total_acoes_disponiveis);
+
+                    botao.innerHTML = `
+                <span class="iconeMais">+</span>
+                <span class="nomeAcao">${item.setor}</span>
+            `;
+
+                    container.appendChild(botao);
+                }
+            });
+        }
+
+
+
+        function adicionarSetor(setor, quantidade) {
+            if (setorSelecionado.some(s => s.setor === setor)) return;
+
+            setorSelecionado.push({
+                setor,
+                quantidade
+            });
+
+            atualizarSetoresEscolhidos();
+            atualizarOpcoesSetor();
+            carregarAcoesSetor();
+        }
+
+
+        function removerSetor(setor) {
+
+            setorSelecionado = setorSelecionado.filter(s => s.setor !== setor);
+
+            Object.keys(todasAcoes).forEach(ticker => {
+                if (todasAcoes[ticker].setor === setor) {
+                    delete todasAcoes[ticker];
+                    acoesEscolhidas = acoesEscolhidas.filter(a => a !== ticker);
+                }
+            });
+
+            atualizarSetoresEscolhidos();
+            atualizarOpcoesSetor();
+            atualizarOpcoesAcoes();
+        }
+
+
+
+
+        let todasAcoes = {};
+        let acoesEscolhidas = [];
+
+
 
         function adicionarAcao(ticker) {
             if (acoesEscolhidas.length >= 4) {
-                alert('Você já selecionou o máximo de 4 ações para comparação');
+                mensagemErro('Você já selecionou o máximo de 4 ações para comparação');
                 return;
             }
 
@@ -243,12 +405,13 @@
                 const divTag = document.createElement('div');
                 divTag.className = 'tagAcao';
                 divTag.innerHTML = `
-                    ${ticker}
-                    <button class="botaoRemover" onclick="removerAcao('${ticker}')">×</button>
-                `;
+            ${todasAcoes[ticker].nome}
+            <button class="botaoRemover" onclick="removerAcao('${ticker}')">×</button>
+        `;
                 container.appendChild(divTag);
             });
         }
+
 
         function atualizarOpcoesAcoes() {
             const container = document.getElementById('opcoesAcoes');
@@ -258,86 +421,96 @@
                 if (!acoesEscolhidas.includes(ticker)) {
                     const botao = document.createElement('button');
                     botao.className = 'opcaoAcao';
-                    botao.onclick = function () { adicionarAcao(ticker); };
+                    botao.onclick = () => adicionarAcao(ticker);
                     botao.innerHTML = `
-                        <span class="iconeMais">+</span>
-                        <span class="nomeAcao">${todasAcoes[ticker].nome}</span>
-                    `;
+                <span class="iconeMais">+</span>
+                <span class="nomeAcao">${todasAcoes[ticker].nome} (${todasAcoes[ticker].setor})</span>
+            `;
                     container.appendChild(botao);
                 }
             });
         }
 
-        function atualizarResultadosComparacao() {
+
+
+        async function atualizarResultadosComparacao() {
             const container = document.getElementById('resultadosComparacao');
+
+            const anos = selectPeriodo.value;
 
             if (acoesEscolhidas.length === 0) {
                 container.innerHTML = '<h2>Selecione ações para comparar</h2>';
                 return;
             }
 
+            let infosAcoesTemp = [];
+            let evolucaoMeses = [];
+
+            const OBJETO_MES_VAZIO = {
+                ticker: "",
+                ano: 0,
+                mes: 0,
+                preco_medio_mes: 0
+            };
+
+            for (const item of acoesEscolhidas) {
+                try {
+                    const respostaMeses = await fetch(`/setores/evolucaoMeses/${item}/${selectPeriodo.value}`);
+                    const dadosMeses = await respostaMeses.json();
+
+                    // Se vier vazio → push do objeto padrão
+                    evolucaoMeses.push(dadosMeses.length ? dadosMeses : [OBJETO_MES_VAZIO]);
+                } catch {
+                    evolucaoMeses.push([OBJETO_MES_VAZIO]);
+                }
+            }
+
+            const OBJETO_ACAO_VAZIO = {
+                idEmpresa: 0,
+                nome: "",
+                ticker: "",
+                setor: "",
+                logo: "",
+                media_preco_fechamento: 0,
+                max_preco_alto: 0,
+                min_preco_baixo: 0,
+                media_volume: 0,
+                EBITDA: 0,
+                DRE: 0,
+                retorno: 0,
+                volatilidade_media_ano: 0,
+                favoritada: 0
+            };
+
+
+            for (const item of acoesEscolhidas) {
+                try {
+                    const resposta = await fetch(`/setores/buscarAcoesUnicas/${item}/${anos}/${sessionStorage.ID_USUARIO}`);
+                    const dados = await resposta.json();
+
+                    // Se vier vazio → push do objeto padrão
+                    infosAcoesTemp.push(dados.length ? dados : [OBJETO_ACAO_VAZIO]);
+                } catch {
+                    infosAcoesTemp.push([OBJETO_ACAO_VAZIO]);
+                }
+            }
+
+            console.log(infosAcoesTemp);
+            console.log(evolucaoMeses);
+
+
+
             let html = '<h2>Comparação de Indicadores</h2>';
             html += '<div class="containerCards">';
 
-            const dadosAcoes = {
-                'AAPL': {
-                    retornoValor: '+22',
-                    retornoPercent: '.5%',
-                    volatilidade: '25.3',
-                    volatPorcent: '%',
-                    maxDrawdownValor: '-15',
-                    maxDrawdownPercent: '.2%'
-                },
-                'MSFT': {
-                    retornoValor: '+19',
-                    retornoPercent: '.8%',
-                    volatilidade: '23.1',
-                    volatPorcent: '%',
-                    maxDrawdownValor: '-12',
-                    maxDrawdownPercent: '.8%'
-                },
-                'GOOGL': {
-                    retornoValor: '+15',
-                    retornoPercent: '.3%',
-                    volatilidade: '28.7',
-                    volatPorcent: '%',
-                    maxDrawdownValor: '-18',
-                    maxDrawdownPercent: '.5%'
-                },
-                'TSLA': {
-                    retornoValor: '+31',
-                    retornoPercent: '.2%',
-                    volatilidade: '45.6',
-                    volatPorcent: '%',
-                    maxDrawdownValor: '-35',
-                    maxDrawdownPercent: '.7%'
-                },
-                'JNJ': {
-                    retornoValor: '+8',
-                    retornoPercent: '.1%',
-                    volatilidade: '15.2',
-                    volatPorcent: '%',
-                    maxDrawdownValor: '-7',
-                    maxDrawdownPercent: '.4%'
-                },
-                'JPM': {
-                    retornoValor: '+17',
-                    retornoPercent: '.9%',
-                    volatilidade: '21.4',
-                    volatPorcent: '%',
-                    maxDrawdownValor: '-14',
-                    maxDrawdownPercent: '.3%'
-                }
-            };
 
-            acoesEscolhidas.forEach(ticker => {
-                const dados = dadosAcoes[ticker];
+            infosAcoesTemp.forEach(ticker => {
 
                 html += `
                     <div class="cardAcao">
                         <div class="cabecalhoCard">
-                            <h3>${ticker}</h3>
-                            <span class="tagSetor">${todasAcoes[ticker].setor}</span>
+                            <h3>${ticker[0].nome}</h3>
+                            <span class="tagSetor">${ticker[0].setor}</span>
                         </div>
                         <div class="indicadores">
                             <div class="grupoIndicador">
@@ -345,23 +518,26 @@
                                     <span class="tooltip left-edge">
                                             Retorno <span class="tip">É o lucro ou prejuízo percentual do investimento em determinado período.</span>
                                         </span></div>
-                                <div class="valorIndicador positivo">${dados.retornoValor}</div>
-                                <div class="percentualIndicador positivo">${dados.retornoPercent}</div>
+                                <div class="valorIndicador positivo">${ticker[0].retorno}%</div>
                             </div>
                             <div class="grupoIndicador">
                                 <div class="nomeIndicador"><span class="tooltip left-edge">
                                             Volatilidade
-                                            <span class="tip">Mostra o quanto o preço oscila ao longo do tempo.</span>
+                                            <span class="tip">Mostra o quanto o percentual de oscilação ao longo do ano selecionado.</span>
                                         </span></div>
-                                <div class="valorIndicador neutro">${dados.volatilidade}</div>
-                                <div class="percentualIndicador neutro">${dados.volatPorcent}</div>
+                                <div class="valorIndicador neutro">${ticker[0].volatilidade_media_ano}%</div>
                             </div>
                             <div class="grupoIndicador">
                                 <div class="nomeIndicador"><span class="tooltip left-edge">
-                                            Max Drawdown <span class="tip">É a maior perda desde o ponto mais alto até o mais baixo do investimento.</span>
+                                            DRE<span class="tip">Lucro Líquido médio das empresas do setor.</span>
                                         </span></div>
-                                <div class="valorIndicador negativo">${dados.maxDrawdownValor}</div>
-                                <div class="percentualIndicador negativo">${dados.maxDrawdownPercent}</div>
+                                <div class="valorIndicador negativo">R$${ticker[0].DRE}M</div>
+                            </div>
+                            <div class="grupoIndicador">
+                                <div class="nomeIndicador"><span class="tooltip left-edge">
+                                            EBITDA<span class="tip">Potencial de geração de caixa operacional (Lucro antes de juros/impostos).</span>
+                                        </span></div>
+                                <div class="valorIndicador negativo">R$${ticker[0].EBITDA}M</div>
                             </div>
                         </div>
                     </div>
@@ -371,20 +547,13 @@
             html += '</div>';
 
             html += '<div class="containerGraficos">';
-            html += `
-                <div class="secaoGrafico">
-                    <h3>Análise Multidimensional</h3>
-                    <div class="grafico">
-                        <canvas id="graficoRadar"></canvas>
-                    </div>
-                </div>
-            `;
+
             html += '</div>';
 
             html += '<div class="containerGraficos">';
             html += `
                 <div class="secaoGrafico">
-                    <h3>Retorno e P/E</h3>
+                    <h3>EBITDA e DRE</h3>
                     <div class="grafico">
                         <canvas id="graficoRetornoEPE"></canvas>
                     </div>
@@ -392,7 +561,7 @@
             `;
             html += `
                 <div class="secaoGrafico">
-                    <h3>Sharpe e Beta</h3>
+                    <h3>Retorno e Volatilidade</h3>
                     <div class="grafico">
                         <canvas id="graficoSharpeBeta"></canvas>
                     </div>
@@ -413,39 +582,37 @@
 
             html += `
                 <div class="secaoGrafico resumoComparativo">
+                    
                     <h3>Resumo Comparativo</h3>
                     <table class="tabelaResumo">
                         <thead>
                             <tr>
                                 <th>Métrica</th>
-                                ${acoesEscolhidas.map(ticker => `<th>${ticker}</th>`).join('')}
+                                ${infosAcoesTemp.map(ticker => `<th>${ticker[0].nome}</th>`).join('')}
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>Retorno (%)</td>
-                                ${acoesEscolhidas.map(ticker => `
+                                ${infosAcoesTemp.map(ticker => `
                                     <td>
-                                        <span class="valorPositivo">${dadosAcoes[ticker].retornoValor}</span>
-                                        <span class="percentualPositivo">${dadosAcoes[ticker].retornoPercent}</span>
+                                        <span class="valorPositivo">${ticker[0].retorno}</span>
                                     </td>
                                 `).join('')}
                             </tr>
                             <tr>
                                 <td>Volatilidade (%)</td>
-                                ${acoesEscolhidas.map(ticker => `
+                                ${infosAcoesTemp.map(ticker => `
                                     <td>
-                                        <span class="valorNeutro">${dadosAcoes[ticker].volatilidade}</span>
-                                        <span class="percentualNeutro">${dadosAcoes[ticker].volatPorcent}</span>
+                                        <span class="valorNeutro">${ticker[0].volatilidade_media_ano}</span>
                                     </td>
                                 `).join('')}
                             </tr>
                             <tr>
-                                <td>Max Drawdown (%)</td>
-                                ${acoesEscolhidas.map(ticker => `
+                                <td>DRE(R$M)</td>
+                                ${infosAcoesTemp.map(ticker => `
                                     <td>
-                                        <span class="valorNegativo">${dadosAcoes[ticker].maxDrawdownValor}</span>
-                                        <span class="percentualNegativo">${dadosAcoes[ticker].maxDrawdownPercent}</span>
+                                        <span class="valorNegativo">${ticker[0].DRE}</span>
                                     </td>
                                 `).join('')}
                             </tr>
@@ -457,145 +624,59 @@
             container.innerHTML = html;
 
             if (acoesEscolhidas.length >= 1) {
-                criarGraficoRadar();
-                criarGraficoBarras();
-                criarGraficoEvolucaoPrecos();
+                criarGraficoBarras(infosAcoesTemp);
+                criarGraficoEvolucaoPrecos(evolucaoMeses);
             }
         }
 
-        function criarGraficoRadar() {
-            const ctx = document.getElementById('graficoRadar');
 
-            const dados = {
-                labels: ['Retorno', 'Sharpe', 'Liquidez', 'Estabilidade'],
-                datasets: []
-            };
+        const cores = {
+            '0': 'rgb(54, 162, 235)',
+            '1': 'rgb(75, 192, 192)',
+            '2': 'rgb(255, 99, 132)',
+            '3': 'rgb(255, 159, 64)',
 
-            const cores = {
-                'AAPL': {
-                    background: 'rgba(54, 162, 235, 0.2)',
-                    border: 'rgb(54, 162, 235)'
-                },
-                'MSFT': {
-                    background: 'rgba(75, 192, 192, 0.2)',
-                    border: 'rgb(75, 192, 192)'
-                },
-                'GOOGL': {
-                    background: 'rgba(255, 99, 132, 0.2)',
-                    border: 'rgb(255, 99, 132)'
-                },
-                'TSLA': {
-                    background: 'rgba(255, 159, 64, 0.2)',
-                    border: 'rgb(255, 159, 64)'
-                },
-                'JNJ': {
-                    background: 'rgba(153, 102, 255, 0.2)',
-                    border: 'rgb(153, 102, 255)'
-                },
-                'JPM': {
-                    background: 'rgba(255, 205, 86, 0.2)',
-                    border: 'rgb(255, 205, 86)'
-                }
-            };
+        };
 
-            const dadosRadar = {
-                'AAPL': [7.5, 6.8, 6.5, 7.0],
-                'MSFT': [8.2, 7.5, 7.8, 7.6],
-                'GOOGL': [7.8, 7.2, 6.9, 7.4],
-                'TSLA': [8.5, 6.0, 5.5, 5.8],
-                'JNJ': [6.8, 7.8, 8.2, 8.5],
-                'JPM': [7.2, 7.0, 7.8, 7.5]
-            };
 
-            acoesEscolhidas.forEach(ticker => {
-                dados.datasets.push({
-                    label: ticker,
-                    data: dadosRadar[ticker],
-                    fill: true,
-                    backgroundColor: cores[ticker].background,
-                    borderColor: cores[ticker].border,
-                    pointBackgroundColor: cores[ticker].border,
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: cores[ticker].border
-                });
-            });
-
-            new Chart(ctx, {
-                type: 'radar',
-                data: dados,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        r: {
-                            angleLines: {
-                                display: true,
-                                color: 'rgba(0,0,0,0.1)'
-                            },
-                            ticks: {
-                                beginAtZero: true,
-                                max: 10,
-                                stepSize: 2
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        }
-                    }
-                }
-            });
-        }
-
-        function criarGraficoBarras() {
+        function criarGraficoBarras(acoes) {
             const ctxRetornoEPE = document.getElementById('graficoRetornoEPE');
+
+
             const dadosRetornoEPE = {
-                labels: ['Retorno (%)', 'P/E'],
+                labels: ['EBITDA(R$M)', 'DRE(R$M)'],
                 datasets: []
             };
 
             const ctxSharpeBeta = document.getElementById('graficoSharpeBeta');
             const dadosSharpeBeta = {
-                labels: ['Sharpe', 'Beta'],
+                labels: ['Retorno(%)', 'Volatilidade(%) '],
                 datasets: []
             };
 
-            const cores = {
-                'AAPL': 'rgb(54, 162, 235)',
-                'MSFT': 'rgb(75, 192, 192)',
-                'GOOGL': 'rgb(255, 99, 132)',
-                'TSLA': 'rgb(255, 159, 64)',
-                'JNJ': 'rgb(153, 102, 255)',
-                'JPM': 'rgb(255, 205, 86)'
-            };
 
-            const dadosBarras = {
-                'AAPL': [22.5, 1.2, 1.1, 28.3],
-                'MSFT': [19.8, 1.1, 0.9, 35.2],
-                'GOOGL': [15.3, 0.9, 1.3, 24.1],
-                'TSLA': [31.2, 0.7, 1.7, 42.5],
-                'JNJ': [8.1, 1.4, 0.6, 18.9],
-                'JPM': [17.9, 1.0, 1.2, 22.7]
-            };
+            var cor = 0
 
-            acoesEscolhidas.forEach(ticker => {
+            acoes.forEach(ticker => {
+
+
                 dadosRetornoEPE.datasets.push({
-                    label: ticker,
-                    data: [dadosBarras[ticker][0], dadosBarras[ticker][3]],
-                    backgroundColor: cores[ticker],
+                    label: ticker[0].ticker,
+                    data: [ticker[0].EBITDA, ticker[0].DRE],
+                    backgroundColor: cores[cor],
                     borderColor: 'rgba(0,0,0,0.1)',
                     borderWidth: 1
                 });
 
                 dadosSharpeBeta.datasets.push({
-                    label: ticker,
-                    data: [dadosBarras[ticker][1], dadosBarras[ticker][2]],
-                    backgroundColor: cores[ticker],
+                    label: ticker[0].ticker,
+                    data: [ticker[0].retorno, ticker[0].volatilidade_media_ano],
+                    backgroundColor: cores[cor],
                     borderColor: 'rgba(0,0,0,0.1)',
                     borderWidth: 1
                 });
+
+                cor++;
             });
 
             const opcoes = {
@@ -635,42 +716,40 @@
             });
         }
 
-        function criarGraficoEvolucaoPrecos() {
+        function criarGraficoEvolucaoPrecos(evolucaoMeses) {
             const ctx = document.getElementById('graficoEvolucaoPrecos');
 
             const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
 
-            const precosPorAcao = {
-                'AAPL': [178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189],
-                'MSFT': [287, 289, 293, 297, 302, 305, 310, 312, 315, 318, 320, 325],
-                'GOOGL': [155, 158, 160, 163, 167, 170, 173, 175, 178, 180, 183, 186],
-                'TSLA': [380, 390, 385, 405, 420, 410, 440, 450, 445, 460, 470, 485],
-                'JNJ': [155, 157, 159, 160, 162, 163, 165, 166, 168, 169, 171, 172],
-                'JPM': [145, 148, 150, 152, 154, 156, 158, 160, 162, 164, 166, 168]
-            };
 
-            const cores = {
-                'AAPL': 'rgb(54, 162, 235)',
-                'MSFT': 'rgb(75, 192, 192)',
-                'GOOGL': 'rgb(255, 99, 132)',
-                'TSLA': 'rgb(255, 159, 64)',
-                'JNJ': 'rgb(153, 102, 255)',
-                'JPM': 'rgb(255, 205, 86)'
-            };
 
+
+
+
+
+            var cor = 0;
             const datasets = [];
 
-            acoesEscolhidas.forEach(ticker => {
+            evolucaoMeses.forEach(ticker => {
+
+                var precos = [];
+
+                ticker.forEach(element => {
+                    precos.push(element.preco_medio_mes)
+                });
+
                 datasets.push({
-                    label: ticker,
-                    data: precosPorAcao[ticker],
-                    borderColor: cores[ticker],
-                    backgroundColor: cores[ticker],
+                    label: ticker[0].ticker,
+                    data: precos,
+                    borderColor: cores[cor],
+                    backgroundColor: cores[cor],
                     borderWidth: 2,
                     tension: 0.3,
                     pointRadius: 3
                 });
+                cor++;
             });
+
 
             new Chart(ctx, {
                 type: 'line',
@@ -718,39 +797,44 @@
         });
 
 
-         (function () {
-        const perfil = document.querySelector('#perfilIcon');
-        const opcoes = document.querySelector('.opcoes-dropdown');
+        (function () {
+            const perfil = document.querySelector('#perfilIcon');
+            const opcoes = document.querySelector('.opcoes-dropdown');
 
-        if (!perfil || !opcoes) return;
+            if (!perfil || !opcoes) return;
 
-        function abrirFecharPerfil() {
-            const ativo = opcoes.classList.toggle('active');
-            opcoes.setAttribute('aria-hidden', (!ativo).toString());
-            perfil.setAttribute('aria-expanded', ativo.toString());
-        }
+            function abrirFecharPerfil() {
+                const ativo = opcoes.classList.toggle('active');
+                opcoes.setAttribute('aria-hidden', (!ativo).toString());
+                perfil.setAttribute('aria-expanded', ativo.toString());
+            }
 
-        perfil.addEventListener('click', function (ev) {
-            ev.stopPropagation();
-            abrirFecharPerfil();
-        });
-
-        perfil.addEventListener('keydown', function (ev) {
-            if (ev.key === 'Enter' || ev.key === ' ') {
-                ev.preventDefault();
+            perfil.addEventListener('click', function (ev) {
+                ev.stopPropagation();
                 abrirFecharPerfil();
-            }
-        });
+            });
 
-        document.addEventListener('click', function (ev) {
-            if (!ev.target.closest('#perfilIcon') && !ev.target.closest('.opcoes-dropdown')) {
-                opcoes.classList.remove('active');
-                opcoes.setAttribute('aria-hidden', 'true');
-                perfil.setAttribute('aria-expanded', 'false');
-            }
-        });
-    })();
+            perfil.addEventListener('keydown', function (ev) {
+                if (ev.key === 'Enter' || ev.key === ' ') {
+                    ev.preventDefault();
+                    abrirFecharPerfil();
+                }
+            });
+
+            document.addEventListener('click', function (ev) {
+                if (!ev.target.closest('#perfilIcon') && !ev.target.closest('.opcoes-dropdown')) {
+                    opcoes.classList.remove('active');
+                    opcoes.setAttribute('aria-hidden', 'true');
+                    perfil.setAttribute('aria-expanded', 'false');
+                }
+            });
+        })();
+
+
     </script>
     <script src="Style/js/fazerHamburguer.js"></script>
+
+
 </body>
+
 </html>
