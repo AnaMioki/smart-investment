@@ -608,7 +608,7 @@
 
             // const retornoEl = card.querySelector(".retorno");
             // retornoEl.className = acao.rentabilidadeAnual >= 0 ? "verde" : "laranja";
-            
+
             const retornoEl = card.querySelector(".retorno");
             retornoEl.classList.remove("verde", "laranja");
             retornoEl.classList.add(acao.rentabilidadeAnual >= 0 ? "verde" : "laranja");
@@ -620,9 +620,9 @@
             // });
 
             card.addEventListener("click", (e) => {
-                  console.log("teste:", acao.ticker);
+                console.log("teste:", acao.ticker);
                 e.preventDefault(); // evita qualquer comportamento padrão
-                abrirInfoAcao(card, acao.ticker); 
+                abrirInfoAcao(card, acao.ticker);
             });
 
 
@@ -632,66 +632,195 @@
 
 
     async function abrirInfoAcao(card, ticker) {
-    try {
-        // busca dados da ação via fetch
-        const resp = await fetch(`/acoes/buscarAcaoPorTicker/${ticker}`);
-        if (!resp.ok) {
-            console.error("Erro ao buscar ação por ticker:", resp.status);
-            return;
-        }
+        try {
+            // busca dados da ação via fetch
+            const resp = await fetch(`/acoes/buscarAcaoPorTicker/${ticker}`);
+            if (!resp.ok) {
+                console.error("Erro ao buscar ação por ticker:", resp.status);
+                return;
+            }
 
-        const dados = await resp.json();
-        if (!dados || dados.length === 0) {
-            console.warn("Nenhuma informação encontrada para essa ação");
-            return;
-        }
+            const dados = await resp.json();
+            if (!dados || dados.length === 0) {
+                console.warn("Nenhuma informação encontrada para essa ação");
+                return;
+            }
 
-        const acao = dados[0]; // pega o objeto da ação
+            const acao = dados[0]; // pega o objeto da ação
 
-        // cria overlay do popup
-        const popup = document.createElement("div");
-        popup.className = "popup-overlay";
+            // cria overlay do popup
+            const popup = document.createElement("div");
+            popup.className = "popup-acao";
 
-        // conteúdo do popup
-        popup.innerHTML = `
+
+            if (dados[0].favoritada == 0) {
+                var imagem = `<img class="estrela" src="./Style/assets/estrelaVazia.svg"  onclick="event.stopPropagation(); favoritar(${dados[0].idEmpresa})">`;
+            } else {
+                var imagem = `<img class="estrela" src="./Style/assets/estrelaCheia.svg"   onclick="event.stopPropagation(); desfavoritar(${dados[0].idEmpresa})">`;
+            }
+
+            // conteúdo do popup
+            popup.innerHTML = `
             <div class="popup-conteudo">
+                 <div class="popup-header">
+                    <div class="dentro-popup">
+                        <div id="imagemPopUp">
+                            ${imagem}
+                        </div>
+                        <h2>${dados[0].nome}</h2>
+                    <img src="${dados[0].logo}">
+                    </div>
                 <span class="popup-fechar">&times;</span>
-                <h2>${acao.nome} (${acao.ticker})</h2>
-                <p>Setor: ${acao.setor}</p>
-                <p>Preço: R$ ${acao.precoSobreValorPatrimonial.toFixed(2)}</p>
-                <p>Retorno anual: ${acao.rentabilidadeAnual.toFixed(2)}%</p>
-                <p>DRE: ${acao.DRE.toFixed(2)}</p>
-                <p>EBITDA: ${acao.EBITDA.toFixed(2)}</p>
-                <p>Volume: ${acao.volume}</p>
-                <img id="imagemPopUp" src="Style/assets/imagemVazia.webp" alt="Logo">
-                <img id="favoritar" src="Style/assets/estrelaVazia.svg" style="cursor:pointer">
+                 <div class="preco-atual">
+                            <h3>R$${dados[0].media_preco_fechamento}</h3>
+                            <span></span>
+                        </div>
+                        <div class="info-principal">
+                        <div class="preco-atual">
+                            <h3>R$${dados[0].media_preco_fechamento}</h3>
+                            <span></span>
+                        </div>
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Ticker</span>
+                            <span class="info-valor">${dados[0].ticker}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Preço médio</span>
+                            <span class="info-valor">R$${dados[0].media_preco_fechamento}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Maior preço</span>
+                            <span class="info-valor">R$${dados[0].max_preco_alto}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Menor preço</span>
+                            <span class="info-valor">R$${dados[0].min_preco_baixo}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Volume</span>
+                            <span class="info-valor">${dados[0].media_volume}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Setor</span>
+                            <span class="info-valor">${dados[0].setor}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         `;
 
-        document.body.appendChild(popup);
+            //  <h2>${acao.nome} (${acao.ticker})</h2>
+            //         <p>Setor: ${acao.setor}</p>
+            //         <p>Preço: R$ ${acao.precoSobreValorPatrimonial.toFixed(2)}</p>
+            //         <p>Retorno anual: ${acao.rentabilidadeAnual.toFixed(2)}%</p>
+            //         <p>DRE: ${acao.DRE.toFixed(2)}</p>
+            //         <p>EBITDA: ${acao.EBITDA.toFixed(2)}</p>
+            //         <p>Volume: ${acao.volume}</p>
+            //         <img id="imagemPopUp" src="Style/assets/imagemVazia.webp" alt="Logo">
+            //         <img id="favoritar" src="Style/assets/estrelaVazia.svg" style="cursor:pointer">
+            //     document.body.appendChild(popup);
 
-        // fechar popup
-        popup.querySelector(".popup-fechar").addEventListener("click", () => popup.remove());
-        popup.addEventListener("click", (e) => {
-            if (e.target === popup) popup.remove(); // fechar clicando fora do conteúdo
-        });
+            // fechar popup
+            popup.querySelector(".popup-fechar").addEventListener("click", () => popup.remove());
+            popup.addEventListener("click", (e) => {
+                if (e.target === popup) popup.remove(); // fechar clicando fora do conteúdo
+            });
 
-        // favoritar/desfavoritar
-        const estrela = popup.querySelector("#favoritar");
-        estrela.addEventListener("click", (e) => {
-            e.stopPropagation();
-            estrela.src = estrela.src.includes("Vazia") 
-                ? "Style/assets/estrelaCheia.svg" 
-                : "Style/assets/estrelaVazia.svg";
-            // aqui você pode chamar a rota de favoritar/desfavoritar
-        });
+            document.body.appendChild(popup);
 
-    } catch (erro) {
-        console.error("Erro ao abrir popup da ação:", erro);
+            const fecharPopup = popup.querySelector('.fechar-popup');
+            fecharPopup.onclick = () => {
+                document.body.removeChild(popup);
+            };
+
+            document.addEventListener('click', fecharFora);
+
+            function fecharFora(e) {
+                if (!popup.querySelector('.popup-conteudo').contains(e.target)) {
+                    popup.remove();
+                    document.removeEventListener('click', fecharFora);
+                }
+            }
+            // favoritar/desfavoritar
+            // const estrela = popup.querySelector("#favoritar");
+            // estrela.addEventListener("click", (e) => {
+            //     e.stopPropagation();
+            //     estrela.src = estrela.src.includes("Vazia")
+            //         ? "Style/assets/estrelaCheia.svg"
+            //         : "Style/assets/estrelaVazia.svg";
+            //     // aqui você pode chamar a rota de favoritar/desfavoritar
+            // });
+
+        } catch (erro) {
+            console.error("Erro ao abrir popup da ação:", erro);
+        }
+    }    // busca dados da ação via fetch, se quiser preencher mais info
+
+
+
+    function favoritar(idAcao) {
+        var imagem = `<img class="estrela" src="./Style/assets/estrelaCheia.svg"  onclick="event.stopPropagation(); desfavoritar(${idAcao})">`;
+        imagemPopUp.innerHTML = imagem;
+
+        fetch("/interaction/favoritarAcao", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                idacao: idAcao,
+                idUsuario: sessionStorage.ID_USUARIO
+            }),
+        })
+            .then((res) => {
+                if (res.ok) {
+                    console.log("Sucesso ao favoritar ação!");
+                } else {
+                    res.text().then((msg) =>
+                        console.log("Erro ao favoritar, tente novamente!")
+                    );
+                }
+            })
+            .catch((error) => {
+                console.error("Erro:", error);
+                console.log("Erro ao conectar com o servidor.");
+            });
     }
-}    // busca dados da ação via fetch, se quiser preencher mais info
 
 
+    function desfavoritar(idAcao) {
+        imagemPopUp.innerHTML = "";
+        var imagem = `<img class="estrela" src="./Style/assets/estrelaVazia.svg"  onclick="event.stopPropagation(); favoritar(${idAcao})">`;
+        imagemPopUp.innerHTML = "";
+        imagemPopUp.innerHTML = imagem;
+
+        fetch("/interaction/desfavoritarAcao", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                idacao: idAcao,
+                idUsuario: sessionStorage.ID_USUARIO
+            }),
+        })
+            .then((res) => {
+                if (res.ok) {
+                    console.log("Sucesso ao favoritar ação!");
+                } else {
+                    res.text().then((msg) =>
+                        console.log("Erro ao favoritar, tente novamente!")
+                    );
+                }
+            })
+            .catch((error) => {
+                console.error("Erro:", error);
+                console.log("Erro ao conectar com o servidor.");
+            });
+
+    }
 
     // vou comentar esse  DOM porque já tá sendo chamado na init lá em cima
     // document.addEventListener("DOMContentLoaded", carregarNotificacoes);
