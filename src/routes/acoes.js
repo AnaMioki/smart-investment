@@ -18,17 +18,18 @@ router.get("/setores", function (req, res) {
 });
 
 //leva em consideração o perfil também
-router.get('/listarAcoesPorSetor/:perfil/:setor', function (req , res) {
-    acoesController.listarAcoesPorSetor(req , res);
+router.get('/listarAcoesPorSetor/:perfil/:setor', function (req, res) {
+    acoesController.listarAcoesPorSetor(req, res);
 });
 
-router.get("/kpis/:perfil/:setor?", function (req , res){
+router.get("/kpis/:perfil/:setor?", function (req, res) {
     kpisController.pegarKpisPorSetor(req, res);
-} );
+});
 
 //router.get("/kpis/:perfil", kpisController.pegarKpisPorSetor);
 
-router.get("/grafico/evolucao/:perfil/:setor?", acoesController.graficoEvolucao);
+router.get("/grafico/evolucao/:perfil/:setor?", function (req, res) { 
+    acoesController.graficoEvolucao(req, res)});
 
 
 

@@ -5,7 +5,7 @@ function listarTodasAcoesDeAcordoComPerfil(req, res) {
     let perfil = req.params.perfil;  //pede o perfil coomo requisição para puxar as ações corretas
     console.log("perfil recebido na rota: ", perfil);
 
-    const perfisValidos = ["conservador", "Moderado", "Arrojado", "Neutro"];
+    const perfisValidos = ["Conservador", "Moderado", "Arrojado", "Neutro"];
     if (!perfisValidos.includes(perfil)) {
         return res.status(400).json({ erro: "Perfil inválido" });
     }
@@ -13,27 +13,27 @@ function listarTodasAcoesDeAcordoComPerfil(req, res) {
     //acoesModel.listarTodasAcoesDeAcordoComPerfil(perfil)
     acoesModel.listarTodasAcoesDeAcordoComPerfil(perfil)
         .then(resultado => {
-        res.json(resultado)
-        // const filtradas = resultado.filter(acao => {
-        //     const vol = acao.volatilidade_media_ano;
-        //     const pvpa = acao.precoSobreValorPatrimonial;
-        //     const retorno = acao.rentabilidadeAnual;
+            res.json(resultado)
+            // const filtradas = resultado.filter(acao => {
+            //     const vol = acao.volatilidade_media_ano;
+            //     const pvpa = acao.precoSobreValorPatrimonial;
+            //     const retorno = acao.rentabilidadeAnual;
 
-        //     if (perfil === "conservador") {
-        //         return vol < 0.5 && pvpa <= 1;
-        //     }
-        //     if (perfil === "moderado") {
-        //         return vol < 1.5 && retorno >= 1 && retorno <= 20;
-        //     }
-        //     if (perfil === "arrojado") {
-        //         return vol >= 0.5 && vol <= 4 && retorno > 5;
-        //     }
+            //     if (perfil === "conservador") {
+            //         return vol < 0.5 && pvpa <= 1;
+            //     }
+            //     if (perfil === "moderado") {
+            //         return vol < 1.5 && retorno >= 1 && retorno <= 20;
+            //     }
+            //     if (perfil === "arrojado") {
+            //         return vol >= 0.5 && vol <= 4 && retorno > 5;
+            //     }
 
-        //     return false; // se nao estier em nenhum
-        // });
-        // console.log("Ações filtradas: ", filtradas);
-        // res.json(filtradas);
-    })
+            //     return false; // se nao estier em nenhum
+            // });
+            // console.log("Ações filtradas: ", filtradas);
+            // res.json(filtradas);
+        })
         .catch(erro => {
             console.log("erro ao listar ações: ", erro.sqlMessage);
             res.status(500).json(erro.sqlMessage);
@@ -67,15 +67,18 @@ function listarAcoesPorSetor(req, res) {
         // } else {
         //     res.status(204).send("Nenhuma ação encontrada para este setor!");
         // }
-    .catch(erro => {
-        console.log("Erro ao listar ações:", erro.sqlMessage);
-        res.status(500).json(erro.sqlMessage);
-    });
+        .catch(erro => {
+            console.log("Erro ao listar ações:", erro.sqlMessage);
+            res.status(500).json(erro.sqlMessage);
+        });
 }
 
 async function graficoEvolucao(req, res) {
     const perfil = req.params.perfil;
-    const setor = req.query.setor || null;
+    //const setor = req.params.setor || req.query.setor || "";
+    const setor = req.params.setor && req.params.setor !== "null"
+    ? req.params.setor
+    : "";
 
     try {
         // aq ele pega as top 3 de acordo com o setor
@@ -90,22 +93,49 @@ async function graficoEvolucao(req, res) {
         // pega a evolução dessas 3 ações
         const evolucao = await acoesModel.pegarEvolucaoPorTickers(tickers);
 
-        res.status(200).json({
-            recomendadas,
-            evolucao
-        });
 
-    } catch (erro) {
-        console.error("Erro no gráfico:", erro);
-        return res.status(500).json(erro);
-    }
-}
+        const meses = [
+            "Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
+            "Jul", "Ago", "Set", "Out", "Nov", "Dez"
+        ];
 
+        function montarEvolucaoFormatada(tickers, evolucaoBruta) {
+            const resultado = {};
 
+            tickers.forEach(ticker => {
+                resultado[ticker] = meses.map((mesNome, index) => {
+                    const mesNumero = index + 1;
 
-module.exports = {
-    listarTodasAcoesDeAcordoComPerfil,
-    listarSetores,
-    listarAcoesPorSetor,
-    graficoEvolucao
-}
+                    const encontrado = evolucaoBruta.find(e =>
+                        e.ticker === ticker && e.mes === mesNumero
+                    );
+
+                    return {
+                        mes: mesNome,
+                        preco: encontrado ? encontrado.preco_medio_mes : null
+                    };
+                });
+            });
+
+                return resultado;
+            }
+
+                const evolucaoFormatada = montarEvolucaoFormatada(tickers, evolucao);
+
+                res.status(200).json({
+                    recomendadas,
+                    evolucao: evolucaoFormatada
+                });
+
+            } catch (erro) {
+                console.error("Erro no gráfico:", erro);
+                return res.status(500).json(erro);
+            }
+        }
+
+        module.exports = {
+            listarTodasAcoesDeAcordoComPerfil,
+            listarSetores,
+            listarAcoesPorSetor,
+            graficoEvolucao
+        }

@@ -272,7 +272,9 @@
     document.addEventListener("DOMContentLoaded", init);
 
     window.onload = () => {
-        pegarKpisPorSetor(perfilSelecionado, "");
+        // teste:
+        const perfil = sessionStorage.PERFIL_USUARIO;
+        pegarKpisPorSetor(perfil, "");
     };
 
     function init() {
@@ -294,7 +296,7 @@
         carregarKPIs(perfil); // vazio pq no início não tem filtro
         //carregarAcoes(perfil);
         carregarNotificacoes(perfil);
-        criarGraficoEvolucaoPrecos();
+        criarGraficoEvolucaoPrecos(perfil, setor);
     }
 
 
@@ -302,7 +304,7 @@
     document.getElementById("selectPeriodo").addEventListener("change", () => {
         setor = document.getElementById("selectPeriodo").value;
         const perfil = sessionStorage.PERFIL_USUARIO;
-        
+
         filtrarPorSetor(perfil);
         carregarKPIs(perfil);
         criarGraficoEvolucaoPrecos();
@@ -674,9 +676,18 @@
 
 
     async function carregarEvolucao(perfil, setor) {
-        const resp = await fetch(`/acoes/grafico/evolucao/${perfil}/${setor || ""}`);
-        //const listaAcoes= await resp.json();
-        const data = await resp.json();
+
+        console.log("carregarEvolucao chamado com setor:", setor);
+
+
+        // const resp = await fetch(`/acoes/grafico/evolucao/${perfil}/${setor || ""}`);
+        // //const listaAcoes= await resp.json();
+        // const data = await resp.json();
+
+        let url = `/acoes/grafico/evolucao/${perfil}`;
+        if (setor) url += `/${setor}`;
+
+        const resp = await fetch(url);
 
         const listaAcoes = organizarDadosParaGrafico(data.evolucao);
 
@@ -691,31 +702,46 @@
 
     function organizarDadosParaGrafico(evolucao) {
 
-        const mesesNomes = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
-            "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+        const resultado = [];
 
-        const acoesAgrupadas = {};
-
-        evolucao.forEach(linha => {
-            if (!acoesAgrupadas[linha.ticker]) {
-                acoesAgrupadas[linha.ticker] = {
-                    ticker: linha.ticker,
-                    historico: []
-                };
-            }
-
-            acoesAgrupadas[linha.ticker].historico.push({
-                mes: mesesNomes[linha.mes - 1],
-                preco_medio_mensal: linha.preco_medio_mensal
+        for (const ticker in evolucaoFormatada) {
+            resultado.push({
+                ticker,
+                historico: evolucaoFormatada[ticker].map(m => ({
+                    mes: m.mes,
+                    preco_medio_mensal: m.preco
+                }))
             });
-        });
+        }
 
-        return Object.values(acoesAgrupadas);
+        return resultado;
+
+        // const mesesNomes = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
+        //     "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+
+        // const acoesAgrupadas = {};
+
+        // evolucao.forEach(linha => {
+        //     if (!acoesAgrupadas[linha.ticker]) {
+        //         acoesAgrupadas[linha.ticker] = {
+        //             ticker: linha.ticker,
+        //             historico: []
+        //         };
+        //     }
+
+        //     acoesAgrupadas[linha.ticker].historico.push({
+        //         mes: mesesNomes[linha.mes - 1],
+        //         preco_medio_mensal: linha.preco_medio_mensal
+        //     });
+        // });
+
+        //return Object.values(acoesAgrupadas);
     }
 
     // deixando dinamico
     function criarGraficoEvolucaoPrecos(listaAcoes) {
         const ctx = document.getElementById('graphLinha').getContext('2d');
+
 
 
         if (!listaAcoes || listaAcoes.length === 0) {
@@ -752,8 +778,6 @@
             }
         });
     }
-
-    // criarGraficoEvolucaoPrecos();
 
     document.querySelector('#notificacaoIcon').addEventListener('click', function (e) {
         e.stopPropagation();

@@ -139,18 +139,11 @@ FROM (
 //         AND e.setor = '${setor}';
 
 function pegarTop3AcoesRecomendadasGraficoEvolucao(perfil, setor) {
-    // acho assim melhor pq aqui ele pega as mais rentáveis:
-    // let instrucaoSql = `
-    //     SELECT 
-    //         e.nome,
-    //         e.ticker,
-    //         it.rentabilidadeAnual
-    //     FROM empresa e
-    //     JOIN infoTemporal it ON e.idEmpresa = it.fkEmpresa
-    //     WHERE it.ano = (SELECT MAX(ano) FROM infoTemporal)
-    // `;
 
     // logica do victor pra pegar as ações recomendadas:
+
+    console.log("Perfil recebido:", perfil);
+    console.log("Setor recebido:", setor);
     let instrucaoSql = `
         SELECT 
             e.nome,
@@ -159,14 +152,26 @@ function pegarTop3AcoesRecomendadasGraficoEvolucao(perfil, setor) {
             it.rentabilidadeAnual,
             it.precoSobreValorPatrimonial
         FROM dashboard_acoes d
-        JOIN empresa e ON d.fkEmpresa = e.idEmpresa
+        -- JOIN empresa e ON d.fkEmpresa = e.idEmpresa
+        JOIN empresa e ON d.idEmpresa = e.idEmpresa
         JOIN infoTemporal it ON e.idEmpresa = it.fkEmpresa
         WHERE (it.precoSobreValorPatrimonial <= 1 OR it.rentabilidadeAnual > 15)
-        AND it.ano = (SELECT MAX(ano) FROM infoTemporal)
+        -- AND it.ano = (SELECT MAX(ano) FROM infoTemporal)
         -- AND perfil = '${perfil}'
+
     `;
 
-    if (setor) {
+    if (perfil && perfil !== "") {
+        instrucaoSql += `
+            AND (
+                (d.volatilidade < 0.5 AND d.precoSobreValorPatrimonial <= 1 AND '${perfil}' = 'Conservador') OR
+                (d.volatilidade < 1.5 AND d.rentabilidadeAnual BETWEEN 1 AND 20 AND '${perfil}' = 'Moderado') OR
+                (d.volatilidade BETWEEN 0.5 AND 4 AND d.rentabilidadeAnual > 5 AND '${perfil}' = 'Arrojado')
+            )
+        `;
+    }
+
+    if (setor && setor !== "") {
         instrucaoSql += ` AND e.setor = '${setor}' `;
     }
 
@@ -181,53 +186,32 @@ function pegarTop3AcoesRecomendadasGraficoEvolucao(perfil, setor) {
 
 // utilizando a view para o gráfico de evolução de preço
 function pegarEvolucaoPorTickers(tickers) {
-    const lista = tickers.map(t => `'${t}'`).join(",");
+    const listaTickers = tickers.map(t => `'${t}'`).join(",");
 
     const instrucaoSql = `
-        SELECT 
-            acao,
-            ticker,
-            mes,
-            preco_medio_mensal
-        FROM evolucao_preco_2024
-        WHERE ticker IN (${lista})
-        ORDER BY ticker, mes;
+         SELECT 
+            e.ticker,
+            YEAR(a.dtAtual) AS ano,
+            MONTH(a.dtAtual) AS mes,
+            ROUND(AVG(a.precoFechamento), 2) AS preco_medio_mes
+        FROM acoes a
+        JOIN empresa e ON a.fkEmpresa = e.idEmpresa
+        WHERE e.ticker IN (${listaTickers})
+          AND YEAR(a.dtAtual) = (SELECT MAX(YEAR(dtAtual)) FROM acoes)
+        GROUP BY e.ticker, ano, mes
+        ORDER BY e.ticker, mes;
     `;
 
+    //   SELECT 
+    //         acao,
+    //         ticker,
+    //         mes,
+    //         preco_medio_mensal
+    //     FROM evolucao_preco_2024
+    //     WHERE ticker IN (${lista})
+    //     ORDER BY ticker, mes;
     return database.executar(instrucaoSql);
 }
-
-// function graficoEvolucao(perfil, setor) {
-//     let filtroSetor = "";
-//     if (setor !== "todos") {
-//         filtroSetor = `AND setor = '${setor}'`;
-//     }
-
-//       const instrucaoSql = `
-//         SELECT TOP 3 ticker
-//         FROM dashboard_acoes
-//         WHERE (precoSobreValorPatrimonial <= 1 OR rentabilidadeAnual > 15)
-//         -- pra garantir pegar os ultimos
-//         AND it.ano = (SELECT MAX(ano) FROM infoTemporal)
-//         AND perfil = '${perfil}'
-//         ${filtroSetor}
-//         ORDER BY rentabilidadeAnual DESC;
-//     `;
-//     return database.executar(instrucaoSql)
-//         .then(top3 => {
-//             if (top3.length === 0) return [];
-
-//             const tickers = top3.map(t => `'${t.ticker}'`).join(",");
-
-//             const instrucaoSql = `
-//                 SELECT acao, ticker, mes, preco_medio_mensal
-//                 FROM evolucao_preco_2024
-//                 WHERE ticker IN (${tickers})
-//                 ORDER BY ticker, mes;
-//             `;
-//             return database.executar(instrucaoSql);
-//         });
-// }
 
 
 
