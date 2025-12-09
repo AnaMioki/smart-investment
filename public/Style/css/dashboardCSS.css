@@ -464,8 +464,9 @@ img#perfilIcon {
 
 #graphDash div h1 {
     font-weight: 600;
-    font-size: 1rem;
-    color: #333;
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: black;
     margin-bottom: 10px;
 }
 
@@ -496,10 +497,11 @@ img#perfilIcon {
 }
 
 #graphGrande h1 {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     font-weight: 600;
+    font-weight: bold;
     margin-bottom: 20px;
-    color: #333;
+    color: black;
     text-align: center; /* Título centralizado fica melhor nesse layout */
 }
 
