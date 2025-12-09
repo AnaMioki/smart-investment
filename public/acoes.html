@@ -152,7 +152,7 @@
                         <h1>Ações Disponíveis</h1>
                         <label for="searchSetor">
                             <img src="Style/assets/lupaSetores.svg">
-                            <input type="search" id="searchSetor" placeholder="Buscar setor...">
+                            <input type="search" id="searchTicker" placeholder="Buscar ação por ticker...">
                         </label>
                     </div>
 
@@ -613,14 +613,84 @@
             retornoEl.classList.add(acao.rentabilidadeAnual >= 0 ? "verde" : "laranja");
 
 
-            // redireciona ao clicar
-            card.addEventListener("click", () => {
-                window.location.href = `acao.html?id=${acao.idEmpresa}`;
+            // // redireciona ao clicar
+            // card.addEventListener("click", () => {
+            //     window.location.href = `acao.html?id=${acao.idEmpresa}`;
+            // });
+
+            card.addEventListener("click", (e) => {
+                e.preventDefault(); // evita qualquer comportamento padrão
+                abrirInfoAcao(card, acao.ticker); 
             });
+
 
             container.appendChild(card);
         });
     }
+
+
+    function abrirInfoAcao(card, ticker) {
+    async function abrirInfoAcao(card, ticker) {
+    try {
+        // busca dados da ação via fetch
+        const resp = await fetch(`/acoes/buscarPorTicker/${ticker}/`);
+        if (!resp.ok) {
+            console.error("Erro ao buscar ação por ticker:", resp.status);
+            return;
+        }
+
+        const dados = await resp.json();
+        if (!dados || dados.length === 0) {
+            console.warn("Nenhuma informação encontrada para essa ação");
+            return;
+        }
+
+        const acao = dados[0]; // pega o objeto da ação
+
+        // cria overlay do popup
+        const popup = document.createElement("div");
+        popup.className = "popup-overlay";
+
+        // conteúdo do popup
+        popup.innerHTML = `
+            <div class="popup-conteudo">
+                <span class="popup-fechar">&times;</span>
+                <h2>${acao.nome} (${acao.ticker})</h2>
+                <p>Setor: ${acao.setor}</p>
+                <p>Preço: R$ ${acao.precoSobreValorPatrimonial.toFixed(2)}</p>
+                <p>Retorno anual: ${acao.rentabilidadeAnual.toFixed(2)}%</p>
+                <p>DRE: ${acao.DRE.toFixed(2)}</p>
+                <p>EBITDA: ${acao.EBITDA.toFixed(2)}</p>
+                <p>Volume: ${acao.volume}</p>
+                <img id="imagemPopUp" src="Style/assets/imagemVazia.webp" alt="Logo">
+                <img id="favoritar" src="Style/assets/estrelaVazia.svg" style="cursor:pointer">
+            </div>
+        `;
+
+        document.body.appendChild(popup);
+
+        // fechar popup
+        popup.querySelector(".popup-fechar").addEventListener("click", () => popup.remove());
+        popup.addEventListener("click", (e) => {
+            if (e.target === popup) popup.remove(); // fechar clicando fora do conteúdo
+        });
+
+        // favoritar/desfavoritar
+        const estrela = popup.querySelector("#favoritar");
+        estrela.addEventListener("click", (e) => {
+            e.stopPropagation();
+            estrela.src = estrela.src.includes("Vazia") 
+                ? "Style/assets/estrelaCheia.svg" 
+                : "Style/assets/estrelaVazia.svg";
+            // aqui você pode chamar a rota de favoritar/desfavoritar
+        });
+
+    } catch (erro) {
+        console.error("Erro ao abrir popup da ação:", erro);
+    }
+}    // busca dados da ação via fetch, se quiser preencher mais info
+}
+
 
     // vou comentar esse  DOM porque já tá sendo chamado na init lá em cima
     // document.addEventListener("DOMContentLoaded", carregarNotificacoes);
@@ -857,7 +927,53 @@
         });
     }
 
-    // criarGraficoEvolucaoPrecos();
+
+
+    const inputTicker = document.getElementById("searchTicker");
+    let timeout;
+
+    inputTicker.addEventListener("input", (e) => {
+        clearTimeout(timeout); // cancela chamadas anteriores
+
+        const ticker = e.target.value.trim();
+        const perfil = sessionStorage.PERFIL_USUARIO;
+        const idUsuario = sessionStorage.ID_USUARIO;
+
+        timeout = setTimeout(async () => {
+            if (!ticker) {
+                // Input vazio → mostra todas as ações filtradas por setor
+                filtrarPorSetor(perfil);
+                return;
+            }
+
+            await buscarAcaoPorTicker(ticker);
+        }, 300); // debounce de 300ms
+    });
+
+
+    async function buscarAcaoPorTicker(ticker) {
+        try {
+            const resposta = await fetch(`/acoes/buscarPorTicker/${ticker}/`);
+            if (!resposta.ok) {
+                console.error("Erro ao buscar ação por ticker:", resposta.status);
+                return;
+            }
+
+            const dados = await resposta.json();
+
+            // atualiza os cards usando sua função existente
+            if (!dados || dados.length === 0) {
+                renderizarAcoes([]); // mostra mensagem de "nenhuma ação"
+                return;
+            }
+
+            renderizarAcoes([dados[0]]); // renderiza apenas o card encontrado
+        } catch (erro) {
+            console.error("Erro no fetch por ticker:", erro);
+        }
+    }
+
+
 
     document.querySelector('#notificacaoIcon').addEventListener('click', function (e) {
         e.stopPropagation();
