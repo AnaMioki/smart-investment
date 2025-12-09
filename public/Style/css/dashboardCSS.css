@@ -480,9 +480,7 @@ img#perfilIcon {
 #graphGrande {
     display: flex;
     flex-direction: column;
-    
-    /* AQUI ESTÁ A CORREÇÃO DO "MUITO LARGO" */
-    width: 90%; /* Não ocupa mais 100% da tela */
+    width: 90%;
     max-width: 1400px; /* Trava em um tamanho máximo em telas gigantes */
     margin: 40px auto; /* Centraliza na tela (auto nas laterais) */
     
