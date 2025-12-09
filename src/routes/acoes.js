@@ -31,6 +31,9 @@ router.get("/kpis/:perfil/:setor?", function (req, res) {
 router.get("/grafico/evolucao/:perfil/:setor?", function (req, res) { 
     acoesController.graficoEvolucao(req, res)});
 
+router.get('/buscarAcaoPorTicker/:ticker/:idUsuario', acoesController.buscarAcaoPorTicker);
+
+
 
 
 module.exports = router;

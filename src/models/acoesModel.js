@@ -110,74 +110,56 @@ FROM (
     return database.executar(instrucaoSql);
 }
 
-//  SELECT 
-//             e.idEmpresa,
-//             e.nome,
-//             e.setor,
-//             it.rentabilidadeAnual,
-//             it.precoSobreValorPatrimonial,
-
-//             -- comentei por enquanto esse valor pq não existe no banco: 
-//             -- sub.volatilidade_media_ano,
-
-//             -- DRE
-//             ((it.valorMercado - it.patrimonioLiquido) / it.patrimonioLiquido) AS dre,
-
-//             -- EBITDA
-//             (it.valorMercado / it.multiploSetorial) AS ebitda,
-
-//             it.volume,
-//             it.ano
-
-//         FROM empresa e
-//         JOIN infoTemporal it 
-//             ON e.idEmpresa = it.fkEmpresa
-//         JOIN sub_acoes_calculado sub 
-//             ON sub.fkEmpresa = e.idEmpresa
-
-//         WHERE it.ano = (SELECT MAX(ano) FROM infoTemporal)
-//         AND e.setor = '${setor}';
-
-function pegarTop3AcoesRecomendadasGraficoEvolucao(perfil, setor) {
+function pegarTop3AcoesGraficoEvolucao(perfil, setor) {
 
     // logica do victor pra pegar as ações recomendadas:
 
     console.log("Perfil recebido:", perfil);
     console.log("Setor recebido:", setor);
-    let instrucaoSql = `
-        SELECT 
-            e.nome,
-            e.ticker,
-            e.setor,
-            it.rentabilidadeAnual,
-            it.precoSobreValorPatrimonial
-        FROM dashboard_acoes d
-        -- JOIN empresa e ON d.fkEmpresa = e.idEmpresa
-        JOIN empresa e ON d.idEmpresa = e.idEmpresa
-        JOIN infoTemporal it ON e.idEmpresa = it.fkEmpresa
-        WHERE (it.precoSobreValorPatrimonial <= 1 OR it.rentabilidadeAnual > 15)
-        -- AND it.ano = (SELECT MAX(ano) FROM infoTemporal)
-        -- AND perfil = '${perfil}'
+  
+     var instrucaoSql = `
+      SELECT nome, ticker, setor
+        FROM (
+            SELECT 
+                e.nome,
+                e.ticker,
+                e.setor,
+                it.rentabilidadeAnual,
 
-    `;
+                ROW_NUMBER() OVER (
+                    PARTITION BY e.setor 
+                    ORDER BY it.rentabilidadeAnual DESC
+                ) AS posicao
 
-    if (perfil && perfil !== "") {
-        instrucaoSql += `
+            FROM empresa e
+            JOIN infoTemporal it 
+                ON e.idEmpresa = it.fkEmpresa
+
+            JOIN dashboard_acoes d
+                ON d.idEmpresa = e.idEmpresa
+
+            WHERE it.ano = (SELECT MAX(ano) FROM infoTemporal)
+
             AND (
-                (d.volatilidade < 0.5 AND d.precoSobreValorPatrimonial <= 1 AND '${perfil}' = 'Conservador') OR
-                (d.volatilidade < 1.5 AND d.rentabilidadeAnual BETWEEN 1 AND 20 AND '${perfil}' = 'Moderado') OR
-                (d.volatilidade BETWEEN 0.5 AND 4 AND d.rentabilidadeAnual > 5 AND '${perfil}' = 'Arrojado')
+                ('${perfil}' = 'Conservador'
+                    AND d.volatilidade < 0.5 
+                    AND d.precoSobreValorPatrimonial <= 1)
+
+                OR ('${perfil}' = 'Moderado'
+                    AND d.volatilidade < 1.5
+                    AND d.rentabilidadeAnual BETWEEN 1 AND 20)
+
+                OR ('${perfil}' = 'Arrojado'
+                    AND d.volatilidade BETWEEN 0.5 AND 4
+                    AND d.rentabilidadeAnual > 5)
+
+                OR ('${perfil}' = 'Neutro')
             )
-        `;
-    }
 
-    if (setor && setor !== "") {
-        instrucaoSql += ` AND e.setor = '${setor}' `;
-    }
+            ${setor ? `AND e.setor = '${setor}'` : ""}
 
-    instrucaoSql += `
-        ORDER BY it.rentabilidadeAnual DESC
-        LIMIT 3;
+        ) AS ranking
+        WHERE posicao <= 3;
     `;
 
     console.log("SQL RECOMENDADAS:", instrucaoSql);
@@ -214,11 +196,50 @@ function pegarEvolucaoPorTickers(tickers) {
 }
 
 
+function buscarAcaoPorTicker(ticker, idUsuario) {
+    const instrucaoSql = `
+           SELECT *
+    FROM (
+        SELECT 
+            e.idEmpresa,
+            e.nome,
+            e.ticker,
+            e.setor,
+            it.rentabilidadeAnual,
+            it.precoSobreValorPatrimonial,
+            it.patrimonioLiquidoAcao,
+            it.DRE,
+            it.EBITDA,
+            a.volume,
+            ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 AS volatilidade,
+            it.ano AS ano_referencia,
+            CASE 
+                WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 < 0.5 
+                     AND it.precoSobreValorPatrimonial <= 1 THEN 'Conservador'
+                WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 < 1.5 
+                     AND it.rentabilidadeAnual BETWEEN 1 AND 20 THEN 'Moderado'
+                WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 BETWEEN 0.5 AND 4
+                     AND it.rentabilidadeAnual > 5 THEN 'Arrojado'
+                ELSE 'Neutro'
+            END AS perfil_investidor
+        FROM infoTemporal it
+        INNER JOIN empresa e ON it.fkEmpresa = e.idEmpresa
+        INNER JOIN acoes a ON a.fkEmpresa = e.idEmpresa AND YEAR(a.dtAtual) = it.ano
+        WHERE it.ano = (SELECT MAX(ano) FROM infoTemporal)
+          AND e.ticker = '${ticker}'
+    ) AS sub;
+    `;
+    console.log("Executando SQL:", instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
+
 
 module.exports = {
     listarTodasAcoesDeAcordoComPerfil,
     listarAcoesPorSetor,
     listarSetores,
-    pegarTop3AcoesRecomendadasGraficoEvolucao,
-    pegarEvolucaoPorTickers
+    pegarTop3AcoesGraficoEvolucao,
+    pegarEvolucaoPorTickers,
+    buscarAcaoPorTicker
 };

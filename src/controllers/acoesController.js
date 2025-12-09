@@ -1,3 +1,4 @@
+const { bus } = require('nodemon/lib/utils');
 var acoesModel = require('../models/acoesModel');
 
 function listarTodasAcoesDeAcordoComPerfil(req, res) {
@@ -82,7 +83,7 @@ async function graficoEvolucao(req, res) {
 
     try {
         // aq ele pega as top 3 de acordo com o setor
-        const recomendadas = await acoesModel.pegarTop3AcoesRecomendadasGraficoEvolucao(perfil, setor);
+        const recomendadas = await acoesModel.pegarTop3AcoesGraficoEvolucao(perfil, setor);
 
         if (recomendadas.length === 0) {
             return res.status(404).json({ msg: "Nenhuma ação recomendada encontrada." });
@@ -133,9 +134,36 @@ async function graficoEvolucao(req, res) {
             }
         }
 
+        function buscarAcaoPorTicker(req, res) {
+    const ticker = req.params.ticker;
+    const idUsuario = req.params.idUsuario;
+
+    acoesModel.buscarAcaoPorTicker(ticker, idUsuario)
+        .then(resultado => {
+            if (!resultado || resultado.length === 0) {
+                return res.status(204).send("Nenhuma ação encontrada para este ticker!");
+            }
+
+            // filtra histórico para remover meses com preço null
+            resultado.forEach(acao => {
+                if (acao.historico) {
+                    acao.historico = acao.historico.filter(h => h.preco != null);
+                }
+            });
+
+            res.json(resultado);
+        })
+        .catch(erro => {
+            console.error("Erro ao buscar ação:", erro);
+            res.status(500).json(erro.sqlMessage || erro);
+        });
+}
+
+
         module.exports = {
             listarTodasAcoesDeAcordoComPerfil,
             listarSetores,
             listarAcoesPorSetor,
-            graficoEvolucao
+            graficoEvolucao,
+            buscarAcaoPorTicker
         }

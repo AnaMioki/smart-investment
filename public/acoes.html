@@ -274,7 +274,7 @@
     window.onload = () => {
         // teste:
         const perfil = sessionStorage.PERFIL_USUARIO;
-        pegarKpisPorSetor(perfil, "");
+        //pegarKpisPorSetor(perfil, "");
     };
 
     function init() {
@@ -290,13 +290,19 @@
             return;
         }
 
+        // if (window.listaAcoes && window.listaAcoes.length > 0) {
+        //     criarGraficoEvolucaoPrecos(listaAcoes);
+        // }
+
 
         carregarSetores(); // nao pode tirar daqui
         filtrarPorSetor(perfil);
         carregarKPIs(perfil); // vazio pq no início não tem filtro
         //carregarAcoes(perfil);
         carregarNotificacoes(perfil);
-        criarGraficoEvolucaoPrecos(perfil, setor);
+        //criarGraficoEvolucaoPrecos(perfil, setor);
+        carregarEvolucao(perfil, setor);
+
     }
 
 
@@ -307,7 +313,8 @@
 
         filtrarPorSetor(perfil);
         carregarKPIs(perfil);
-        criarGraficoEvolucaoPrecos();
+        //criarGraficoEvolucaoPrecos();
+        carregarEvolucao(perfil, setor);
     });
 
     // metodo complementar para redirecionar rotas
@@ -519,12 +526,15 @@
                 </div>
             </div>
         `;
+            const retornoEl = card.querySelector(".retorno");
+            if (retornoEl) {
+                retornoEl.classList.remove("verde", "laranja");
+                retornoEl.classList.add(acao.rentabilidadeAnual >= 0 ? "verde" : "laranja");
+            }
 
             // const retornoEl = card.querySelector(".retorno");
             // retornoEl.className = acao.rentabilidadeAnual >= 0 ? "verde" : "laranja";
-            const retornoEl = card.querySelector(".retorno");
-            retornoEl.classList.remove("verde", "laranja");
-            retornoEl.classList.add(acao.rentabilidadeAnual >= 0 ? "verde" : "laranja");
+
 
 
             // redireciona ao clicar
@@ -558,7 +568,8 @@
         })
             .then(res => {
                 if (!res.ok) throw new Error("Erro ao buscar notificações");
-                return res.json();
+                //return res.json();
+                return res.text().then(t => t ? JSON.parse(t) : []);
             })
             .then(notificacoes => {
                 atualizarDropdown(notificacoes);
@@ -688,6 +699,8 @@
         if (setor) url += `/${setor}`;
 
         const resp = await fetch(url);
+        const data = await resp.json();
+
 
         const listaAcoes = organizarDadosParaGrafico(data.evolucao);
 
@@ -704,10 +717,10 @@
 
         const resultado = [];
 
-        for (const ticker in evolucaoFormatada) {
+        for (const ticker in evolucao) {
             resultado.push({
                 ticker,
-                historico: evolucaoFormatada[ticker].map(m => ({
+                historico: evolucao[ticker].map(m => ({
                     mes: m.mes,
                     preco_medio_mensal: m.preco
                 }))
@@ -742,24 +755,29 @@
     function criarGraficoEvolucaoPrecos(listaAcoes) {
         const ctx = document.getElementById('graphLinha').getContext('2d');
 
-
-
         if (!listaAcoes || listaAcoes.length === 0) {
             console.warn("Nenhuma ação encontrada para o gráfico.");
             return;
         }
 
+        if (!listaAcoes[0].historico) {
+            console.error("A estrutura de dados não contém 'historico'.");
+            return;
+        }
 
         const meses = listaAcoes[0].historico.map(h => h.mes);
 
-        const datasets = listaAcoes.map(acao => ({
+        const cores = ["#ff6384", "#36a2eb", "#ffcd56"];
+
+        const datasets = listaAcoes.map((acao, i) => ({
             label: acao.ticker,
-            //data: gerarValoresMock(),
             data: acao.historico.map(p => p.preco_medio_mensal),
+            borderColor: cores[i % cores.length],
             borderWidth: 2,
             fill: false,
             tension: 0.2
         }));
+
 
         // destroi grafico antigo
         if (window.graficoEvolucao) {
