@@ -608,6 +608,7 @@
 
             // const retornoEl = card.querySelector(".retorno");
             // retornoEl.className = acao.rentabilidadeAnual >= 0 ? "verde" : "laranja";
+            
             const retornoEl = card.querySelector(".retorno");
             retornoEl.classList.remove("verde", "laranja");
             retornoEl.classList.add(acao.rentabilidadeAnual >= 0 ? "verde" : "laranja");
@@ -619,6 +620,7 @@
             // });
 
             card.addEventListener("click", (e) => {
+                  console.log("teste:", acao.ticker);
                 e.preventDefault(); // evita qualquer comportamento padrão
                 abrirInfoAcao(card, acao.ticker); 
             });
@@ -629,11 +631,10 @@
     }
 
 
-    function abrirInfoAcao(card, ticker) {
     async function abrirInfoAcao(card, ticker) {
     try {
         // busca dados da ação via fetch
-        const resp = await fetch(`/acoes/buscarPorTicker/${ticker}/`);
+        const resp = await fetch(`/acoes/buscarAcaoPorTicker/${ticker}`);
         if (!resp.ok) {
             console.error("Erro ao buscar ação por ticker:", resp.status);
             return;
@@ -689,7 +690,7 @@
         console.error("Erro ao abrir popup da ação:", erro);
     }
 }    // busca dados da ação via fetch, se quiser preencher mais info
-}
+
 
 
     // vou comentar esse  DOM porque já tá sendo chamado na init lá em cima
