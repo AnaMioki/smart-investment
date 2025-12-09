@@ -444,7 +444,7 @@ img#perfilIcon {
     display: flex;
     justify-content: space-between;
     width: 100%;
-    gap: 20px;
+    gap: 30px;
     flex-wrap: wrap; /* CRUCIAL para responsividade */
 }
 
@@ -458,7 +458,7 @@ img#perfilIcon {
     background-color: #ffffff;
     border-radius: 15px;
     gap: 15px;
-    height: 400px; /* Altura fixa para manter consistência */
+    height: 500px; /* Altura fixa para manter consistência */
     position: relative; /* Necessário para o Chart.js */
 }
 
@@ -479,24 +479,33 @@ img#perfilIcon {
 #graphGrande {
     display: flex;
     flex-direction: column;
-    width: 100%; 
-    height: 400px; /* Altura fixa */
-    padding: 20px;
-    border: 1px solid #eee;
-    border-radius: 15px;
+    
+    /* AQUI ESTÁ A CORREÇÃO DO "MUITO LARGO" */
+    width: 90%; /* Não ocupa mais 100% da tela */
+    max-width: 1400px; /* Trava em um tamanho máximo em telas gigantes */
+    margin: 40px auto; /* Centraliza na tela (auto nas laterais) */
+    
+    height: 550px; /* Aumentado para ficar proporcional aos de cima */
+    
+    padding: 25px;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 20px;
     background-color: #ffffff;
     position: relative;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.04);
 }
 
 #graphGrande h1 {
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-weight: 600;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center; /* Título centralizado fica melhor nesse layout */
 }
 
 #graphGrande canvas {
    width: 100% !important;
-   height: 90% !important; /* Deixa um espaço para o título */
+   height: 90% !important;
 }
 
 /* --- DROPDOWNS --- */
@@ -596,9 +605,21 @@ img#perfilIcon {
     }
     
     #graphDash > div {
-        width: 100%;
-        height: 350px; /* Altura um pouco menor para mobile */
-    }
+    flex: 1; 
+    min-width: 450px; /* Aumentei a largura mínima para não quebrar cedo demais */
+    display: flex; 
+    flex-direction: column;
+    padding: 25px; /* Mais preenchimento interno */
+    border: 1px solid rgba(0,0,0,0.08); /* Borda mais suave */
+    background-color: #ffffff;
+    border-radius: 20px;
+    
+    /* AQUI ESTÁ A CORREÇÃO DA ALTURA "PEQUENA" */
+    height: 550px; /* Aumentado de 400px para 550px */
+    
+    position: relative;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.04);
+}
 
     #graphGrande {
         height: 350px;
