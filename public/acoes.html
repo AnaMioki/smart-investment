@@ -474,6 +474,11 @@
     });
 
  
+       function sair() {
+        sessionStorage.clear();
+        window.location.href = "./login.html";
+    }
+
     (function () {
         const perfil = document.querySelector('#perfilIcon');
         const opcoes = document.querySelector('.opcoes-dropdown');

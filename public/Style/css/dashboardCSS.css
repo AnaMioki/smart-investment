@@ -115,6 +115,7 @@ img#logo {
     flex-shrink: 0;
 }
 
+
 #perfilIcon img,
 img#perfilIcon {
     width: 16vh;
@@ -509,7 +510,7 @@ img#perfilIcon {
 }
 
 /* --- DROPDOWNS --- */
-.notificacao-dropdown, .opcoes-dropdown {
+.notificacao-dropdown {
     display: none;
     position: absolute;
     top: 100%;
@@ -521,7 +522,7 @@ img#perfilIcon {
     z-index: 1000;
     padding: 12px;
 }
-.notificacao-dropdown.active, .opcoes-dropdown.active { display: block; }
+.notificacao-dropdown.active { display: block; }
 
 /* TOOLTIP */
 .tooltip { position: relative; display: inline-block; cursor: help; border-bottom: 1px dotted #999; }
@@ -624,4 +625,34 @@ img#perfilIcon {
     #graphGrande {
         height: 350px;
     }
+}
+
+
+
+/* Dropdown do perfil */
+.opcoes-dropdown {
+    display: none;
+    position: absolute;
+    top: 9.5vh; /* logo abaixo do header */
+    right: 2.5vh;
+    min-width: 180px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    z-index: 1200;
+    padding: 6px 6px;
+}
+.opcoes-dropdown.active {
+    display: block;
+}
+.opcoes-dropdown a {
+    display: block;
+    padding: 10px 12px;
+    color: #004225;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 6px;
+}
+.opcoes-dropdown a:hover {
+    background: #f3f7f5;
 }

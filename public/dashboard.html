@@ -8,7 +8,8 @@
   <link rel="icon" type="image/x-icon" href="Style/assets/smartLogoVetor.ico">
   <link rel="stylesheet" href="Style/css/dashboardCSS.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
 </head>
 
 <body onload="atualizarDashboard()">
@@ -306,7 +307,7 @@
 
     // 1. Pega o período selecionado no <select>
     const periodoSelecionado = document.getElementById('selectDash').value;
-    
+
     // 2. Calcula o Benchmark (IBOVESPA) para esse período
     // O retorno é string, então usamos parseFloat para fazer as contas de comparação depois
     const benchmarkString = getBenchmarkIbovespa(periodoSelecionado);
@@ -318,40 +319,40 @@
 
     // Loop para exibir o TOP 5
     // Verifica se existem dados suficientes para não quebrar o loop
-    const limite = Math.min(dadosOrdenados.length, 5); 
+    const limite = Math.min(dadosOrdenados.length, 5);
 
     for (let i = 0; i < 5; i++) {
-        let setor = dadosOrdenados[i];
-        let rentabilidadeSetor = setor.rentabilidade_periodo;
+      let setor = dadosOrdenados[i];
+      let rentabilidadeSetor = setor.rentabilidade_periodo;
 
-        // --- Lógica de Classificação Dinâmica ---
-        let classificacaoTexto = "";
-        let classificacaoCor = ""; 
+      // --- Lógica de Classificação Dinâmica ---
+      let classificacaoTexto = "";
+      let classificacaoCor = "";
 
-        // Regra: Muito alta > IBOVESPA + 6.2
-        if (rentabilidadeSetor > (benchmarkValor + 6.2)) {
-            classificacaoTexto = "Muito Alta";
-            classificacaoCor = "verde"; // Classe CSS
-        } 
-        // Regra: Alta entre (IBOVESPA + 3.1) e (IBOVESPA + 6.2)
-        else if (rentabilidadeSetor >= (benchmarkValor + 3.1)) {
-            classificacaoTexto = "Alta";
-            classificacaoCor = "azul";
-        }
-        // Regra: Média entre (IBOVESPA - 3) e (IBOVESPA + 3) 
-        // Nota: Ajustei o limite superior para < 3.1 para não conflitar com a Alta
-        else if (rentabilidadeSetor >= (benchmarkValor - 3)) {
-            classificacaoTexto = "Média";
-            classificacaoCor = "amarelo";
-        }
-        // Regra: Baixa < IBOVESPA - 3
-        else {
-            classificacaoTexto = "Baixa";
-            classificacaoCor = "corVermelha";
-        }
+      // Regra: Muito alta > IBOVESPA + 6.2
+      if (rentabilidadeSetor > (benchmarkValor + 6.2)) {
+        classificacaoTexto = "Muito Alta";
+        classificacaoCor = "verde"; // Classe CSS
+      }
+      // Regra: Alta entre (IBOVESPA + 3.1) e (IBOVESPA + 6.2)
+      else if (rentabilidadeSetor >= (benchmarkValor + 3.1)) {
+        classificacaoTexto = "Alta";
+        classificacaoCor = "azul";
+      }
+      // Regra: Média entre (IBOVESPA - 3) e (IBOVESPA + 3) 
+      // Nota: Ajustei o limite superior para < 3.1 para não conflitar com a Alta
+      else if (rentabilidadeSetor >= (benchmarkValor - 3)) {
+        classificacaoTexto = "Média";
+        classificacaoCor = "amarelo";
+      }
+      // Regra: Baixa < IBOVESPA - 3
+      else {
+        classificacaoTexto = "Baixa";
+        classificacaoCor = "corVermelha";
+      }
 
-        // --- HTML Template ---
-listaDiv.innerHTML += `
+      // --- HTML Template ---
+      listaDiv.innerHTML += `
             <div>
                 <div class="numero">
                     <h2>${i + 1}</h2>
@@ -424,42 +425,42 @@ listaDiv.innerHTML += `
             </div>
             `;
     }
-}
+  }
 
-// Função auxiliar para pegar a média do Ibovespa conforme o filtro selecionado
-function getBenchmarkIbovespa(periodo) {
-    
+  // Função auxiliar para pegar a média do Ibovespa conforme o filtro selecionado
+  function getBenchmarkIbovespa(periodo) {
+
     let benchmark = 0;
-    
+
     // Parse para garantir que é número
     const p = parseInt(periodo);
 
-    switch(p) {
-        case 1: // Somente 2024
-            benchmark = -10.36; 
-            break;
-        case 2: // Média 2023-2024
-            benchmark = (22.28 - 10.36) / 2; // ~ 5.96%
-            break;
-        case 3: // Média 2022-2024
-            benchmark = (4.69 + 22.28 - 10.36) / 3; // ~ 5.53%
-            break;
-        case 4: // Média 2021-2024
-            benchmark = (-11.93 + 4.69 + 22.28 - 10.36) / 4; // ~ 1.17%
-            break;
-        case 5: // Média 2020-2024
-            benchmark = (2.92 - 11.93 + 4.69 + 22.28 - 10.36) / 5; // ~ 1.52%
-            break;
-        default:
-            benchmark = 5.0; 
+    switch (p) {
+      case 1: // Somente 2024
+        benchmark = -10.36;
+        break;
+      case 2: // Média 2023-2024
+        benchmark = (22.28 - 10.36) / 2; // ~ 5.96%
+        break;
+      case 3: // Média 2022-2024
+        benchmark = (4.69 + 22.28 - 10.36) / 3; // ~ 5.53%
+        break;
+      case 4: // Média 2021-2024
+        benchmark = (-11.93 + 4.69 + 22.28 - 10.36) / 4; // ~ 1.17%
+        break;
+      case 5: // Média 2020-2024
+        benchmark = (2.92 - 11.93 + 4.69 + 22.28 - 10.36) / 5; // ~ 1.52%
+        break;
+      default:
+        benchmark = 5.0;
     }
-    
-    return benchmark.toFixed(2); 
-}
+
+    return benchmark.toFixed(2);
+  }
 
 
-function renderizarGraficos(dados) {
-    Chart.defaults.font.size = 22; 
+  function renderizarGraficos(dados) {
+    Chart.defaults.font.size = 22;
     Chart.defaults.font.weight = 'bold';
     Chart.defaults.color = '#000000';
     const periodoSelecionado = document.getElementById('selectDash').value;
@@ -469,9 +470,9 @@ function renderizarGraficos(dados) {
     // Ordena por rentabilidade (maior para menor) e pega o TOP 5
     // Isso garante que todos os gráficos falem dos mesmos "campeões"
     const top5 = dados
-        .sort((a, b) => b.rentabilidade_periodo - a.rentabilidade_periodo)
-        .slice(0, 5);
-        
+      .sort((a, b) => b.rentabilidade_periodo - a.rentabilidade_periodo)
+      .slice(0, 5);
+
     const labelsTop5 = top5.map(d => d.setor);
 
     // --- GRÁFICO 1: PERFORMANCE RELATIVA (Setor vs Ibovespa) ---
@@ -479,58 +480,58 @@ function renderizarGraficos(dados) {
     if (chartRankSetor) chartRankSetor.destroy();
 
     chartRankSetor = new Chart(ctxRank, {
-        type: 'bar',
-        data: {
-            labels: labelsTop5,
-            datasets: [
-                {
-                    label: 'Média Ibovespa (%)',
-                    // Cria uma linha reta repetindo o valor do benchmark para cada coluna
-                    data: Array(5).fill(valorBenchmark),
-                    type: 'line', // Transforma este dataset em linha
-                    borderColor: '#6B7280', // Cinza escuro
-                    borderWidth: 2,
-                    borderDash: [5, 5], // Linha pontilhada
-                    pointRadius: 0,
-                    order: 0 // Garante que a linha fique por cima
-                },
-                {
-                    label: 'Rentabilidade do Setor (%)',
-                    data: top5.map(d => d.rentabilidade_periodo),
-                    // Pinta de Verde se venceu o Benchmark, Azul se perdeu (ou vice-versa, conforme sua regra)
-                    backgroundColor: top5.map(d => d.rentabilidade_periodo >= valorBenchmark ? '#10B981' : '#3B82F6'),
-                    borderRadius: 4,
-                    order: 1
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { display: true, position: 'top' }, // Mostra legenda para identificar a linha
-                tooltip: {
-                    callbacks: {
-                        footer: (tooltipItems) => {
-                            let val = tooltipItems[0].raw;
-                            let diff = (val - valorBenchmark).toFixed(2);
-                            if(tooltipItems[0].dataset.type === 'line') return '';
-                            return `Diferença pro Ibov: ${diff > 0 ? '+' : ''}${diff}%`;
-                        }
-                    }
-                }
-            },
-            scales: {
-                x: { 
-                    title: { display: true, text: 'TOP 5 Setores' },
-                    // Ajuste dinâmico: começa do 0 ou do menor valor para dar destaque
-                    suggestedMin: 0 
-                },
-                y: { 
-                    title: { display: true, text: 'Rentabilidade (%)' },
-                    // Adiciona a linha de grade do Benchmark visualmente (zero line ou similar) se desejar
-                }
+      type: 'bar',
+      data: {
+        labels: labelsTop5,
+        datasets: [
+          {
+            label: 'Média Ibovespa (%)',
+            // Cria uma linha reta repetindo o valor do benchmark para cada coluna
+            data: Array(5).fill(valorBenchmark),
+            type: 'line', // Transforma este dataset em linha
+            borderColor: '#6B7280', // Cinza escuro
+            borderWidth: 2,
+            borderDash: [5, 5], // Linha pontilhada
+            pointRadius: 0,
+            order: 0 // Garante que a linha fique por cima
+          },
+          {
+            label: 'Rentabilidade do Setor (%)',
+            data: top5.map(d => d.rentabilidade_periodo),
+            // Pinta de Verde se venceu o Benchmark, Azul se perdeu (ou vice-versa, conforme sua regra)
+            backgroundColor: top5.map(d => d.rentabilidade_periodo >= valorBenchmark ? '#10B981' : '#3B82F6'),
+            borderRadius: 4,
+            order: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: true, position: 'top' }, // Mostra legenda para identificar a linha
+          tooltip: {
+            callbacks: {
+              footer: (tooltipItems) => {
+                let val = tooltipItems[0].raw;
+                let diff = (val - valorBenchmark).toFixed(2);
+                if (tooltipItems[0].dataset.type === 'line') return '';
+                return `Diferença pro Ibov: ${diff > 0 ? '+' : ''}${diff}%`;
+              }
             }
+          }
+        },
+        scales: {
+          x: {
+            title: { display: true, text: 'TOP 5 Setores' },
+            // Ajuste dinâmico: começa do 0 ou do menor valor para dar destaque
+            suggestedMin: 0
+          },
+          y: {
+            title: { display: true, text: 'Rentabilidade (%)' },
+            // Adiciona a linha de grade do Benchmark visualmente (zero line ou similar) se desejar
+          }
         }
+      }
     });
 
     // --- GRÁFICO 2: MAPA DE EFICIÊNCIA (Risco x Retorno) - APENAS TOP 5 ---
@@ -538,76 +539,76 @@ function renderizarGraficos(dados) {
     if (chartSecundario) chartSecundario.destroy();
 
     chartSecundario = new Chart(ctxSec, {
-        type: 'scatter',
-        data: {
-            datasets: [
-              {
-                label: 'Setores Top 5',
-                data: top5.map(item => ({
-                    x: item.volatilidade_periodo, // Risco
-                    y: item.rentabilidade_periodo, // Retorno
-                    setor: item.setor
-                })),
-                backgroundColor: '#8B5CF6', // Roxo
-                pointRadius: 8, // Pontos maiores já que são poucos
-                pointHoverRadius: 10
-            },
-            {
-                    label: 'Média Ibovespa', // O texto que aparece lá em cima
-                    data: [], // Vazio para não desenhar nada no gráfico
-                    type: 'line', // Força o ícone ser uma linha
-                    borderColor: '#6B7280', // Mesma cor da linha de anotação
-                    borderWidth: 2,
-                    borderDash: [5, 5], // Mesmo pontilhado
-                    pointRadius: 0 // Sem bolinha na legenda
-                }
-          ]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            let p = context.raw;
-                            return `${p.setor}: Rentabilidade ${p.y}% | Risco ${p.x}%`;
-                        }
-                    }
-                },
-                annotation: {
-                    annotations: {
-                        linhaIbovespa: {
-                            type: 'line',
-                            yMin: numBenchmark, // Altura da linha baseada no filtro
-                            yMax: numBenchmark,
-                            borderColor: '#6B7280', // Cor Cinza Escuro (Igual gráfico 1)
-                            borderWidth: 2,
-                            borderDash: [5, 5], // Pontilhado
-                            label: {
-                                display: true,
-                                content: `Ibov: ${valorBenchmark}%`, // Texto da etiqueta
-                                position: 'end', // Fica na ponta direita
-                                backgroundColor: 'rgba(107, 114, 128, 0.7)',
-                                color: 'black',
-                                font: { size: 14, weight: 'bold' },
-                                yAdjust: -10 // Sobe um pouquinho a etiqueta para não tapar a linha
-                            }
-                        }
-                    }
-                }
-            },
-            scales: {
-                x: { 
-                    title: { display: true, text: 'Risco (Volatilidade %)' },
-                    // Ajuste dinâmico: começa do 0 ou do menor valor para dar destaque
-                    suggestedMin: 0 
-                },
-                y: { 
-                    title: { display: true, text: 'Rentabilidade (%)' },
-                    // Adiciona a linha de grade do Benchmark visualmente (zero line ou similar) se desejar
-                }
+      type: 'scatter',
+      data: {
+        datasets: [
+          {
+            label: 'Setores Top 5',
+            data: top5.map(item => ({
+              x: item.volatilidade_periodo, // Risco
+              y: item.rentabilidade_periodo, // Retorno
+              setor: item.setor
+            })),
+            backgroundColor: '#8B5CF6', // Roxo
+            pointRadius: 8, // Pontos maiores já que são poucos
+            pointHoverRadius: 10
+          },
+          {
+            label: 'Média Ibovespa', // O texto que aparece lá em cima
+            data: [], // Vazio para não desenhar nada no gráfico
+            type: 'line', // Força o ícone ser uma linha
+            borderColor: '#6B7280', // Mesma cor da linha de anotação
+            borderWidth: 2,
+            borderDash: [5, 5], // Mesmo pontilhado
+            pointRadius: 0 // Sem bolinha na legenda
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                let p = context.raw;
+                return `${p.setor}: Rentabilidade ${p.y}% | Risco ${p.x}%`;
+              }
             }
+          },
+          annotation: {
+            annotations: {
+              linhaIbovespa: {
+                type: 'line',
+                yMin: numBenchmark, // Altura da linha baseada no filtro
+                yMax: numBenchmark,
+                borderColor: '#6B7280', // Cor Cinza Escuro (Igual gráfico 1)
+                borderWidth: 2,
+                borderDash: [5, 5], // Pontilhado
+                label: {
+                  display: true,
+                  content: `Ibov: ${valorBenchmark}%`, // Texto da etiqueta
+                  position: 'end', // Fica na ponta direita
+                  backgroundColor: 'rgba(107, 114, 128, 0.7)',
+                  color: 'black',
+                  font: { size: 14, weight: 'bold' },
+                  yAdjust: -10 // Sobe um pouquinho a etiqueta para não tapar a linha
+                }
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            title: { display: true, text: 'Risco (Volatilidade %)' },
+            // Ajuste dinâmico: começa do 0 ou do menor valor para dar destaque
+            suggestedMin: 0
+          },
+          y: {
+            title: { display: true, text: 'Rentabilidade (%)' },
+            // Adiciona a linha de grade do Benchmark visualmente (zero line ou similar) se desejar
+          }
         }
+      }
     });
 
     // --- GRÁFICO 3: FUNDAMENTOS (DRE vs EBITDA) ---
@@ -615,46 +616,46 @@ function renderizarGraficos(dados) {
     if (chartVolatilidade) chartVolatilidade.destroy();
 
     const limparValor = (val) => {
-        if(typeof val === 'number') return val;
-        return parseFloat(String(val).replace(/[^0-9.-]/g, '')); 
+      if (typeof val === 'number') return val;
+      return parseFloat(String(val).replace(/[^0-9.-]/g, ''));
     };
 
     chartVolatilidade = new Chart(ctxVol, {
-        type: 'bar',
-        data: {
-            labels: labelsTop5,
-            datasets: [
-                {
-                    label: 'EBITDA (Caixa)',
-                    data: top5.map(d => limparValor(d.EBITDA)),
-                    backgroundColor: '#F59E0B', // Laranja
-                    borderRadius: 4,
-                    barPercentage: 0.6,
-                },
-                {
-                    label: 'Lucro Líquido (DRE)',
-                    data: top5.map(d => limparValor(d.DRE)),
-                    backgroundColor: '#10B981', // Verde
-                    borderRadius: 4,
-                    barPercentage: 0.6,
-                }
-            ]
-        },
-        options: {
-            indexAxis: 'y', // Gráfico Horizontal
-            responsive: true,
-            scales: {
-                x: {
-                    grid: { display: true },
-                    title: { display: true, text: 'R$(M)' },
-                    suggestedMin: 0 
-                }
-            }
+      type: 'bar',
+      data: {
+        labels: labelsTop5,
+        datasets: [
+          {
+            label: 'EBITDA (Caixa)',
+            data: top5.map(d => limparValor(d.EBITDA)),
+            backgroundColor: '#F59E0B', // Laranja
+            borderRadius: 4,
+            barPercentage: 0.6,
+          },
+          {
+            label: 'Lucro Líquido (DRE)',
+            data: top5.map(d => limparValor(d.DRE)),
+            backgroundColor: '#10B981', // Verde
+            borderRadius: 4,
+            barPercentage: 0.6,
+          }
+        ]
+      },
+      options: {
+        indexAxis: 'y', // Gráfico Horizontal
+        responsive: true,
+        scales: {
+          x: {
+            grid: { display: true },
+            title: { display: true, text: 'R$(M)' },
+            suggestedMin: 0
+          }
         }
+      }
     });
-}
+  }
 
-  
+
   function sair() {
     sessionStorage.clear();
     window.location.href = "./login.html";

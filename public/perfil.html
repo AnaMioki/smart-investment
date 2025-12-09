@@ -32,7 +32,7 @@
                     </div>
                 </div>
 
-                  <img id="perfilIcon" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" alt="Perfil" role="button"
+                <img id="perfilIcon" class="perfilBoneco" src="Style/assets/perfilBoneco.svg" alt="Perfil" role="button"
                     tabindex="0" aria-haspopup="true" aria-expanded="false">
                 <div class="opcoes-dropdown" role="menu" aria-hidden="true">
                     <a role="menuitem" href="perfil.html">Perfil</a>
@@ -155,15 +155,15 @@
 <script src="Style/js/fazerHamburguer.js"></script>
 
 <script>
-  document.addEventListener("DOMContentLoaded", carregarNotificacoes);
+    document.addEventListener("DOMContentLoaded", carregarNotificacoes);
 
-  async function carregarNotificacoes() {
-    const idUsuario = sessionStorage.ID_USUARIO;
+    async function carregarNotificacoes() {
+        const idUsuario = sessionStorage.ID_USUARIO;
 
-    if (!idUsuario) {
-      console.warn("ID_USUARIO não encontrado no sessionStorage.");
-      return;
-    }
+        if (!idUsuario) {
+            console.warn("ID_USUARIO não encontrado no sessionStorage.");
+            return;
+        }
 
         fetch("/notificacoes/receberNotificacoes", {
             method: "POST",
@@ -190,23 +190,23 @@
                 atualizarDropdown(notificacoes || []);
             })
             .catch(err => console.error(err));
-  }
+    }
 
-  function atualizarDropdown(notificacoes) {
-    var contador = 0;
+    function atualizarDropdown(notificacoes) {
+        var contador = 0;
 
-    const container = document.querySelector(".notificacao-dropdown");
-    const badge = document.querySelector(".notification-badge");
+        const container = document.querySelector(".notificacao-dropdown");
+        const badge = document.querySelector(".notification-badge");
 
-    // Limpa o container (evita duplicar)
-    container.innerHTML = "";
-    var qtd_not = 0;
+        // Limpa o container (evita duplicar)
+        container.innerHTML = "";
+        var qtd_not = 0;
 
-    notificacoes.forEach(not => {
-      if (not.lido == 0) {
-        qtd_not++;
-      }
-    });
+        notificacoes.forEach(not => {
+            if (not.lido == 0) {
+                qtd_not++;
+            }
+        });
 
         // Atualiza badge (mostra no máx. 9+). Se não houver notificações, oculta o badge.
         if (!badge) {
@@ -219,12 +219,12 @@
             badge.textContent = qtd_not > 9 ? '9+' : String(qtd_not);
         }
 
-    notificacoes.forEach(not => {
-      if (contador < 3) {
-        const item = document.createElement("div");
-        item.classList.add("notificacao-item");
+        notificacoes.forEach(not => {
+            if (contador < 3) {
+                const item = document.createElement("div");
+                item.classList.add("notificacao-item");
 
-        item.innerHTML = `
+                item.innerHTML = `
                         <div class="notificacao-content">
                             <div class="notificacao-title">${not.tipo}</div>
                             <div class="notificacao-text">${not.mensagem}</div>
@@ -232,34 +232,34 @@
                         </div>
                     `;
 
-        container.appendChild(item);
-        console.log(not.tipo)
-      }
-      contador++;
-    });
+                container.appendChild(item);
+                console.log(not.tipo)
+            }
+            contador++;
+        });
 
-    // Link para ver todas
-    const link = document.createElement("a");
-    link.href = "notificacoes.html";
-    link.textContent = "Ver todas as notificações";
-    container.appendChild(link);
-  }
+        // Link para ver todas
+        const link = document.createElement("a");
+        link.href = "notificacoes.html";
+        link.textContent = "Ver todas as notificações";
+        container.appendChild(link);
+    }
 
-  function formatarTempo(dataBanco) {
-    const data = new Date(dataBanco);
-    const agora = new Date();
+    function formatarTempo(dataBanco) {
+        const data = new Date(dataBanco);
+        const agora = new Date();
 
-    const diffMs = agora - data;
-    const diffMin = Math.floor(diffMs / 60000);
-    const diffHoras = Math.floor(diffMin / 60);
+        const diffMs = agora - data;
+        const diffMin = Math.floor(diffMs / 60000);
+        const diffHoras = Math.floor(diffMin / 60);
 
-    if (diffMin < 1) return "Agora mesmo";
-    if (diffMin < 60) return `Há ${diffMin} minutos`;
-    if (diffHoras < 24) return `Há ${diffHoras} hora${diffHoras > 1 ? "s" : ""}`;
+        if (diffMin < 1) return "Agora mesmo";
+        if (diffMin < 60) return `Há ${diffMin} minutos`;
+        if (diffHoras < 24) return `Há ${diffHoras} hora${diffHoras > 1 ? "s" : ""}`;
 
-    const diffDias = Math.floor(diffHoras / 24);
-    return `Há ${diffDias} dia${diffDias > 1 ? "s" : ""}`;
-  }
+        const diffDias = Math.floor(diffHoras / 24);
+        return `Há ${diffDias} dia${diffDias > 1 ? "s" : ""}`;
+    }
 
     if (sessionStorage.getItem('ID_USUARIO') === null) {
         showLoginCard(4);
@@ -318,7 +318,7 @@
     const alertaAlteracao = document.getElementById('alertaAlteracao');
 
     function escapeHtml(str) {
-        return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+        return String(str).replace(/[&<>"']/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s]));
     }
 
     function editarDadosPerfil() {
@@ -591,11 +591,6 @@
         });
     }
 
-    function sair() {
-        sessionStorage.clear();
-        window.location.href = "./login.html";
-    }
-
     carregarDados();
 
     document.querySelector('#notificacaoIcon').addEventListener('click', function (e) {
@@ -611,7 +606,11 @@
         }
     });
 
-    
+       function sair() {
+        sessionStorage.clear();
+        window.location.href = "./login.html";
+    }
+
     (function () {
         const perfil = document.querySelector('#perfilIcon');
         const opcoes = document.querySelector('.opcoes-dropdown');
