@@ -185,13 +185,40 @@ function pegarEvolucaoPorTickers(tickers) {
 
     const instrucaoSql = `
         SELECT 
-            acao,
-            ticker,
-            mes,
-            preco_medio_mensal
-        FROM evolucao_preco_2024
-        WHERE ticker IN (${lista})
-        ORDER BY ticker, mes;
+            e.idEmpresa,
+            e.nome,
+            e.ticker,
+            e.setor,
+            it.rentabilidadeAnual,
+            it.precoSobreValorPatrimonial,
+            it.patrimonioLiquidoAcao,
+            it.DRE,
+            it.EBITDA,
+            a.volume,
+            ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 AS volatilidade,
+            it.ano AS ano_referencia,
+            CASE 
+                WHEN MAX(af.idAcoesFavoritadas) IS NOT NULL THEN 1
+                ELSE 0
+            END AS favoritada
+            CASE 
+                WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 < 0.5 
+                     AND it.precoSobreValorPatrimonial <= 1 THEN 'Conservador'
+                WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 < 1.5 
+                     AND it.rentabilidadeAnual BETWEEN 1 AND 20 THEN 'Moderado'
+                WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 BETWEEN 0.5 AND 4
+                     AND it.rentabilidadeAnual > 5 THEN 'Arrojado'
+                ELSE 'Neutro'
+            END AS perfil_investidor
+        FROM infoTemporal it
+        INNER JOIN empresa e ON it.fkEmpresa = e.idEmpresa
+        LEFT JOIN acoesFavoritadas af
+        ON af.fkAcoes = e.idEmpresa
+        AND af.fkUsuario = ${idUsuario}
+        INNER JOIN acoes a ON a.fkEmpresa = e.idEmpresa AND YEAR(a.dtAtual) = it.ano
+        WHERE it.ano = (SELECT MAX(ano) FROM infoTemporal)
+          AND e.ticker = '${ticker}'
+    ) AS sub;
     `;
 
     return database.executar(instrucaoSql);

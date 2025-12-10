@@ -645,7 +645,6 @@
                 console.warn("Nenhuma informação encontrada para essa ação");
                 return;
             }
-
             const acao = dados[0]; // pega o objeto da ação
 
             // cria overlay do popup
@@ -672,7 +671,7 @@
                     </div>
                 <span class="popup-fechar">&times;</span>
                  <div class="preco-atual">
-                            <h3>R$${dados[0].media_preco_fechamento}</h3>
+                            <h3>R$${acao.precoSobreValorPatrimonial.toFixed(2)}</h3>
                             <span></span>
                         </div>
                         <div class="info-principal">
@@ -684,29 +683,40 @@
                     <div class="info-grid">
                         <div class="info-item">
                             <span class="info-label">Ticker</span>
-                            <span class="info-valor">${dados[0].ticker}</span>
+                            <span class="info-valor">${acao.ticker}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Setor</span>
+                            <span class="info-valor">${acao.setor}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Preço médio</span>
-                            <span class="info-valor">R$${dados[0].media_preco_fechamento}</span>
+                            <span class="info-valor">R$${acao.precoSobreValorPatrimonial.toFixed(2)}</span>
                         </div>
-                        <div class="info-item">
+                        <!-- <div class="info-item">
                             <span class="info-label">Maior preço</span>
                             <span class="info-valor">R$${dados[0].max_preco_alto}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Menor preço</span>
                             <span class="info-valor">R$${dados[0].min_preco_baixo}</span>
+                        </div>  -->
+                         <div class="info-item">
+                            <span class="info-label">Rentabilidade anual</span>
+                            <span class="info-valor">R$${acao.rentabilidadeAnual.toFixed(2)}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">DRE</span>
+                            <span class="info-valor">${acao.DRE.toFixed(2)}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">EBITDA</span>
+                            <span class="info-valor">${acao.EBITDA.toFixed(2)}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Volume</span>
-                            <span class="info-valor">${dados[0].media_volume}</span>
+                            <span class="info-valor">${acao.volume}</span>
                         </div>
-                        <div class="info-item">
-                            <span class="info-label">Setor</span>
-                            <span class="info-valor">${dados[0].setor}</span>
-                        </div>
-                    </div>
                 </div>
             </div>
         `;
