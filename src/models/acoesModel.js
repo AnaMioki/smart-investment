@@ -162,7 +162,7 @@ function pegarTop3AcoesRecomendadasGraficoEvolucao(perfil, setor) {
         JOIN empresa e ON d.fkEmpresa = e.idEmpresa
         JOIN infoTemporal it ON e.idEmpresa = it.fkEmpresa
         WHERE (it.precoSobreValorPatrimonial <= 1 OR it.rentabilidadeAnual > 15)
-        AND it.ano = (SELECT MAX(ano) FROM infoTemporal)
+        -- AND it.ano = (SELECT MAX(ano) FROM infoTemporal)
         -- AND perfil = '${perfil}'
     `;
 
@@ -260,6 +260,7 @@ function buscarAcoesUnicas(ticker, idUsuario) {
     var instrucaoSql =
         `SELECT 
     e.*, 
+    -- a.*,
     TRUNCATE(AVG(a.precoFechamento), 2) AS media_preco_fechamento,
     MAX(a.precoMaisAlto) AS max_preco_alto,
     MIN(a.precoMaisBaixo) AS min_preco_baixo,

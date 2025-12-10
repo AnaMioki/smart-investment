@@ -354,7 +354,7 @@
 
     //const selectPeriodo = document.getElementById("selectPeriodo");
 
-    
+
     let setor = "";
 
     // centraliza tudo que precisa ser iniciado ao carregar a página, tava mó bagunça do carai
@@ -393,12 +393,12 @@
     document.getElementById("selectPeriodo").addEventListener("change", () => {
         setor = document.getElementById("selectPeriodo").value;
         const perfil = sessionStorage.PERFIL_USUARIO;
-        
+
         filtrarPorSetor(perfil);
         carregarKPIs(perfil);
         criarGraficoEvolucaoPrecos();
     });
- // metodo complementar para redirecionar rotas
+    // metodo complementar para redirecionar rotas
     // se é a rota que puxa todas as ações ou a filtrada por setor (ambas levando em consideração o perfil do usuário)
 
     function filtrarPorSetor(perfil) {
@@ -617,12 +617,37 @@
             </div>
         `;
 
-            // const retornoEl = card.querySelector(".retorno");
-            // retornoEl.className = acao.rentabilidadeAnual >= 0 ? "verde" : "laranja";
+            // const estrela = card.querySelector('.estrela');
 
-            const retornoEl = card.querySelector(".retorno");
-            retornoEl.classList.remove("verde", "laranja");
-            retornoEl.classList.add(acao.rentabilidadeAnual >= 0 ? "verde" : "laranja");
+            // // decide se está cheia ou vazia
+            // if (acao.favoritada) {
+            //     estrela.classList.add('cheia');
+            //     estrela.classList.remove('vazia');
+            // } else {
+            //     estrela.classList.add('vazia');
+            //     estrela.classList.remove('cheia');
+            // }
+
+            // // adiciona clique pra favoritar/desfavoritar
+            // estrela.onclick = async () => {
+            //     const novaFavorita = !acao.favoritada;
+            //     await fetch(`/acoes/atualizarFavorita`, {
+            //         method: 'POST',
+            //         headers: { 'Content-Type': 'application/json' },
+            //         body: JSON.stringify({ idAcao: acao.idAcoes, idUsuario, favoritada: novaFavorita })
+            //     });
+
+            //     acao.favoritada = novaFavorita;
+            //     estrela.classList.toggle('cheia', novaFavorita);
+            //     estrela.classList.toggle('vazia', !novaFavorita);
+            // };
+
+            // // const retornoEl = card.querySelector(".retorno");
+            // // retornoEl.className = acao.rentabilidadeAnual >= 0 ? "verde" : "laranja";
+
+            // const retornoEl = card.querySelector(".retorno");
+            // retornoEl.classList.remove("verde", "laranja");
+            // retornoEl.classList.add(acao.rentabilidadeAnual >= 0 ? "verde" : "laranja");
 
 
             // // redireciona ao clicar
@@ -641,14 +666,74 @@
         });
     }
 
+    function favoritar(idAcao) {
+        var imagem = `<img class="estrela" src="./Style/assets/estrelaCheia.svg"  onclick="event.stopPropagation(); desfavoritar(${idAcao})">`;
+        imagemPopUp.innerHTML = imagem;
 
-    async function abrirInfoAcao(card, ticker, idUsuario) {
+        fetch("/interaction/favoritarAcao", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                idacao: idAcao,
+                idUsuario: sessionStorage.ID_USUARIO
+            }),
+        })
+            .then((res) => {
+                if (res.ok) {
+                    console.log("Sucesso ao favoritar ação!");
+                } else {
+                    res.text().then((msg) =>
+                        console.log("Erro ao favoritar, tente novamente!")
+                    );
+                }
+            })
+            .catch((error) => {
+                console.error("Erro:", error);
+                console.log("Erro ao conectar com o servidor.");
+            });
+    }
+
+
+    function desfavoritar(idAcao) {
+        imagemPopUp.innerHTML = "";
+        var imagem = `<img class="estrela" src="./Style/assets/estrelaVazia.svg"  onclick="event.stopPropagation(); favoritar(${idAcao})">`;
+        imagemPopUp.innerHTML = "";
+        imagemPopUp.innerHTML = imagem;
+
+        fetch("/interaction/desfavoritarAcao", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                idacao: idAcao,
+                idUsuario: sessionStorage.ID_USUARIO
+            }),
+        })
+            .then((res) => {
+                if (res.ok) {
+                    console.log("Sucesso ao favoritar ação!");
+                } else {
+                    res.text().then((msg) =>
+                        console.log("Erro ao favoritar, tente novamente!")
+                    );
+                }
+            })
+            .catch((error) => {
+                console.error("Erro:", error);
+                console.log("Erro ao conectar com o servidor.");
+            });
+
+    }
+
+    async function abrirInfoAcao(card, ticker) {
         try {
-
             const idUsuario = sessionStorage.ID_USUARIO;
             // busca dados da ação via fetch
             //const resp = await fetch(`/acoes/buscarAcaoPorTicker/${ticker}/${idUsuario}`);
-             const resp = await fetch(`/acoes/buscarAcoesUnicas/${ticker}/${idUsuario}`);
+            const resp = await fetch(`/acoes/buscarAcoesUnicas/${ticker}/${idUsuario}`);
             if (!resp.ok) {
                 console.error("Erro ao buscar ação por ticker:", resp.status);
                 return;
@@ -707,21 +792,17 @@
                             <span class="info-label">Preço médio</span>
                             <span class="info-valor">R$${dados[0].media_preco_fechamento != null ? dados[0].media_preco_fechamento.toFixed(2) : "-"}</span>
                         </div>
-                        <!-- <div class="info-item">
+                        <div class="info-item">
                             <span class="info-label">Maior preço</span>
                             <span class="info-valor">R$${dados[0].max_preco_alto}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Menor preço</span>
                             <span class="info-valor">R$${dados[0].min_preco_baixo}</span>
-                        </div>  -->
-                         <div class="info-item">
-                            <span class="info-label">Rentabilidade anual</span>
-                            <span class="info-valor">R$${acao.rentabilidadeAnual != null ? acao.rentabilidadeAnual.toFixed(2) : "-"}</span>
-                        </div>
+                        </div>  
                         <div class="info-item">
                             <span class="info-label">DRE</span>
-                            <span class="info-valor">${acao.DRE != null ? acao.DRE.toFixed(2): "-"}</span>
+                            <span class="info-valor">${acao.DRE != null ? acao.DRE.toFixed(2) : "-"}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">EBITDA</span>
@@ -729,29 +810,11 @@
                         </div>
                         <div class="info-item">
                             <span class="info-label">Volume</span>
-                            <span class="info-valor">${acao.volume}</span>
+                            <span class="info-valor">${acao.media_volume}</span>
                         </div>
                 </div>
             </div>
         `;
-
-            //  <h2>${acao.nome} (${acao.ticker})</h2>
-            //         <p>Setor: ${acao.setor}</p>
-            //         <p>Preço: R$ ${acao.precoSobreValorPatrimonial.toFixed(2)}</p>
-            //         <p>Retorno anual: ${acao.rentabilidadeAnual.toFixed(2)}%</p>
-            //         <p>DRE: ${acao.DRE.toFixed(2)}</p>
-            //         <p>EBITDA: ${acao.EBITDA.toFixed(2)}</p>
-            //         <p>Volume: ${acao.volume}</p>
-            //         <img id="imagemPopUp" src="Style/assets/imagemVazia.webp" alt="Logo">
-            //         <img id="favoritar" src="Style/assets/estrelaVazia.svg" style="cursor:pointer">
-            //     document.body.appendChild(popup);
-
-            // fechar popup
-            popup.querySelector(".popup-fechar").addEventListener("click", () => popup.remove());
-            popup.addEventListener("click", (e) => {
-                if (e.target === popup) popup.remove(); // fechar clicando fora do conteúdo
-            });
-
             document.body.appendChild(popup);
 
             const fecharPopup = popup.querySelector('.popup-fechar');
@@ -767,26 +830,68 @@
                     document.removeEventListener('click', fecharFora);
                 }
             }
-            // favoritar/desfavoritar
-            // const estrela = popup.querySelector("#favoritar");
-            // estrela.addEventListener("click", (e) => {
-            //     e.stopPropagation();
-            //     estrela.src = estrela.src.includes("Vazia")
-            //         ? "Style/assets/estrelaCheia.svg"
-            //         : "Style/assets/estrelaVazia.svg";
-            //     // aqui você pode chamar a rota de favoritar/desfavoritar
-            // });
-
-        } catch (erro) {
-            console.error("Erro ao abrir popup da ação:", erro);
         }
-    }    // busca dados da ação via fetch, se quiser preencher mais info
+        catch (erro) {
+            console.error("Erro ao abrir popup da ação:", erro);
+        };
+    }
+
+    //  <h2>${acao.nome} (${acao.ticker})</h2>
+    //         <p>Setor: ${acao.setor}</p>
+    //         <p>Preço: R$ ${acao.precoSobreValorPatrimonial.toFixed(2)}</p>
+    //         <p>Retorno anual: ${acao.rentabilidadeAnual.toFixed(2)}%</p>
+    //         <p>DRE: ${acao.DRE.toFixed(2)}</p>
+    //         <p>EBITDA: ${acao.EBITDA.toFixed(2)}</p>
+    //         <p>Volume: ${acao.volume}</p>
+    //         <img id="imagemPopUp" src="Style/assets/imagemVazia.webp" alt="Logo">
+    //         <img id="favoritar" src="Style/assets/estrelaVazia.svg" style="cursor:pointer">
+    //     document.body.appendChild(popup);
+
+    // fechar popup
+    // popup.querySelector(".popup-fechar").addEventListener("click", () => popup.remove());
+    // popup.addEventListener("click", (e) => {
+    //     if (e.target === popup) popup.remove(); // fechar clicando fora do conteúdo
+    // });
+
+    // document.body.appendChild(popup);
+
+    // const fecharPopup = popup.querySelector('.popup-fechar');
+    // fecharPopup.onclick = () => {
+    //     document.body.removeChild(popup);
+    // };
+
+    // document.addEventListener('click', fecharFora);
+
+    // function fecharFora(e) {
+    //     if (!popup.querySelector('.popup-conteudo').contains(e.target)) {
+    //         popup.remove();
+    //         document.removeEventListener('click', fecharFora);
+    //     }
+    // }
+    // favoritar/desfavoritar
+    // const estrela = popup.querySelector("#favoritar");
+    // estrela.addEventListener("click", (e) => {
+    //     e.stopPropagation();
+    //     estrela.src = estrela.src.includes("Vazia")
+    //         ? "Style/assets/estrelaCheia.svg"
+    //         : "Style/assets/estrelaVazia.svg";
+    //     // aqui você pode chamar a rota de favoritar/desfavoritar
+    // });
+
+    //     } catch (erro) {
+    //     console.error("Erro ao abrir popup da ação:", erro);
+    // }
+    // busca dados da ação via fetch, se quiser preencher mais info
 
 
 
     function favoritar(idAcao) {
-        var imagem = `<img class="estrela" src="./Style/assets/estrelaCheia.svg"  onclick="event.stopPropagation(); desfavoritar(${idAcao})">`;
-        imagemPopUp.innerHTML = imagem;
+        // var imagem = `<img class="estrela" src="./Style/assets/estrelaCheia.svg"  onclick="event.stopPropagation(); desfavoritar(${idAcao})">`;
+        // imagemPopUp.innerHTML = imagem;
+
+        const estrela = document.querySelector('.popup-acao .estrela');
+        estrela.src = './Style/assets/estrelaCheia.svg';
+        estrela.setAttribute('onclick', `event.stopPropagation(); desfavoritar(${idEmpresa})`);
 
         fetch("/interaction/favoritarAcao", {
             method: "POST",
@@ -815,10 +920,14 @@
 
 
     function desfavoritar(idAcao) {
-        imagemPopUp.innerHTML = "";
-        var imagem = `<img class="estrela" src="./Style/assets/estrelaVazia.svg"  onclick="event.stopPropagation(); favoritar(${idAcao})">`;
-        imagemPopUp.innerHTML = "";
-        imagemPopUp.innerHTML = imagem;
+        // imagemPopUp.innerHTML = "";
+        // var imagem = `<img class="estrela" src="./Style/assets/estrelaVazia.svg"  onclick="event.stopPropagation(); favoritar(${idAcao})">`;
+        // imagemPopUp.innerHTML = "";
+        // imagemPopUp.innerHTML = imagem;
+
+        const estrela = document.querySelector('.popup-acao .estrela');
+        estrela.src = './Style/assets/estrelaVazia.svg';
+        estrela.setAttribute('onclick', `event.stopPropagation(); favoritar(${idEmpresa})`);
 
         fetch("/interaction/desfavoritarAcao", {
             method: "DELETE",
@@ -1148,7 +1257,7 @@
 
 
     //async function buscarAcaoPorTicker(ticker) {
-      async function buscarAcoesUnicas(ticker) {
+    async function buscarAcoesUnicas(ticker) {
         try {
             //const resposta = await fetch(`/acoes/buscarPorTicker/${ticker}/`);
             const resposta = await fetch(`/acoes/buscarPorTicker/${ticker}/`);
