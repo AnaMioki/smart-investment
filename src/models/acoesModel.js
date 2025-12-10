@@ -214,6 +214,10 @@ function buscarAcaoPorTicker(ticker, idUsuario) {
             ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 AS volatilidade,
             it.ano AS ano_referencia,
             CASE 
+                WHEN MAX(af.idAcoesFavoritadas) IS NOT NULL THEN 1
+                ELSE 0
+            END AS favoritada
+            CASE 
                 WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 < 0.5 
                      AND it.precoSobreValorPatrimonial <= 1 THEN 'Conservador'
                 WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 < 1.5 
@@ -224,6 +228,9 @@ function buscarAcaoPorTicker(ticker, idUsuario) {
             END AS perfil_investidor
         FROM infoTemporal it
         INNER JOIN empresa e ON it.fkEmpresa = e.idEmpresa
+        LEFT JOIN acoesFavoritadas af
+        ON af.fkAcoes = e.idEmpresa
+        AND af.fkUsuario = ${idUsuario}
         INNER JOIN acoes a ON a.fkEmpresa = e.idEmpresa AND YEAR(a.dtAtual) = it.ano
         WHERE it.ano = (SELECT MAX(ano) FROM infoTemporal)
           AND e.ticker = '${ticker}'
