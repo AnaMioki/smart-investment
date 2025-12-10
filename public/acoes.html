@@ -150,10 +150,10 @@
 
                     <div id="topoSetor">
                         <h1>Ações Disponíveis</h1>
-                        <label for="searchSetor">
+                        <!-- <label for="searchSetor">
                             <img src="Style/assets/lupaSetores.svg">
                             <input type="search" id="searchTicker" placeholder="Buscar ação por ticker...">
-                        </label>
+                        </label> -->
                     </div>
 
                     <div id="listaAcoes">
@@ -189,7 +189,7 @@
                         <div id="card-modelo" class="card" style="display: none;">
                             <div>
                                 <div class="tipo">
-                                    <img class="icon-favorito" src="Style/assets/estrelaCheia.svg">
+                                    <!-- <img class="icon-favorito" src="Style/assets/estrelaCheia.svg"> -->
                                     <div>
                                         <h1 class="acao-nome"></h1>
                                         <p class="acao-ticker"></p>
@@ -590,7 +590,7 @@
             card.innerHTML = `
             <div>
                 <div class="tipo">
-                    <img class="icon-favorito" src="Style/assets/estrelaCheia.svg">
+                   <!-- <img class="icon-favorito" src="Style/assets/estrelaCheia.svg">-->
 
                     <div>
                         <h1 class="acao-nome">${acao.nome}</h1>
@@ -1109,56 +1109,116 @@
     //     });
     // }
 
+    const cores = {
+        '0': 'rgb(54, 162, 235)',
+        '1': 'rgb(75, 192, 192)',
+        '2': 'rgb(255, 99, 132)',
+        '3': 'rgb(255, 159, 64)'
+    };
+
+    function criarGraficoEvolucaoPrecos(evolucaoMeses) {
+        const ctx = document.getElementById('graficoEvolucaoPrecos');
+        const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+
+        let cor = 0;
+        const datasets = [];
+
+        evolucaoMeses.forEach(ticker => {
+            const precos = ticker.map(element => element.preco_medio_mes);
+
+            datasets.push({
+                label: ticker[0].ticker,        // Ticker da ação
+                data: precos,                    // Valores de preço médio por mês
+                borderColor: cores[cor],         // Cor da linha
+                backgroundColor: cores[cor],     // Cor de preenchimento (para linha)
+                borderWidth: 2,
+                tension: 0.3,                    // Curvatura da linha
+                pointRadius: 3                   // Tamanho do ponto
+            });
+
+            cor++;
+        });
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: meses,
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(0,0,0,0.05)' }
+                    },
+                    x: {
+                        grid: { color: 'rgba(0,0,0,0.05)' }
+                    }
+                },
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+    }
+
 
     async function carregarEvolucao(perfil, setor) {
-        // const resp = await fetch(`/acoes/grafico/evolucao/${perfil}/${setor || ""}`);
-        // //const listaAcoes= await resp.json();
-        // const data = await resp.json();
+       const listaAcoes = [];
 
-        // const listaAcoes = organizarDadosParaGrafico(data.evolucao);
+    for (const ticker of tickers) {
+        try {
+            const resp = await fetch(`/setores/evolucaoMeses/${ticker}/${anos}`);
+            if (!resp.ok) {
+                console.warn("Erro ao buscar dados da ação", ticker, resp.status);
+                continue;
+            }
+            const dados = await resp.json();
+            listaAcoes.push(...organizarDadosParaGrafico(dados));
+        } catch (e) {
+            console.error("Erro ao buscar dados da ação", ticker, e);
+        }
+    }
 
+    if (listaAcoes.length === 0) {
+        console.warn("Nenhuma ação encontrada.");
+    }
 
-        console.log("carregarEvolucao chamado com setor:", setor);
-
-
-        // const resp = await fetch(`/acoes/grafico/evolucao/${perfil}/${setor || ""}`);
-        // //const listaAcoes= await resp.json();
-        // const data = await resp.json();
-
-        let url = `/acoes/grafico/evolucao/${perfil}`;
-        if (setor) url += `/${setor}`;
+    criarGraficoEvolucaoPrecos(listaAcoes);
 
         // const resp = await fetch(url);
         // const data = await resp.json();
 
-        let resp;
-        try {
-            resp = await fetch(url);
-        } catch (e) {
-            console.error("Erro ao acessar gráfico:", e);
-            criarGraficoEvolucaoPrecos([]);
-            return;
-        }
+        // let resp;
+        // try {
+        //     resp = await fetch(url);
+        // } catch (e) {
+        //     console.error("Erro ao acessar gráfico:", e);
+        //     criarGraficoEvolucaoPrecos([]);
+        //     return;
+        // }
 
-        if (!resp.ok) {
-            console.warn("Rota de gráfico retornou status", resp.status);
-            criarGraficoEvolucaoPrecos([]);
-            return;
-        }
+        // if (!resp.ok) {
+        //     console.warn("Rota de gráfico retornou status", resp.status);
+        //     criarGraficoEvolucaoPrecos([]);
+        //     return;
+        // }
 
-        let data = {};
-        try {
-            data = await resp.json();
-        } catch {
-            console.warn("Gráfico retornou JSON vazio.");
-            criarGraficoEvolucaoPrecos([]);
-            return;
-        }
+        // let data = {};
+        // try {
+        //     data = await resp.json();
+        // } catch {
+        //     console.warn("Gráfico retornou JSON vazio.");
+        //     criarGraficoEvolucaoPrecos([]);
+        //     return;
+        // }
 
 
-        const listaAcoes = organizarDadosParaGrafico(data.evolucao || {});
+        // const listaAcoes = organizarDadosParaGrafico(data.evolucao || {});
 
-        criarGraficoEvolucaoPrecos(listaAcoes);
+        // criarGraficoEvolucaoPrecos(listaAcoes);
 
         // organizar dados
         // const meses = dados.map(item => item.mes);
@@ -1231,6 +1291,64 @@
         });
     }
 
+//     async function carregarEvolucao(tickers, anos) {
+//     const listaAcoes = [];
+
+//     for (const ticker of tickers) {
+//         try {
+//             const resp = await fetch(`/setores/evolucaoMeses/${ticker}/${anos}`);
+//             if (!resp.ok) continue;
+//             const dados = await resp.json();
+//             listaAcoes.push(...organizarDadosParaGrafico(dados));
+//         } catch (e) {
+//             console.error("Erro ao buscar dados da ação", ticker, e);
+//         }
+//     }
+
+//     if (listaAcoes.length === 0) console.warn("Nenhuma ação encontrada.");
+
+//     criarGraficoEvolucaoPrecos(listaAcoes);
+// }
+
+// function organizarDadosParaGrafico(evolucao) {
+//     const mesesNomes = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+//     const acoesAgrupadas = {};
+
+//     evolucao.forEach(linha => {
+//         if (!acoesAgrupadas[linha.ticker]) {
+//             acoesAgrupadas[linha.ticker] = { ticker: linha.ticker, historico: [] };
+//         }
+//         acoesAgrupadas[linha.ticker].historico.push({
+//             mes: mesesNomes[linha.mes - 1],
+//             preco_medio_mensal: linha.preco_medio_mes
+//         });
+//     });
+
+//     return Object.values(acoesAgrupadas);
+// }
+
+// function criarGraficoEvolucaoPrecos(listaAcoes) {
+//     const ctx = document.getElementById('graphLinha').getContext('2d');
+//     if (!listaAcoes.length) return;
+
+//     const meses = listaAcoes[0].historico.map(h => h.mes);
+//     const datasets = listaAcoes.map((acao, i) => ({
+//         label: acao.ticker,
+//         data: acao.historico.map(p => p.preco_medio_mensal),
+//         borderColor: cores[i % Object.keys(cores).length],
+//         fill: false,
+//         tension: 0.2,
+//         borderWidth: 2
+//     }));
+
+//     if (window.graficoEvolucao) window.graficoEvolucao.destroy();
+
+//     window.graficoEvolucao = new Chart(ctx, {
+//         type: 'line',
+//         data: { labels: meses, datasets },
+//         options: { responsive: true, plugins: { legend: { position: 'top' } } }
+//     });
+// }
 
 
     const inputTicker = document.getElementById("searchTicker");
