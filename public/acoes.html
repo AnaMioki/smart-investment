@@ -361,12 +361,14 @@
     document.addEventListener("DOMContentLoaded", init);
 
     window.onload = () => {
-        pegarKpisPorSetor(perfilSelecionado, "");
+        //pegarKpisPorSetor(perfilSelecionado, "");
+        const idUsuario = sessionStorage.ID_USUARIO;
     };
 
     function init() {
         console.log("Página carregada. Iniciando...");
         const perfil = sessionStorage.PERFIL_USUARIO;
+        const idUsuario = sessionStorage.ID_USUARIO;
 
         //setor = document.getElementById("selectPeriodo").value;
         setor = ""; // inicia vazio, ou seja, "todos setores"
@@ -598,16 +600,16 @@
                     <h1 class="setor">${acao.setor}</h1>
                     <h1 class="preco">R$ ${acao.precoSobreValorPatrimonial != null ? acao.precoSobreValorPatrimonial.toFixed(2) : "-"}</h1>
                     <!-- <h1 class="retorno verde">${acao.retorno ?? "-"}%</h1> -->
-                    <h1 class="retorno verde">${acao.rentabilidadeAnual.toFixed(2) ?? "-"}%</h1>
+                    <h1 class="retorno verde">${acao.rentabilidadeAnual != null ? acao.rentabilidadeAnual.toFixed(2) : "-"}%</h1>
 
                 </div>
 
                 <div class="especificacao">
                     <h1 class="disaparecido">DRE:</h1>
-                    <h1 class="dre">${acao.DRE.toFixed(2) ?? "-"}</h1>
+                    <h1 class="dre">${acao.DRE != null ? acao.DRE.toFixed(2) : "-"}</h1>
 
                     <h1 class="disaparecido">EBITDA:</h1> 
-                    <h1 class="ebitda">${acao.EBITDA.toFixed(2) ?? "-"}</h1> 
+                    <h1 class="ebitda">${acao.EBITDA != null ? acao.EBITDA.toFixed(2) : "-"}</h1> 
 
                     <h1 class="disaparecido">Volume:</h1>
                     <h1 class="volume">${acao.volume ?? "-"}</h1>
@@ -640,12 +642,13 @@
     }
 
 
-    async function abrirInfoAcao(card, ticker) {
+    async function abrirInfoAcao(card, ticker, idUsuario) {
         try {
 
             const idUsuario = sessionStorage.ID_USUARIO;
             // busca dados da ação via fetch
-            const resp = await fetch(`/acoes/buscarAcaoPorTicker/${ticker}/${idUsuario}`);
+            //const resp = await fetch(`/acoes/buscarAcaoPorTicker/${ticker}/${idUsuario}`);
+             const resp = await fetch(`/acoes/buscarAcoesUnicas/${ticker}/${idUsuario}`);
             if (!resp.ok) {
                 console.error("Erro ao buscar ação por ticker:", resp.status);
                 return;
@@ -682,14 +685,14 @@
                     </div>
                 <span class="popup-fechar">&times;</span>
                  <div class="preco-atual">
-                            <h3>R$${acao.precoSobreValorPatrimonial.toFixed(2)}</h3>
-                            <span></span>
-                        </div>
-                        <div class="info-principal">
-                        <div class="preco-atual">
                             <h3>R$${dados[0].media_preco_fechamento}</h3>
                             <span></span>
                         </div>
+                        <!-- <div class="info-principal">
+                        <div class="preco-atual">
+                            <h3>R$${dados[0].media_preco_fechamento}</h3>
+                            <span></span>
+                        </div> -->
                     </div>
                     <div class="info-grid">
                         <div class="info-item">
@@ -702,7 +705,7 @@
                         </div>
                         <div class="info-item">
                             <span class="info-label">Preço médio</span>
-                            <span class="info-valor">R$${acao.precoSobreValorPatrimonial.toFixed(2)}</span>
+                            <span class="info-valor">R$${dados[0].media_preco_fechamento != null ? dados[0].media_preco_fechamento.toFixed(2) : "-"}</span>
                         </div>
                         <!-- <div class="info-item">
                             <span class="info-label">Maior preço</span>
@@ -714,15 +717,15 @@
                         </div>  -->
                          <div class="info-item">
                             <span class="info-label">Rentabilidade anual</span>
-                            <span class="info-valor">R$${acao.rentabilidadeAnual.toFixed(2)}</span>
+                            <span class="info-valor">R$${acao.rentabilidadeAnual != null ? acao.rentabilidadeAnual.toFixed(2) : "-"}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">DRE</span>
-                            <span class="info-valor">${acao.DRE.toFixed(2)}</span>
+                            <span class="info-valor">${acao.DRE != null ? acao.DRE.toFixed(2): "-"}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">EBITDA</span>
-                            <span class="info-valor">${acao.EBITDA.toFixed(2)}</span>
+                            <span class="info-valor">${acao.EBITDA != null ? acao.EBITDA.toFixed(2) : "-"}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Volume</span>
@@ -1138,13 +1141,16 @@
                 return;
             }
 
-            await buscarAcaoPorTicker(ticker);
+            await buscarAcoesUnicas(ticker, idUsuario);
+            //await buscarAcaoPorTicker(ticker);
         }, 300); // debounce de 300ms
     });
 
 
-    async function buscarAcaoPorTicker(ticker) {
+    //async function buscarAcaoPorTicker(ticker) {
+      async function buscarAcoesUnicas(ticker) {
         try {
+            //const resposta = await fetch(`/acoes/buscarPorTicker/${ticker}/`);
             const resposta = await fetch(`/acoes/buscarPorTicker/${ticker}/`);
             if (!resposta.ok) {
                 console.error("Erro ao buscar ação por ticker:", resposta.status);

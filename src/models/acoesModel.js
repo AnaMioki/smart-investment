@@ -256,12 +256,50 @@ function pegarEvolucaoPorTickers(tickers) {
 //         });
 // }
 
+function buscarAcoesUnicas(ticker, idUsuario) {
+    var instrucaoSql =
+        `SELECT 
+    e.*, 
+    TRUNCATE(AVG(a.precoFechamento), 2) AS media_preco_fechamento,
+    MAX(a.precoMaisAlto) AS max_preco_alto,
+    MIN(a.precoMaisBaixo) AS min_preco_baixo,
+    TRUNCATE(AVG(a.volume), 2) AS media_volume,
+    TRUNCATE(it.EBITDA, 2) AS EBITDA,
+    TRUNCATE(it.valorMercado,2) AS DRE,
+    TRUNCATE(it.rentabilidadeAnual, 2) AS retorno,
+    TRUNCATE(((MAX(a.precoMaisAlto) - MIN(a.precoMaisBaixo)) / AVG(a.precoFechamento)) * 100, 2) AS volatilidade_media_ano,
+    CASE 
+        WHEN MAX(af.idAcoesFavoritadas) IS NOT NULL THEN 1
+        ELSE 0
+    END AS favoritada
 
+FROM empresa e
+JOIN acoes a 
+    ON e.idEmpresa = a.fkEmpresa
+JOIN infoTemporal it 
+    ON it.fkEmpresa = e.idEmpresa
+LEFT JOIN acoesFavoritadas af
+    ON af.fkAcoes = e.idEmpresa
+    AND af.fkUsuario = ${idUsuario}
+
+WHERE 
+    e.ticker = '${ticker}'
+
+GROUP BY 
+    e.idEmpresa, 
+    it.EBITDA,             
+    it.valorMercado,       
+    it.rentabilidadeAnual;
+`;
+    console.log("Executando a instrução do SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql)
+}
 
 module.exports = {
     listarTodasAcoesDeAcordoComPerfil,
     listarAcoesPorSetor,
     listarSetores,
     pegarTop3AcoesRecomendadasGraficoEvolucao,
-    pegarEvolucaoPorTickers
+    pegarEvolucaoPorTickers,
+    buscarAcoesUnicas
 };

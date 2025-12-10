@@ -32,9 +32,11 @@ router.get("/kpis/:perfil/:setor?", function (req , res){
 router.get("/grafico/evolucao/:perfil/:setor?", function (req, res) { 
     acoesController.graficoEvolucao(req, res)});
 
-router.get('/buscarAcaoPorTicker/:ticker/:idUsuario', acoesController.buscarAcaoPorTicker);
-//router.get('/buscarAcaoPorTicker/:ticker', acoesController.buscarAcaoPorTicker);
+// router.get('/buscarAcaoPorTicker/:ticker/:idUsuario', acoesController.buscarAcaoPorTicker);
+// //router.get('/buscarAcaoPorTicker/:ticker', acoesController.buscarAcaoPorTicker);
 
-
+router.get('/buscarAcoesUnicas/:ticker/:idUsuario', function (req , res) {
+    acoesController.buscarAcoesUnicas(req , res);
+});
 
 module.exports = router;
