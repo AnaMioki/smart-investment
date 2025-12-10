@@ -159,11 +159,27 @@ function buscarAcaoPorTicker(req, res) {
         });
 }
 
+function buscarAcoesUnicas(req, res) {
+    var ticker = req.params.ticker;
+    acoesModel.buscarAcoesUnicas(ticker).then(function (resultado) {
+        if (resultado.length > 0) {
+            res.json(resultado);
+        } else {
+            res.status(204).send("Nenhuma ação encontrada para este setor!")
+        }
+    }).catch(function (erro) {
+        console.log(erro);
+        console.log("Houve um erro ao buscar as ações do setor.", erro.sqlMessage);
+        res.status(500).json(erro.sqlMessage);
+    });
+}
+
 
 module.exports = {
     listarTodasAcoesDeAcordoComPerfil,
     listarSetores,
     listarAcoesPorSetor,
     graficoEvolucao,
-    buscarAcaoPorTicker
+    buscarAcaoPorTicker,
+    buscarAcoesUnicas
 }

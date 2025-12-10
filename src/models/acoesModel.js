@@ -1,3 +1,4 @@
+const { bus } = require("nodemon/lib/utils");
 var database = require("../database/config");
 
 function listarTodasAcoesDeAcordoComPerfil(perfil) {
@@ -196,49 +197,74 @@ function pegarEvolucaoPorTickers(tickers) {
 }
 
 
-function buscarAcaoPorTicker(ticker, idUsuario) {
-    const instrucaoSql = `
-           SELECT *
-    FROM (
-        SELECT 
-            -- e.idEmpresa,
-            e.*, 
-            -- e.nome,
-            -- e.ticker,
-            -- e.setor,
-            it.rentabilidadeAnual,
-            it.precoSobreValorPatrimonial,
-            it.patrimonioLiquidoAcao,
-            it.DRE,
-            it.EBITDA,
-            a.volume,
-            ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 AS volatilidade,
-            it.ano AS ano_referencia,
-            CASE 
-                WHEN af.idAcoesFavoritadas IS NOT NULL THEN 1
-                ELSE 0
-            END AS favoritada,
-            CASE 
-                WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 < 0.5 
-                     AND it.precoSobreValorPatrimonial <= 1 THEN 'Conservador'
-                WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 < 1.5 
-                     AND it.rentabilidadeAnual BETWEEN 1 AND 20 THEN 'Moderado'
-                WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 BETWEEN 0.5 AND 4
-                     AND it.rentabilidadeAnual > 5 THEN 'Arrojado'
-                ELSE 'Neutro'
-            END AS perfil_investidor
-        FROM infoTemporal it
-        INNER JOIN empresa e ON it.fkEmpresa = e.idEmpresa
-        LEFT JOIN acoesFavoritadas af
-       ON af.fkAcoes = e.idEmpresa
-        AND af.fkUsuario = ${idUsuario}
-        INNER JOIN acoes a ON a.fkEmpresa = e.idEmpresa AND YEAR(a.dtAtual) = it.ano
-        WHERE it.ano = (SELECT MAX(ano) FROM infoTemporal)
-          AND e.ticker = '${ticker}'
-    ) AS sub;
-    `;
-    console.log("Executando SQL:", instrucaoSql);
-    return database.executar(instrucaoSql);
+// function buscarAcaoPorTicker(ticker, idUsuario) {
+//     const instrucaoSql = `
+//            SELECT *
+//     FROM (
+//         SELECT 
+//             -- e.idEmpresa,
+//             e.*, 
+//             -- e.nome,
+//             -- e.ticker,
+//             -- e.setor,
+//             it.rentabilidadeAnual,
+//             it.precoSobreValorPatrimonial,
+//             it.patrimonioLiquidoAcao,
+//             it.DRE,
+//             it.EBITDA,
+//             a.volume,
+//             ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 AS volatilidade,
+//             it.ano AS ano_referencia,
+//             CASE 
+//                 WHEN af.idAcoesFavoritadas IS NOT NULL THEN 1
+//                 ELSE 0
+//             END AS favoritada,
+//             CASE 
+//                 WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 < 0.5 
+//                      AND it.precoSobreValorPatrimonial <= 1 THEN 'Conservador'
+//                 WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 < 1.5 
+//                      AND it.rentabilidadeAnual BETWEEN 1 AND 20 THEN 'Moderado'
+//                 WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 BETWEEN 0.5 AND 4
+//                      AND it.rentabilidadeAnual > 5 THEN 'Arrojado'
+//                 ELSE 'Neutro'
+//             END AS perfil_investidor
+//         FROM infoTemporal it
+//         INNER JOIN empresa e ON it.fkEmpresa = e.idEmpresa
+//         LEFT JOIN acoesFavoritadas af   ON af.fkAcoes = a.idAcao  -- ou e.idEmpresa, dependendo da relação
+//         AND af.fkUsuario = ${idUsuario}
+//         INNER JOIN acoes a ON a.fkEmpresa = e.idEmpresa AND YEAR(a.dtAtual) = it.ano
+//         WHERE it.ano = (SELECT MAX(ano) FROM infoTemporal)
+//           AND e.ticker = '${ticker}'
+//     ) AS sub;
+//     `;
+//     console.log("Executando SQL:", instrucaoSql);
+//     return database.executar(instrucaoSql);
+// }
+
+function buscarAcoesUnicas(ticker) {
+    var instrucaoSql = `
+    e.*, 
+    MAX(it.rentabilidadeAnual) AS rentabilidadeAnual,
+    MAX(it.precoSobreValorPatrimonial) AS precoSobreValorPatrimonial,
+    MAX(it.patrimonioLiquidoAcao) AS patrimonioLiquidoAcao,
+    MAX(it.DRE) AS DRE,
+    MAX(it.EBITDA) AS EBITDA,
+    MAX(a.volume) AS volume,
+    TRUNCATE(AVG(a.precoFechamento), 2) AS media_preco_fechamento,
+    MAX(a.precoMaisAlto) AS max_preco_alto,
+    MIN(a.precoMaisBaixo) AS min_preco_baixo,
+    TRUNCATE(AVG(a.volume), 2) AS media_volume
+FROM empresa e
+JOIN acoes a 
+    ON e.idEmpresa = a.fkEmpresa
+LEFT JOIN indicadores it
+    ON e.idEmpresa = it.fkEmpresa
+WHERE 
+    e.ticker = '${ticker}'
+GROUP BY e.idEmpresa
+LIMIT 1;`;
+    console.log("Executando a instrução do SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql)
 }
 
 
@@ -249,5 +275,6 @@ module.exports = {
     listarSetores,
     pegarTop3AcoesGraficoEvolucao,
     pegarEvolucaoPorTickers,
-    buscarAcaoPorTicker
+    //buscarAcaoPorTicker,
+    buscarAcoesUnicas
 };

@@ -274,12 +274,14 @@
     window.onload = () => {
         // teste:
         const perfil = sessionStorage.PERFIL_USUARIO;
-        //pegarKpisPorSetor(perfil, "");
+
     };
 
     function init() {
         console.log("Página carregada. Iniciando...");
+        const idUsuario = sessionStorage.ID_USUARIO;
         const perfil = sessionStorage.PERFIL_USUARIO;
+        console.log("Perfil do usuário:", idUsuario);
 
         //setor = document.getElementById("selectPeriodo").value;
         setor = ""; // inicia vazio, ou seja, "todos setores"
@@ -568,7 +570,8 @@
 
             const idUsuario = sessionStorage.ID_USUARIO;
             // busca dados da ação via fetch
-            const resp = await fetch(`/acoes/buscarAcaoPorTicker/${ticker}/${idUsuario}`);
+            //const resp = await fetch(`/acoes/buscarAcaoPorTicker/${ticker}/${idUsuario}`);
+            const resp = await fetch(`/acoes/buscarAcoesUnicas/${ticker}/${idUsuario}`);
             if (!resp.ok) {
                 console.error("Erro ao buscar ação por ticker:", resp.status);
                 return;
@@ -1058,13 +1061,14 @@
                 filtrarPorSetor(perfil);
                 return;
             }
-
-            await buscarAcaoPorTicker(ticker);
+            await buscarAcoesUnicas(ticker)
+            //await buscarAcaoPorTicker(ticker);
         }, 300); // debounce de 300ms
     });
 
 
-    async function buscarAcaoPorTicker(ticker) {
+    //async function buscarAcaoPorTicker(ticker) {
+    async function buscarAcoesUnicas(ticker) {
         try {
             const resposta = await fetch(`/acoes/buscarPorTicker/${ticker}/`);
             if (!resposta.ok) {
