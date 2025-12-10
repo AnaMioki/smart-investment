@@ -424,10 +424,18 @@
 
             if (!resp.ok) {
                 console.error("Erro na rota filtrada:", resp.status);
+                renderizarAcoes([]);
                 return;
             }
 
-            const lista = await resp.json();
+            //const lista = await resp.json();
+            let lista = [];
+            try {
+                lista = await resp.json();
+            } catch {
+                console.warn("Resposta vazia. Considerando lista = []");
+                lista = [];
+            }
             renderizarAcoes(lista);
         } catch (erro) {
             console.error("Erro no fetch setor:", erro);
@@ -458,9 +466,10 @@
 
     }
 
-    // fazer verificação
     function renderizarAcoes(lista) {
         const container = document.getElementById("listaAcoes");
+
+        console.log("Lista recebida:", lista);
 
         // limpa cards antigos, tirando o cabeçalho
         // container.querySelectorAll(".card").forEach(c => c.remove());
@@ -508,7 +517,7 @@
                     </div>
 
                     <h1 class="setor">${acao.setor}</h1>
-                    <h1 class="preco">R$ ${acao.precoSobreValorPatrimonial.toFixed(2) ?? "-"}</h1>
+                    <h1 class="preco">R$ ${acao.precoSobreValorPatrimonial != null ? acao.precoSobreValorPatrimonial.toFixed(2) : "-"}</h1>
                     <!-- <h1 class="retorno verde">${acao.retorno ?? "-"}%</h1> -->
                     <h1 class="retorno verde">${acao.rentabilidadeAnual.toFixed(2) ?? "-"}%</h1>
 
@@ -556,8 +565,10 @@
 
     async function abrirInfoAcao(card, ticker) {
         try {
+
+            const idUsuario = sessionStorage.ID_USUARIO;
             // busca dados da ação via fetch
-            const resp = await fetch(`/acoes/buscarAcaoPorTicker/${ticker}`);
+            const resp = await fetch(`/acoes/buscarAcaoPorTicker/${ticker}/${idUsuario}`);
             if (!resp.ok) {
                 console.error("Erro ao buscar ação por ticker:", resp.status);
                 return;
@@ -575,7 +586,7 @@
             popup.className = "popup-acao";
 
 
-            if (dados[0].favoritada == 0) {
+            if (acao.favoritada == 0) {
                 var imagem = `<img class="estrela" src="./Style/assets/estrelaVazia.svg"  onclick="event.stopPropagation(); favoritar(${dados[0].idEmpresa})">`;
             } else {
                 var imagem = `<img class="estrela" src="./Style/assets/estrelaCheia.svg"   onclick="event.stopPropagation(); desfavoritar(${dados[0].idEmpresa})">`;
@@ -589,8 +600,8 @@
                         <div id="imagemPopUp">
                             ${imagem}
                         </div>
-                        <h2>${dados[0].nome}</h2>
-                    <img src="${dados[0].logo}">
+                        <h2>${acao.nome}</h2>
+                    <!-- <img src="${acao.logo}"> -->
                     </div>
                 <span class="popup-fechar">&times;</span>
                  <div class="preco-atual">
@@ -663,7 +674,7 @@
 
             document.body.appendChild(popup);
 
-            const fecharPopup = popup.querySelector('.fechar-popup');
+            const fecharPopup = popup.querySelector('.popup-fechar');
             fecharPopup.onclick = () => {
                 document.body.removeChild(popup);
             };
@@ -907,11 +918,35 @@
         let url = `/acoes/grafico/evolucao/${perfil}`;
         if (setor) url += `/${setor}`;
 
-        const resp = await fetch(url);
-        const data = await resp.json();
+        // const resp = await fetch(url);
+        // const data = await resp.json();
+
+        let resp;
+        try {
+            resp = await fetch(url);
+        } catch (e) {
+            console.error("Erro ao acessar gráfico:", e);
+            criarGraficoEvolucaoPrecos([]);
+            return;
+        }
+
+        if (!resp.ok) {
+            console.warn("Rota de gráfico retornou status", resp.status);
+            criarGraficoEvolucaoPrecos([]);
+            return;
+        }
+
+        let data = {};
+        try {
+            data = await resp.json();
+        } catch {
+            console.warn("Gráfico retornou JSON vazio.");
+            criarGraficoEvolucaoPrecos([]);
+            return;
+        }
 
 
-        const listaAcoes = organizarDadosParaGrafico(data.evolucao);
+        const listaAcoes = organizarDadosParaGrafico(data.evolucao || {});
 
         criarGraficoEvolucaoPrecos(listaAcoes);
 

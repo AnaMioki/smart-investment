@@ -78,8 +78,8 @@ async function graficoEvolucao(req, res) {
     const perfil = req.params.perfil;
     //const setor = req.params.setor || req.query.setor || "";
     const setor = req.params.setor && req.params.setor !== "null"
-    ? req.params.setor
-    : "";
+        ? req.params.setor
+        : "";
 
     try {
         // aq ele pega as top 3 de acordo com o setor
@@ -118,23 +118,23 @@ async function graficoEvolucao(req, res) {
                 });
             });
 
-                return resultado;
-            }
-
-                const evolucaoFormatada = montarEvolucaoFormatada(tickers, evolucao);
-
-                res.status(200).json({
-                    recomendadas,
-                    evolucao: evolucaoFormatada
-                });
-
-            } catch (erro) {
-                console.error("Erro no gráfico:", erro);
-                return res.status(500).json(erro);
-            }
+            return resultado;
         }
 
-        function buscarAcaoPorTicker(req, res) {
+        const evolucaoFormatada = montarEvolucaoFormatada(tickers, evolucao);
+
+        res.status(200).json({
+            recomendadas,
+            evolucao: evolucaoFormatada
+        });
+
+    } catch (erro) {
+        console.error("Erro no gráfico:", erro);
+        return res.status(500).json(erro);
+    }
+}
+
+function buscarAcaoPorTicker(req, res) {
     const ticker = req.params.ticker;
     const idUsuario = req.params.idUsuario;
 
@@ -160,10 +160,10 @@ async function graficoEvolucao(req, res) {
 }
 
 
-        module.exports = {
-            listarTodasAcoesDeAcordoComPerfil,
-            listarSetores,
-            listarAcoesPorSetor,
-            graficoEvolucao,
-            buscarAcaoPorTicker
-        }
+module.exports = {
+    listarTodasAcoesDeAcordoComPerfil,
+    listarSetores,
+    listarAcoesPorSetor,
+    graficoEvolucao,
+    buscarAcaoPorTicker
+}

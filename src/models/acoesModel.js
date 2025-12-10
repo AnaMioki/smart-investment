@@ -116,8 +116,8 @@ function pegarTop3AcoesGraficoEvolucao(perfil, setor) {
 
     console.log("Perfil recebido:", perfil);
     console.log("Setor recebido:", setor);
-  
-     var instrucaoSql = `
+
+    var instrucaoSql = `
       SELECT nome, ticker, setor
         FROM (
             SELECT 
@@ -201,10 +201,11 @@ function buscarAcaoPorTicker(ticker, idUsuario) {
            SELECT *
     FROM (
         SELECT 
-            e.idEmpresa,
-            e.nome,
-            e.ticker,
-            e.setor,
+            -- e.idEmpresa,
+            e.*, 
+            -- e.nome,
+            -- e.ticker,
+            -- e.setor,
             it.rentabilidadeAnual,
             it.precoSobreValorPatrimonial,
             it.patrimonioLiquidoAcao,
@@ -214,9 +215,9 @@ function buscarAcaoPorTicker(ticker, idUsuario) {
             ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 AS volatilidade,
             it.ano AS ano_referencia,
             CASE 
-                WHEN MAX(af.idAcoesFavoritadas) IS NOT NULL THEN 1
+                WHEN af.idAcoesFavoritadas IS NOT NULL THEN 1
                 ELSE 0
-            END AS favoritada
+            END AS favoritada,
             CASE 
                 WHEN ((a.precoMaisAlto - a.precoMaisBaixo) / a.precoAbertura) * 100 < 0.5 
                      AND it.precoSobreValorPatrimonial <= 1 THEN 'Conservador'
@@ -229,7 +230,7 @@ function buscarAcaoPorTicker(ticker, idUsuario) {
         FROM infoTemporal it
         INNER JOIN empresa e ON it.fkEmpresa = e.idEmpresa
         LEFT JOIN acoesFavoritadas af
-        ON af.fkAcoes = e.idEmpresa
+       ON af.fkAcoes = e.idEmpresa
         AND af.fkUsuario = ${idUsuario}
         INNER JOIN acoes a ON a.fkEmpresa = e.idEmpresa AND YEAR(a.dtAtual) = it.ano
         WHERE it.ano = (SELECT MAX(ano) FROM infoTemporal)
